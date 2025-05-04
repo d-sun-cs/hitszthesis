@@ -22,27 +22,27 @@
   %=========
   % 中文信息
   %=========
-  ctitleone={局部多孔质气体静压轴承},%本科生封面使用
-  ctitletwo={关键技术的研究},%本科生封面使用
-  ctitlecover={局部多孔质气体静压轴承关键技术的研究},%放在封面中使用，自由断行
-  ctitle={局部多孔质气体静压轴承关键技术的研究},%放在原创性声明中使用
-  csubtitle={一条副标题}, %一般情况没有，可以注释掉
+  % ctitleone={局部多孔质气体静压轴承},%本科生封面使用
+  % ctitletwo={关键技术的研究},%本科生封面使用
+  ctitlecover={面向新型GPU架构的稀疏矩阵乘法加速器},%放在封面中使用，自由断行
+  ctitle={面向新型GPU架构的稀疏矩阵乘法加速器},%放在原创性声明中使用
+  % csubtitle={一条副标题}, %一般情况没有，可以注释掉
   cxueke={工学},
   cpostgraduatetype={学术},
-  csubject={机械设计制造及其自动化},
+  csubject={计算机科学与技术},
   % csubject={机械工程},
-  caffil={机电工程与自动化学院},
+  caffil={深圳校区计算机学院},
   % caffil={哈尔滨工业大学（深圳）},
-  cauthor={杨敬轩},
-  csupervisor={某某某 教授},
+  cauthor={孙铎},
+  csupervisor={王强 教授},
   % cassosupervisor={某某某 教授}, % 副导师
   % ccosupervisor={某某某 教授}, % 合作导师
   % 日期自动使用当前时间，若需指定按如下方式修改：
-  cdate={2023年6月},
+  cdate={2025年4月},
   % 指定第二页封面的日期，即答辩日期
-  cdatesecond={2023年06月09日},
-  cstudentid={SZ160310217},
-  cstudenttype={同等学力人员}, %非全日制教育申请学位者
+  cdatesecond={2025年04月20日},
+  cstudentid={24S051046},
+  % cstudenttype={同等学力人员}, %非全日制教育申请学位者
   %（同等学力人员）、（工程硕士）、（工商管理硕士）、
   %（高级管理人员工商管理硕士）、（公共管理硕士）、（中职教师）、（高校教师）等
   %
@@ -50,38 +50,38 @@
   %=========
   % 英文信息
   %=========
-  etitle={Research on key technologies of partial porous externally pressurized gas bearing},
-  esubtitle={This is the sub title},
+  etitle={Sparse Matrix Multiplication Accelerator for New GPU Architecture},
+  % esubtitle={This is the sub title},
   exueke={Engineering},
-  esubject={Mechanical Engineering},
+  esubject={Computer Science and Technology},
   eaffil={Harbin Institute of Technology, Shenzhen},
-  eauthor={Jingxuan Yang},
-  esupervisor={Prof. XXX},
+  eauthor={Duo Sun},
+  esupervisor={Prof. Qiang Wang},
   % eassosupervisor={XXX},
   % ecosupervisor={Prof. XXX}, % Co-Supervisor off Campus
   % 日期自动生成，若需指定按如下方式修改：
-  edate={June, 2023},
+  edate={April, 2025},
   estudenttype={Master of Engineering},
   %
   % 关键词用“英文逗号”分割
-  ckeywords={\TeX, \LaTeX, CJK, 论文模板, 毕业论文},
-  ekeywords={\TeX, \LaTeX, CJK, hitszthesis, thesis},
+  ckeywords={GPU,稀疏矩阵乘法,共享内存},
+  ekeywords={GPU, SpMM, Shared Memory},
 }
 
 % 中文摘要
 \begin{cabstract}
 
-  摘要是论文内容的高度概括，应具有独立性和自含性，即不阅读论文的全文，就能获得必要的信息。摘要应包括本论文的目的、主要研究内容、研究方法、创造性成果及其理论与实际意义。摘要中不宜使用公式、化学结构式、图表和非公知公用的符号与术语，不标注引用文献编号，同时避免将摘要写成目录式的内容介绍。
-
-  关键词是为了文献标引工作、用以表示全文主要内容信息的单词或术语。关键词不超过5个，每个关键词中间用分号分隔。（模板作者注：关键词分隔符不用考虑，模板会自动处理。英文关键词同理。）
+  稀疏矩阵乘法在科学计算与深度学习中应用十分广泛，对稀疏矩阵乘法的优化是提高这些应用性能的关键一环，而稀疏矩阵含有较多的零元素，数据结构特殊，这为稀疏矩阵乘法的设计带来了许多困难。本课题在分析稀疏矩阵乘法现有研究策略的基础上，定位了算法内存访问的性能瓶颈，使用新型GPU架构的全局内存到共享内存异步拷贝新特性，构建流水线数据预取模式，为稀疏矩阵乘以稠密矩阵的算法缓解内存访问瓶颈，在探索过程中总结出了异步拷贝优化算法的主要问题，并针对问题设计了新型算法。
+  本课题利用异步拷贝新特性改进了一个现有研究的算法，在一定的测试规模下取得了性能优势，还结合GPU调度机制分析出利于共享内存异步拷贝特性展现性能优势的场景，并通过针对性测试验证了这一点。在改进现有研究算法的基础上，总结出预取稀疏矩阵和稠密矩阵时数据依赖性的问题和对于稠密矩阵复用率不足的问题，自主设计了能够消除预取数据依赖性和最大化复用稠密矩阵的算法，使得稀疏矩阵和稠密矩阵均可通过全局内存到共享内存的异步拷贝流水线进行预取，在共享内存中实现对稠密矩阵的最大化的复用，促进计算与数据传输的并行。本课题在实验中对比Nvidia官方库cuBLAS和cuSPARSE进行了综合测试，改进的或自主设计的算法在九分之七的方阵乘法测试场景下可以取得最高349.24\%、平均147.86\%的相较于官方库的性能优势。
+  本课题是将GPU新架构特性应用到稀疏矩阵乘法中的探索，不仅开发了应用新特性的算法，还总结出了相关问题与启发，为后继进一步应用更丰富的新特性做针对性算法优化打下了实践基础。
 
 \end{cabstract}
 
 % 英文摘要
 \begin{eabstract}
 
-  Externally pressurized gas bearing has been widely used in the field of aviation, semiconductor, weave, and measurement apparatus because of its advantage of high accuracy, little friction, low heat distortion, long life-span, and no pollution. In this thesis, based on the domestic and overseas researching\dots\dots
-
-  Keywords are terms used in a dissertation for indexing, reflecting core information of the dissertation. An abstract may contain a maximum of 5 keywords, with semicolons used in between to separate one another.
+  Sparse-matrix matrix multiplication(SpMM) is widely used in scientific computing and deep learning. Optimization of SpMM is crucial for enhancing the performance of these applications. Sparse matrices contain numerous zero elements with a unique data structure, which causes many challenges in the design of SpMM algorithms. Based on an analysis of existing research strategies for SpMM, this study identifies the performance bottleneck of memory access, adopts the new feature of asynchronous copy from global memory to shared memory in the latest GPU architectures and constructs a pipeline data prefetching pattern to alleviate memory access bottlenecks for sparse matrix multiplication with dense matrices. In the exploration process, the main issues of asynchronous copy optimization algorithms are summarized, and a novel algorithm is designed to address these issues.
+  This study improves an existing research algorithm by the new feature of asynchronous copy, achieving performance advantages under certain test scales. Combined with GPU scheduling mechanisms, scenarios that benefit from the shared memory asynchronous copy are analyzed, and this point is verified through targeted testing. Building on the improvement of existing research algorithms, this study summarizes the issues of data dependency when prefetching sparse matrices and dense matrices, as well as the problem of insufficient reuse rate for dense matrices. A self-designed algorithm is proposed to eliminate data dependency during prefetching and maximize the reuse of dense matrices, enabling both sparse matrices and dense matrices to be prefetched through asynchronous copy pipelines from global memory to shared memory. This facilitates the maximization of dense matrix reuse in shared memory, promoting parallelism between computation and data transfer, and achieving performance advantages under certain test scales. This study conducted comprehensive tests comparing the Nvidia official libraries cuBLAS and cuSPARSE. The improved or independently designed algorithms achieved up to a 349.24\% and an average of 147.86\% performance improvement over the official libraries in seven out of nine square matrix multiplication test scenarios.
+  This study explores the application of new GPU architecture features to SpMM, not only developing algorithms that utilize these features but also summarizing relevant issues and insights, laying a practical foundation for further optimizations tailored to the richer new features in subsequent applications.
 
 \end{eabstract}

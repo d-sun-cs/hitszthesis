@@ -1,40 +1,116 @@
 % !TEX root = ../main.tex
 
 % 中英标题：\chapter{中文标题}[英文标题]
-\chapter{绪\hspace{1em}论}[Introduction]
-% 绪论也需像摘要、目录格式那样空出两个半角字符。
+\chapter{绪论}[Introduction]
 
 \section{课题背景及研究的目的和意义}[Background, objective and significance of the subject]
 
-% 正文内容，注意LaTeX分段有两种方法，直接空一行或者使用<\par>
-% 默认首行缩进，不需要在代码编辑区手动敲空格
-发展国防工业、微电子工业等尖端技术需要精密和超精密的仪器设备，精密仪器设备要求高速、\dots\dots
+在各类科学领域中，对稀疏数据结构的操作比比皆是，其中，稀疏矩阵相关的乘法是许多实际环境中出现的基本运算，例如多源广度优先搜索\cite{gilbert2006,then2014,buluc2011bfs}、子图匹配\cite{vassilevska2010,buluc2011}和代数多重网格方法等等\cite{bell2012,ballard2016}。随着现代计算机科学的发展，稀疏矩阵乘法的应用领域变得更加广泛，不仅应用于传统学科的计算，例如生物、物理等领域的科学计算，还在深度学习领域有重要的应用空间和发展潜力。
 
-\dots\dots
+如今，基于深度神经网络的大生成模型在自然语言处理和数据管理等任务中有着举足轻重的地位，但随着参数规模的快速增长，模型本身的大小和它的计算代价变得越来越大，实际部署这些大模型的工作变得越来越困难\cite{xia2023}。目前已经有许多基于模型压缩或剪枝的方法来解决大模型的实际部署问题，也出现了一些方法改善面对大规模参数时的表现\cite{frantar2023}。深度神经网络模型在变得愈发庞大和复杂时，也不可避免的会大量增加其稀疏性，就如同生物神经网络那样\cite{zheng2022}。因而，稀疏矩阵的乘法在其中就起着至关重要的作用，其高效合理的运算方式能很大程度上推进大模型的实际部署和运算效率。
 
-\section{气体润滑轴承及其相关理论的发展概况}[Developmental of gas-lubricated bearing and correlated theories]
+然而，在基于GPU平台的并行计算系统中，稀疏矩阵的结构和性质带来了诸多困难和挑战，集中表现在系统的内存管理和负载均衡方面\cite{zachariadis2020}。为了加速并行架构中的矩阵乘法运算，除了旧架构原有的CUDA核心单元之外，Nvidia公司在近几年的新型GPU架构中加入并逐渐丰富了其他硬件单元，如下表\ref{tab1-1}所示，例如张量核心单元（TCU, Tensor Core Unit），从2017年的Volta架构开始，经过Turning、Ampere和Ada Lovelace架构，到现在的Hopper架构，Tensor Core技术已经得到了Transformer引擎的推进发展，又可以大幅加速Transformer模型的AI计算。同时，新架构GPU也带来了许多新的特性，例如，Ampere和Ada Lovelace架构新增了从全局内存到共享内存的异步数据传输功能，使得数据不再需要经过寄存器，以此加快了数据拷贝流程，在此基础上，Hopper架构还引入了线程块集群，增加了集群之间分布式共享内存的功能。
 
-气体轴承是利用气膜支撑负荷或减少摩擦的机械构件。\dots\dots
+本课题以科学计算和深度学习中稀疏矩阵乘法以及GPU新型架构带来的新特性为背景，目的在于利用Ampere架构新增的从全局内存到共享内存的异步拷贝新特性，尝试提高稀疏矩阵乘以稠密矩阵算法（SpMM, Sparse-matrix Matrix Multiplication）的速度，并且深入分析共享内存应用对于算法的影响，给出性能提升或下降的原因，探索并实现面向新型GPU架构的稀疏矩阵乘法加速器。
 
-\dots\dots
+\begin{table}[htbp]
+\caption{NVIDIA GPU系列产品的部分指标}
+\label{tab1-1}
+\vspace{0.5em}\centering\wuhao
+\begin{tabular}{>{\centering\arraybackslash}m{1.5cm} 
+                >{\centering\arraybackslash}m{1cm}
+                >{\centering\arraybackslash}m{3cm}
+                >{\centering\arraybackslash}m{2cm}
+                >{\centering\arraybackslash}m{3.5cm}
+                >{\centering\arraybackslash}m{2cm}}
+\toprule[1.5pt]
+\makecell[c]{产品\\型号} & 
+\makecell[c]{发布\\年份} & 
+架构 & 
+\makecell[c]{张量核心\\单元} & 
+\makecell[c]{全局内存与共享内存\\异步拷贝} & 
+\makecell[c]{分布式共享\\内存} \\
+\midrule[1pt]
+\makecell[c]{Tesla \\ M2090} & 2010 & Fermi & NA & 不支持 & 不支持 \\
+\makecell[c]{Tesla \\ K40} & 2012 & Kepler & NA & 不支持 & 不支持 \\
+\makecell[c]{Tesla \\ M40} & 2014 & Maxwell & NA & 不支持 & 不支持 \\
+\makecell[c]{Tesla \\ P100} & 2016 & Pascal & NA & 不支持 & 不支持 \\
+\makecell[c]{Tesla \\ V100} & 2017 & Volta & 640 & 不支持 & 不支持 \\
+\makecell[c]{Tesla \\ T4} & 2018 & Turing & 320 & 不支持 & 不支持 \\
+\makecell[c]{Tesla \\ A100} & 2020 & Ampere & 432 & 支持 & 不支持 \\
+\makecell[c]{GeForce \\ RTX\\4090} & 2022 & Ada Lovelace & 512 & 支持 & 不支持 \\
+\makecell[c]{Tesla \\ H100} & 2022 & Hopper & 456 & 支持 & 支持 \\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
 
-\subsection{气体润滑轴承的发展}[Developmental of gas-lubricated bearing]
+本课题的研究意义包括应用价值和学术价值两方面。应用价值方面，稀疏矩阵乘法是深度学习和科学计算中的关键计算核心，对模型训练和推理的效率速度具有重要影响，合理选择和优化稀疏矩阵乘法算子，可以降低模型的计算复杂度，同时保持模型的精度，在大规模深度学习任务中取得更好的性能，提高计算效率，减少计算资源的浪费。学术价值方面，本课题紧跟AI大模型和高性能计算的发展趋势，充分发挥GPU新型架构的优势，在学术研究层面对其进行跟进和拓展，对未来深度学习和科学计算的发展具有一定意义，有助于推动技术的进步，为处理大规模任务提供更加可行的解决方案。
 
-1828年，R.R.Willis$^{[3]}$发表了一篇关于小孔节流平板中压力分布的文章，这是有记载的研究气体润滑的最早文献。\dots\dots
+\section{在GPU上进行稀疏矩阵乘法的研究综述}[Research review of sparse matrix multiplication on GPU]
 
-根据间隙内气膜压力的产生原理，气体轴承可以分为四种基本形式：
+\subsection{稀疏矩阵乘法策略研究的发展}[Development of sparse matrix multiplication strategies]
 
-（1）气体静压轴承：加压气体经过节流器进入间隙，在间隙内产生压力气膜使物体浮起的气体轴承，\dots\dots
+在不同的计算场景，特别是在不同的矩阵稀疏程度上，同一个研究成果的表现往往不尽相同，部分研究成果只有在稀疏程度较高的数据结构下才能发挥出原有的高性能表现，而研究者们通常会追求不仅在高稀疏度下有良好的表现，还要在稀疏度相对低的情况下依然表现出方法独特的性能优势\cite{xia2023}。在性能优化方面，高效的内存访问和负载均衡通常是优化的两大重点。大模型占用的内存巨大，甚至超出单一GPU的全部内存大小，所以合理的内存布局和访问方法是提升大模型运算效率的关键之一。一些研究致力于提出更具有通用性的稀疏矩阵乘法模型和框架，还有一些研究基于理论开发出算子库供实际应用，这些研究成果都极大地丰富了稀疏矩阵乘法的高性能计算方案。
 
-\subsubsection{气体润滑轴承的分类}[Classification of gas-lubricated bearing]
+学者Steven Dalton等人在2012年提出了可以将稀疏矩阵之间相乘的算法分解成三个细粒度并行的阶段，分别是扩展、排序和收缩（ESC, Expansion Sorting Contraction）\cite{bell2012}，该方法简洁有效，许多研究对此都有参考和借鉴；学者Weifeng Liu和Brian Vinter在2015年提出了一种高效的SpGEMM（General Sparse Matrix-Matrix Multiplication）框架和算法，用于解决结果稀疏矩阵非零条目数量未知、随机并行插入操作成本和稀疏数据负载均衡这三个问题\cite{liu2015}；学者Carl Yang等人在2018年额外聚焦于指令级并行和负载均衡，提出了一种高效访问输入输出矩阵的关键内存访问模式\cite{yang2018}；学者Changwan Hong等人在2018年提出RS-SpMM（Row-Segmented SpMM）算法，借鉴了稀疏矩阵与向量相乘（SpMV，Sparse Matrix-Vector Multiplication）的思想，将稀疏矩阵划分成两部分，第一部分是所有高度聚集的行分段，第二部分是剩余元素，两部分分别使用不同的乘法策略，从而取得性能提升\cite{hong2018}，并且以此为前作，学者Changwan Hong等人又在2019年提出ASpT（Adaptive Sparse-matrix Tiling）策略，可以根据稀疏矩阵的元素分布情况，自适应地调整运算时的分块，并且也将稀疏矩阵分成了较为稠密的子块和较为稀疏的子块两种，在GPU上分别用不同的方式计算\cite{hong2019}；学者Trevor Gale等人在2020年完成了名为Sputnik的算法库的开发，其中实现了一种非结构化的SpMM算法，解决了当时各种稀疏矩阵库针对高稀疏度的局限性\cite{gale2020}；学者Shaohuai Shi等人在2020年提出GCOOSpDM（Grouped Coordinate Sparse-Dense Matrix-Matrix Multiplication）算法，它基于自定义的稀疏矩阵存储格式，在算法设计中保证了对内存访问的高效性，以此提升并行效率\cite{shi2020}；学者Jianhua Gao等人在2021年发表了第一篇关于一般稀疏矩阵乘法的综述论文，介绍了利用其解决大规模科学问题的相关基本理论和实践，并概述了相关算法、数据结构和算子库\cite{gao2023}；学者Elias Frantar等人在2023年提出SparseGPT剪枝方法，通过这种方法，大规模GPT可以无需再训练就一次剪枝到至少50\%的稀疏性\cite{frantar2023}。
 
-\dots\dots
+综上所述，关于GPU稀疏矩阵乘法策略的研究一直在推进，各项研究分别针对不同的稀疏情况，解决特定的问题，但目前高效的稀疏矩阵乘法依然没有一个绝对统一的框架，学术界对于稀疏结构的探索仍然在继续。
 
-\subsubsection{多孔质气体静压轴承的研究}[Research on porous externally pressurized gas bearing]
+\subsection{GPU新架构特性在稀疏矩阵乘法上的应用}[Application of new GPU architecture features in sparse matrix multiplication]
 
-由于气体的压力低和可压缩性，\dots\dots。
+随着Nvidia GPU的发展，不仅有经典的单指令多数据运算单元来承担计算任务，还有专门为矩阵乘法等操作定制的张量核心运算单元（TCU, Tensor Core Units）来加速这些计算，如何合理地分配计算负载成为了一个值得研究者们深入探讨的问题\cite{zachariadis2020}。现如今，距离Nvidia公司发布具有TCU的GPU产品已经过去了6年左右，对于稀疏矩阵相关乘法优化的研究，从过去充分挖掘利用单指令多数据核心（SIMD cores）的特点，发展到现在探索新型架构中TCU的计算潜能。
+
+学者Orestis Zachariadis等人在2020年提出tSparse模型，采用TCU混合精度模式完成稀疏矩阵乘法，首次在一般稀疏矩阵乘法的上下文中使用TCU\cite{zachariadis2020}；学者Zhaodong Chen等人在2021年提出列向量稀疏编码（Column Vector Sparse Encoding）和基于TCU的一维八位分块（TCU-based 1-D Octet Tiling），设计5个关键准则来提升在TCU上实现结构化SpMM的性能\cite{chen2021}；学者Ningxin Zheng等人在2022年提出了Tensor-with-Sparsity-Attribute(TeSA)这一抽象来为稀疏性建模，并总结出SparTA框架\cite{zheng2022}；学者Shigang Li等人在2022年设计了Magicube算法，提出了更适用于TCU计算的稀疏矩阵存储格式，利用Tensor Core实现了较低精度的SpMM，而后又进行了混合精度的仿真，最终实现了低精度和混合精度的结构化SpMM高性能加速\cite{li2022}；学者Haojun Xia等人在2023年提出FlashLLM框架来支持大规模生成模型的推理任务，为非结构化稀疏性在张量核上的表现敞开了视野，并将FlashLLM框架的实现整合到FasterTransformer中以供更方便地使用\cite{xia2023}。
+
+综上所述，随着深度神经网络和大模型近几年的飞速发展，以及Nvidia公司推出新架构GPU产品，合理利用TCU硬件架构为大模型训练推理任务加速成为了稀疏矩阵乘法研究的一个重点，近年来利用TCU加速SpMM算法的研究也在持续增加。同时可以发现，对于其他新特性例如共享内存相关新特性在SpMM上应用的研究较少，因此本课题选择对从全局内存到共享内存异步拷贝的新特性进行探索和研究，尝试开发出利用该特性加速SpMM的算法。
+
 
 \section{本文的主要研究内容}[Main research contents of this subject]
 
-本课题的研究内容主要是针对局部多孔质止推轴承的多孔质材料的渗透
-率、静压轴承的静态特性、稳定性及其影响因素进行展开，\dots\dots。
+本课题从两个方面开展研究，一是稀疏矩阵乘法的基本原理，二是共享内存异步拷贝的新特性在稀疏矩阵与稠密矩阵相乘算法即SpMM中的应用。在下文中约定用来表示稀疏矩阵A乘以稠密矩阵B，得到结果矩阵C，矩阵元素的精度默认为32位浮点数。
+
+稀疏矩阵乘法的基本原理包括稀疏矩阵的存储格式和乘法的计算方式。稀疏矩阵有很多种存储格式，常用的有坐标存储（COO, Coordinate）、行压缩存储（CSR, Compressed Sparse Row）和列压缩存储（CSC, Compressed Sparse Column）格式，其中COO和CSR存储格式的举例如图1-1所示，图中用红色和绿色分别举例说明了两个元素的存储，将CSR对于行和列的存储方式互换就可以得到CSC格式了。稀疏矩阵乘法的计算方式也有很多种，例如RbR（Row by Row）方式——按行计算结果矩阵的值、CbC（Column by Column）方式——按列计算结果矩阵的值和IP（Inner Product）方式——使用内积直接计算结果矩阵的值，其中RbR格式较为常用，它又经常与CSR存储格式共同使用。
+
+\begin{figure}[h]
+\centering
+\includegraphics[width = 0.75\textwidth]{fig1.png}
+\caption{稀疏矩阵的COO和CSR存储格式举例}
+\end{figure}
+
+在GPU架构中，大部分计算所需数据会提前在全局内存中存储，但线程块直接访问全局内存的开销较大，速度较慢，针对于此，线程块可以先将本轮要处理的数据从全局内存拷贝到共享内存，再从共享内存中读取数据进行计算。共享内存可以简略理解成可供程序员编程的缓存，每个线程块的共享内存只能由线程块内部的线程访问，并且有相比于全局内存更快的访问速度，这样可以极大提升读取内存数据的整体速度。新架构提供了从全局内存到共享内存的异步拷贝特性，如图1-2红色标注所示，利用新特性API，在计算能力8.0及以上的GPU，从全局内存到共享内存的拷贝上不仅可以得到硬件级别的加速，还可以异步进行，从而让数据拷贝和线程计算更好地并行执行。而稀疏矩阵在GPU上的运算相比于稠密矩阵，一方面只需要存储非零元素的数值和索引，节约大量存储空间，另一方面其计算量大大减少，尤其是在高稀疏度时，其性能瓶颈不再是CUDA核心的计算速度，而是集中在内存的数据传输上，所以对于内存访问和数据传输的优化通常能突破稀疏矩阵乘法的性能瓶颈。
+
+\begin{figure}[h]
+\centering
+\includegraphics[width = 0.9\textwidth]{fig2.png}
+\caption{新特性在GPU架构中的体现}
+\end{figure}
+
+基于此，本课题聚集于利用共享内存异步拷贝相关的新特性，改进现有研究的稀疏矩阵乘以稠密矩阵的乘法算法，探索出新特性在稀疏矩阵乘法中的应用方式，并尝试提出新算法，以更好地适配新架构特性。因为稀疏矩阵乘法的性能瓶颈通常就在于全局内存的数据传输操作，所以利用共享内存异步拷贝等新特性提升数据访问的效率，理论上是可以提升性能的，而关于利用共享内存新特性加速SpMM这方面的现有研究比较少\cite{zachariadis2020,chen2021}。本课题还会分析新特性应用后性能提升或下降的原因，阐述其适用性，并针对特定的场景做出合理解释。
+
+\section{稀疏矩阵乘法的性能瓶颈分析}[Performance bottleneck analysis of sparse matrix multiplication]
+
+在正式利用从全局内存到共享内存异步拷贝的新特性对稀疏矩阵与稠密矩阵相乘的算法进行优化之前，本课题需要确定算法的性能瓶颈位于内存访问上，从而说明本课题利用共享内存异步拷贝新特性对SpMM进行优化的研究意义，更清晰地体现出课题的目的和针对性。直观上看，稀疏矩阵乘以稠密矩阵的算法中，乘加运算量大幅减少，具体体现在从全局内存中取到的一个稠密矩阵元素只需要和稀疏矩阵中对应位置的非零元素相乘，省去了与零元素的相乘，同时也减少了相应的累加，然而对稠密矩阵的数据传输量依然不变，这就容易导致内存传输速度不足以匹配计算速度。虽然从直观上就可以看出SpMM的性能瓶颈会出现在内存访问上，但依然可以通过性能测试工具来准确定位性能瓶颈。
+
+Nvidia公司为开发人员提供了Nsight Compute（ncu）性能分析工具，可以对运行在GPU上的Kernel函数进行指标测量，测量的指标包括流多处理器（SM, Streaming Multiprocessors）计算资源的利用率（Compute Throughput）和内存资源的利用率（Memory Throughput）。如果SpMM的性能瓶颈在于内存访问上，那么ncu的测试结果中，对于计算资源的利用率会偏低，而对于内存资源的利用率会接近100\%。当然，这里的利用率并非是简单的越高越好或者越低越好，因为利用这些资源的算法操作本身并不一定是高效的，ncu主要借助计算和内存的利用率以及它们之间的大小关系来说明算法可能有待优化的瓶颈位置。
+
+根据以上分析，本课题基于Ubuntu22.04系统在RTX A6000 GPU上运行了Nvidia官方cuBLAS库的稠密矩阵乘法和cuSPARSE库的CSR稀疏矩阵乘法算法，执行矩阵乘法，选用的矩阵乘法规模为，其中稀疏矩阵A的稀疏度为0.9，即零元素占比0.9，且非零元素的分布为随机均匀分布。cuBLAS库是Nvidia官方提供的基本线性代数子程序（BLAS）的GPU加速实现，它基于Nvidia GPU进行高度的优化，适用性广，可以直接使用它的矩阵乘法算子进行稀疏矩阵与稠密矩阵的乘法，即无论矩阵元素是否为0，一律参与乘法运算。cuSPARSE是Nvidia官方提供的针对于稀疏矩阵相关基本线性代数子程序的GPU加速实现，虽然在稀疏度不足的情况下其性能可能不如cuBLAS，但依然有广泛应用。cuBLAS和cuSPARSE都提供了标准API接口，可以在CUDA程序中方便地调用，执行上述稀疏矩阵乘法，并使用ncu进行性能指标测量。对于cuBLAS库，只能调用稠密矩阵乘法的接口来进行SpMM的计算，对于cuSPARSE库，可以调用基于CSR存储格式的标准SpMM接口进行计算，ncu测量的计算资源和内存利用率指标如下表~\ref{tab1-2}~所示，分别对应于Compute Throughput和Memory Throughput两列。从表~\ref{tab1-2}~的测试结果中可以看出，相比于使用稠密矩阵乘法算法的cuBLAS库，使用稀疏矩阵乘法算法的cuSPARSE库在执行时内存资源的利用率很高，接近100\%，但是对于SM计算资源的利用率偏低。据此可以说明，稀疏矩阵乘法算法的性能瓶颈并不在于SM的计算，而是主要集中在内存访问上。
+
+\begin{table}[htbp]
+\caption{ncu测量cuBLAS库和cuSPARSE库的结果}
+\label{tab1-2}
+\vspace{0.5em}\centering\wuhao
+\begin{tabular}{cccccc}
+\toprule[1.5pt]
+算子库 & Compute Throughput & Memory Throughput & SM Busy & Max Bandwidth \\
+\midrule[1pt]
+cuBLAS & 67.79\% & 57.29\% & 70.46\% & 57.34\% \\
+cuSPARSE & 45.71\% & 93.44\% & 26.09\% & 88.46\% \\
+\bottomrule[1.5pt]
+\end{tabular}
+\end{table}
+
+除了利用率之外，ncu还提供了其他有助于判断性能瓶颈的指标。通过对比计算资源SM忙碌（SM Busy）的时间占比和耗尽全部内存通信带宽的时间占比（Max Bandwidth），也可以辅助定位程序可能存在的性能瓶颈，如表1-2最后两列所示，可以看出，相比于使用稠密矩阵乘法算法的cuBLAS库，使用稀疏矩阵乘法算法的cuSPARSE库能够充分利用SM计算资源的时间很少，只有四分之一左右，但是其完全占满内存通信带宽的时间很多，接近90\%，从这个角度也可以说明，稀疏矩阵乘法算法的性能瓶颈并不在于SM的计算，而是主要集中在内存访问上。
+
+总得来说，本课题在正式性能优化前，分析了稀疏矩阵乘以稠密矩阵算法的性能瓶颈，利用Nvidia官方提供的Nsight Compute性能分析工具，在相同的测试环境下分别使用cuBLAS库和cuSPARSE库完成稀疏矩阵乘以稠密矩阵的运算，根据ncu反馈的性能测试指标——计算资源利用率、内存利用率、SM忙碌时间占比和耗尽内存通信带宽时间占比，判断出SpMM算法的性能瓶颈主要集中在内存访问上。以此为基础，利用从全局内存到共享内存的异步拷贝新特性，对SpMM算法的内存访问方面进行优化，在理论上是有机会进一步提升算法性能的，这进一步说明了本课题的研究意义，让本课题的研究方向更加具有针对性。
+
+
