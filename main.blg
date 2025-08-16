@@ -1,0 +1,72 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: hitszthesis.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: reference.bib
+Warning--string name "nov" is undefined
+--line 76 of file reference.bib
+Warning--string name "jan" is undefined
+--line 92 of file reference.bib
+Warning--I didn't find a database entry for "IntelligentStorageAcceleration2022"
+Warning--I didn't find a database entry for "ren2010"
+Warning--I didn't find a database entry for "Gravagne2003"
+Warning--I didn't find a database entry for "webster2010"
+Warning--I didn't find a database entry for "liu2016"
+Warning--I didn't find a database entry for "fu2018"
+Warning--I didn't find a database entry for "zhai2015"
+Warning--I didn't find a database entry for "yao2015"
+Warning--I didn't find a database entry for "jones2006"
+Warning--I didn't find a database entry for "mcmahan2005"
+Warning--I didn't find a database entry for "jones2004"
+Warning--Require address: fordAvailabilityGloballyDistributed2010b
+Warning--Require citedate: weatherspoonErasureCodingVs2002a
+Warning--Require address: huangErasureCodingWindows2012
+Warning--Require address: zhouFastErasureCoding2019
+Warning--Require citedate: uezatoAcceleratingXORbasedErasure2021
+Warning--Require citedate: wangFastAccelerationStrategies2025
+Warning--Require address: weiCharacterizingOptimizingRemote2021
+You've used 7 entries,
+            3189 wiz_defined-function locations,
+            784 strings with 8541 characters,
+and the built_in function-call counts, 14249 in all, are:
+= -- 1555
+> -- 27
+< -- 64
++ -- 1245
+- -- 98
+* -- 393
+:= -- 1591
+add.period$ -- 0
+call.type$ -- 7
+change.case$ -- 40
+chr.to.int$ -- 0
+cite$ -- 14
+duplicate$ -- 2002
+empty$ -- 551
+format.name$ -- 80
+if$ -- 3800
+int.to.chr$ -- 0
+int.to.str$ -- 7
+missing$ -- 0
+newline$ -- 48
+num.names$ -- 8
+pop$ -- 212
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 116
+stack$ -- 0
+substring$ -- 1670
+swap$ -- 375
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 7
+while$ -- 194
+width$ -- 8
+write$ -- 136
+(There were 20 warnings)

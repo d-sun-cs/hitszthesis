@@ -1,0 +1,48 @@
+\begin{thebibliography}{1}
+\providecommand{\bibauthor}[1]{#1}
+\providecommand{\bibeditor}[1]{#1}
+\providecommand{\bibtranslator}[1]{#1}
+\providecommand{\bibtitle}[1]{#1}
+\providecommand{\bibbooktitle}[1]{#1}
+\providecommand{\bibjournal}[1]{#1}
+\providecommand{\bibmark}[1]{\mbox{#1}}
+\providecommand{\bibcountry}[1]{#1}
+\providecommand{\bibpatentid}[1]{#1}
+\providecommand{\bibedition}[1]{#1}
+\providecommand{\biborganization}[1]{#1}
+\providecommand{\bibaddress}[1]{#1}
+\providecommand{\bibpublisher}[1]{#1}
+\providecommand{\bibinstitution}[1]{#1}
+\providecommand{\bibschool}[1]{#1}
+\providecommand{\bibvolume}[1]{#1}
+\providecommand{\bibnumber}[1]{#1}
+\providecommand{\bibversion}[1]{#1}
+\providecommand{\bibpages}[1]{#1}
+\providecommand{\bibmodifydate}[1]{#1}
+\providecommand{\bibcitedate}[1]{#1}
+\providecommand{\bibyear}[1]{#1}
+\providecommand{\bibdate}[1]{#1}
+\providecommand{\biburl}[1]{\newline\url{#1}}
+
+\bibitem{fordAvailabilityGloballyDistributed2010b}
+\bibauthor{FORD D\@，LABELLE F\@，POPOVICI F~I，et~al}\@. \bibtitle{Availability in {{Globally Distributed Storage Systems}}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{9th {{USENIX Symposium}} on {{Operating Systems Design}} and {{Implementation}} ({{OSDI}} 10)}\@，\bibaddress{［S.l.］}\@，\bibyear{2010}\@.
+
+\bibitem{weatherspoonErasureCodingVs2002a}
+\bibauthor{WEATHERSPOON H\@，KUBIATOWICZ J~D}\@. \bibtitle{Erasure {{Coding Vs}}. {{Replication}}: {{A Quantitative Comparison}}}\bibmark{\,［C/OL］} //\thinspace{}\bibeditor{DRUSCHEL P\@，KAASHOEK F\@，ROWSTRON A}\@. \bibbooktitle{Peer-to-{{Peer Systems}}}\@，\bibaddress{Berlin, Heidelberg}\thinspace{}\textnormal{：}\bibpublisher{Springer}\@，\bibyear{2002}\thinspace{}\textnormal{：}\bibpages{328\textnormal{-}337}\@. \url{http://dx.doi.org/10.1007/3-540-45748-8_31}\@.
+
+\bibitem{huangErasureCodingWindows2012}
+\bibauthor{HUANG C\@，SIMITCI H\@，XU Y，et~al}\@. \bibtitle{Erasure {{Coding}} in {{Windows Azure Storage}}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{2012 {{USENIX Annual Technical Conference}} ({{USENIX ATC}} 12)}\@，\bibaddress{［S.l.］}\@，\bibyear{2012}\thinspace{}\textnormal{：}\bibpages{15\textnormal{-}26}\@.
+
+\bibitem{zhouFastErasureCoding2019}
+\bibauthor{ZHOU T\@，TIAN C}\@. \bibtitle{Fast {{Erasure Coding}} for {{Data Storage}}: {{A Comprehensive Study}} of the {{Acceleration Techniques}}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{17th {{USENIX Conference}} on {{File}} and {{Storage Technologies}} ({{FAST}} 19)}\@，\bibaddress{［S.l.］}\@，\bibyear{2019}\thinspace{}\textnormal{：}\bibpages{317\textnormal{-}329}\@.
+
+\bibitem{uezatoAcceleratingXORbasedErasure2021}
+\bibauthor{UEZATO Y}\@. \bibtitle{Accelerating {{XOR-based}} Erasure Coding Using Program Optimization Techniques}\bibmark{\,［C/OL］} //\thinspace{}\bibbooktitle{{{SC}} '21\thinspace{}\textnormal{：}Proceedings of the {{International Conference}} for {{High Performance Computing}}, {{Networking}}, {{Storage}} and {{Analysis}}}\@，\bibaddress{New York, NY, USA}\thinspace{}\textnormal{：}\bibpublisher{Association for Computing Machinery}\@，\bibyear{2021}\thinspace{}\textnormal{：}\bibpages{1\textnormal{-}14}\@. \url{http://dx.doi.org/10.1145/3458817.3476204}\@.
+
+\bibitem{wangFastAccelerationStrategies2025}
+\bibauthor{WANG W\@，LYU M\@，NIU T，et~al}\@. \bibtitle{Fast {{Acceleration Strategies}} for {{XOR-Based Erasure Codes}}}\bibmark{\,［J/OL］}\@. \bibjournal{IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems}\@，\bibyear{2025}\@，\bibvolume{44}\bibnumber{（1）\!\!}\thinspace{}\textnormal{：}\bibpages{331\textnormal{-}344}\@. \url{http://dx.doi.org/10.1109/TCAD.2024.3432648}\@.
+
+\bibitem{weiCharacterizingOptimizingRemote2021}
+\bibauthor{WEI X\@，XIE X\@，CHEN R，et~al}\@. \bibtitle{Characterizing and {{Optimizing Remote Persistent Memory}} with \{\vphantom\}{{RDMA}}\vphantom\{\} and \{\vphantom\}{{NVM}}\vphantom\{\}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{2021 {{USENIX Annual Technical Conference}} ({{USENIX ATC}} 21)}\@，\bibaddress{［S.l.］}\@，\bibyear{2021}\thinspace{}\textnormal{：}\bibpages{523\textnormal{-}536}\@.
+
+\end{thebibliography}

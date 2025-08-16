@@ -1,40 +1,30 @@
 % !TEX root = ../main.tex
 
-% 中英标题：\chapter{中文标题}[英文标题]
-\chapter{绪\hspace{1em}论}[Introduction]
-% 绪论也需像摘要、目录格式那样空出两个半角字符。
+\chapter{课题的来源及研究目的和意义}
 
-\section{课题背景及研究的目的和意义}[Background, objective and significance of the subject]
+\section{课题来源}
 
-% 正文内容，注意LaTeX分段有两种方法，直接空一行或者使用<\par>
-% 默认首行缩进，不需要在代码编辑区手动敲空格
-发展国防工业、微电子工业等尖端技术需要精密和超精密的仪器设备，精密仪器设备要求高速、\dots\dots
+在现代存储系统中，数据可用性对于应对各种故障至关重要\cite{fordAvailabilityGloballyDistributed2010b}。目前，主流的容错技术包括数据复制和纠删码。
+数据复制通过在不同节点保存多份副本，虽然实现简单，但存储开销较大。
+例如，三副本机制能容忍两次故障，但需要三倍的存储空间。
+相比之下，纠删码技术能够以远低于复制的存储成本，提供同等甚至更高的数据可靠性\cite{weatherspoonErasureCodingVs2002a}。
+因此，纠删码已成为Google文件系统（GFS）、Windows Azure存储\cite{huangErasureCodingWindows2012}、Hadoop分布式文件系统（HDFS）以及Ceph等大规模存储系统的核心技术。
 
-\dots\dots
+纠删码通过对原始数据进行编码生成冗余校验信息，从而提升数据可靠性，并在数据丢失时实现恢复。
+与复制技术相比，经典纠删码通常依赖于有限域上的矩阵乘法，编码和解码过程计算量更大\cite{weatherspoonErasureCodingVs2002a}。
+众多研究如Zerasure\cite{zhouFastErasureCoding2019}、SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}、Cerasure\cite{wangFastAccelerationStrategies2025}致力于提升基于有限域矩阵乘法的编解码效率，以降低系统成本并增强服务可靠性。
+近年来，基于移位异或操作的纠删码在理论层面的研究取得许多进展，从根本上避免乘法运算，更简单的运算方式达到更高的理论性能
 
-\section{气体润滑轴承及其相关理论的发展概况}[Developmental of gas-lubricated bearing and correlated theories]
+尽管Two-tone编码在理论上具备优越性能，其工程实现尚处于探索阶段。现有文献虽展示了算法潜力，但缺乏可用于生产环境的实现。前期工作已对Two-tone编码与解码原语进行了形式化，并分析了其渐近复杂度。
 
-气体轴承是利用气膜支撑负荷或减少摩擦的机械构件。\dots\dots
+\section{研究的目的和意义}
 
-\dots\dots
+与复制技术相比，纠删码的编码和解码过程计算量更大\cite{weatherspoonErasureCodingVs2002a}。然而，即使是ISA-L\cite{IntelligentStorageAcceleration2022}、SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}等先进库，其编码速度仍难以充分发挥新型高性能设备（如InfiniBand RDMA和PM\cite{weiCharacterizingOptimizingRemote2021}）的潜力。因此，加速纠删码的编码过程对于充分利用这些硬件资源具有重要意义。
 
-\subsection{气体润滑轴承的发展}[Developmental of gas-lubricated bearing]
+纠删码算法的发展经历了从简单奇偶校验到复杂矩阵型方案的演变，逐步在存储开销与恢复速度之间寻求平衡。
 
-1828年，R.R.Willis$^{[3]}$发表了一篇关于小孔节流平板中压力分布的文章，这是有记载的研究气体润滑的最早文献。\dots\dots
 
-根据间隙内气膜压力的产生原理，气体轴承可以分为四种基本形式：
 
-（1）气体静压轴承：加压气体经过节流器进入间隙，在间隙内产生压力气膜使物体浮起的气体轴承，\dots\dots
+将Two-tone编码集成到实际存储系统面临两大挑战：一是支持多样化的擦除模式，二是突破内存访问瓶颈。针对第一个问题，提出了统一擦除-校验映射机制，将所有数据丢失场景归纳为单一解码路径，简化了冗余条件判断。针对内存压力，采用固定窗口分块策略提升缓存命中率，并在寄存器中合并相邻数据块，减少内存访问次数。
 
-\subsubsection{气体润滑轴承的分类}[Classification of gas-lubricated bearing]
-
-\dots\dots
-
-\subsubsection{多孔质气体静压轴承的研究}[Research on porous externally pressurized gas bearing]
-
-由于气体的压力低和可压缩性，\dots\dots。
-
-\section{本文的主要研究内容}[Main research contents of this subject]
-
-本课题的研究内容主要是针对局部多孔质止推轴承的多孔质材料的渗透
-率、静压轴承的静态特性、稳定性及其影响因素进行展开，\dots\dots。
+本课题旨在设计并优化高效的纠删码实现方案，推动新型编码算法在大规模存储系统中的落地应用，提升系统的可靠性与性能。
