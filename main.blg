@@ -16,45 +16,45 @@ Warning--I didn't find a database entry for "yao2015"
 Warning--I didn't find a database entry for "jones2006"
 Warning--I didn't find a database entry for "mcmahan2005"
 Warning--I didn't find a database entry for "jones2004"
-You've used 31 entries,
+You've used 32 entries,
             3189 wiz_defined-function locations,
-            959 strings with 15427 characters,
-and the built_in function-call counts, 60289 in all, are:
-= -- 6597
-> -- 116
-< -- 266
-+ -- 5193
-- -- 415
-* -- 1655
-:= -- 6653
+            967 strings with 15667 characters,
+and the built_in function-call counts, 62334 in all, are:
+= -- 6820
+> -- 120
+< -- 275
++ -- 5360
+- -- 430
+* -- 1713
+:= -- 6867
 add.period$ -- 0
-call.type$ -- 31
-change.case$ -- 170
+call.type$ -- 32
+change.case$ -- 176
 chr.to.int$ -- 0
-cite$ -- 31
-duplicate$ -- 8577
-empty$ -- 2394
-format.name$ -- 340
-if$ -- 16076
+cite$ -- 32
+duplicate$ -- 8878
+empty$ -- 2482
+format.name$ -- 352
+if$ -- 16615
 int.to.chr$ -- 0
-int.to.str$ -- 31
+int.to.str$ -- 32
 missing$ -- 0
-newline$ -- 120
-num.names$ -- 32
-pop$ -- 887
+newline$ -- 123
+num.names$ -- 33
+pop$ -- 920
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 536
+skip$ -- 551
 stack$ -- 0
-substring$ -- 7160
-swap$ -- 1666
+substring$ -- 7410
+swap$ -- 1724
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 817
-width$ -- 33
-write$ -- 492
+while$ -- 847
+width$ -- 34
+write$ -- 507
 (There were 10 warnings)

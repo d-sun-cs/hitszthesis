@@ -60,6 +60,9 @@
 \bibitem{plankJerasureLibraryFacilitating2008}
 \bibauthor{PLANK J~S\@，SIMMERMAN S\@，SCHUMAN C~D}\@. \bibtitle{Jerasure: {{A Library}} in {{C}}/{{C}}++ {{Facilitating Erasure Coding}} for {{Storage Applications}} - {{Version}} 1.2}\thinspace{}\textnormal{：}\bibnumber{CS-08-627}\bibmark{\,［R］}\@. \bibaddress{Knoxville, TN 37996, USA}\thinspace{}\textnormal{：}\bibinstitution{University of Tennessee}\@，\bibyear{2008}\@.
 
+\bibitem{liuGCRSGPUAccelerated2018}
+\bibauthor{LIU C\@，WANG Q\@，CHU X，et~al}\@. \bibtitle{G-{{CRS}}: {{GPU Accelerated Cauchy Reed-Solomon Coding}}}\bibmark{\,［J］}\@. \bibjournal{IEEE Transactions on Parallel and Distributed Systems}\@，\bibyear{2018}\@，\bibvolume{29}\bibnumber{（7）\!\!}\thinspace{}\textnormal{：}\bibpages{1484\textnormal{-}1498}\@.
+
 \bibitem{zhouFastErasureCoding2019}
 \bibauthor{ZHOU T\@，TIAN C}\@. \bibtitle{Fast {{Erasure Coding}} for {{Data Storage}}: {{A Comprehensive Study}} of the {{Acceleration Techniques}}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{17th {{USENIX Conference}} on {{File}} and {{Storage Technologies}} ({{FAST}} 19)}\@，\bibaddress{Boston, MA}\thinspace{}\textnormal{：}\bibpublisher{USENIX Association}\@，\bibyear{2019}\thinspace{}\textnormal{：}\bibpages{317\textnormal{-}329}\@.
 
