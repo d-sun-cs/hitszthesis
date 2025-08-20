@@ -4,11 +4,11 @@
 
 \section{国内外研究现状}
 
-现如今，关于纠删码的研究，RS码从理论到实现
-理论研究成果：Vandermonde矩阵->Cauchy矩阵、XOR-Based转化异或计算
-程序实现优化成果：选择1个数较少的矩阵以减少异或计算、提取公共运算并复用、缓存优化
+关于纠删码的研究最近成果，RS码从理论到实现
+理论研究SOTA成果：Vandermonde矩阵->Cauchy矩阵(逆运算开销小)、XOR-Based转化异或计算
+程序实现优化SOTA成果：选择1个数较少的矩阵（同时考虑Vandermond和Cauchy）以减少异或计算、提取公共运算并复用、缓存优化
 移位异或码，
-理论成果：two-tone具有连续可解性，
+理论成果：two-tone具有连续可解性，RID性质，高效解码
 
 下一小节有具体文献分析
 
@@ -16,8 +16,16 @@
 
 \subsection{RS码相关研究分析}
 
-早期：提出Reed-Solomon码\cite{reedPolynomialCodesCertain1960}，XOR-Based优化\cite{lubyXORBasedErasureResilientCoding1995}
-
-
+早期提出理论：提出Reed-Solomon码\cite{reedPolynomialCodesCertain1960}，XOR-Based优化\cite{lubyXORBasedErasureResilientCoding1995}
+各种优化：
+硬件支持的并发并行：Jerasure封装成经典库\cite{plankJerasureLibraryFacilitating2008}，Jerasure多线程优化\cite{arslanOpenMPPOSIXThreads2017},G-CRS\cite{liuGCRSGPUAccelerated2018}在GPU上优化。需要CPU/GPU支持，并非大多数条件下能达成。
+减少矩阵的1的个数进而减少运算数的工作有：Zerasure\cite{zhouFastErasureCoding2020}、\cite{makovenkoRevisitingOptimizationCauchy2022}、Cerasure\cite{wangFastAccelerationStrategies2025}
+提取公共异或运算表达式并复用减少运算：Zerasure\cite{zhouFastErasureCoding2020}、SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}
+缓存优化：Zerasure\cite{zhouFastErasureCoding2020}、SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}
+数据指针开销降低：Cerasure\cite{wangFastAccelerationStrategies2025}
 
 \subsection{移位异或码相关研究分析}
+
+ZigZag Decodable理论：
+
+无法直接应用RS码的系统优化策略到移位异或，因为移位异或是所有数据块都会参与异或，避免有限域上其他运算，不同的移位量也导致无公共表达式，偏移量计算方式不同以及数据访问模式不同无法直接应用缓存或指针开销优化
