@@ -4,24 +4,20 @@
 
 \section{国内外研究现状}
 
+现如今，关于纠删码的研究，RS码从理论到实现
+理论研究成果：Vandermonde矩阵->Cauchy矩阵、XOR-Based转化异或计算
+程序实现优化成果：选择1个数较少的矩阵以减少异或计算、提取公共运算并复用、缓存优化
+移位异或码，
+理论成果：two-tone具有连续可解性，
+
+下一小节有具体文献分析
+
 \section{国内外文献综述及简析}
 
-\subsection{冗余机械臂运动学研究现状}
+\subsection{RS码相关研究分析}
 
-\subsection{双臂协调轨迹规划研究现状}
+早期：提出Reed-Solomon码\cite{reedPolynomialCodesCertain1960}，XOR-Based优化\cite{lubyXORBasedErasureResilientCoding1995}
 
-\sindex[china]{du!段誉}引文标注遵照GB/T7714-2005，采用顺序编码制。正文中引用文献的标示应置于所引内容最后一个字的右上角，所引文献编号用阿拉伯数字置于方括号“[ ]”中，用小4号字体的上角标。要求：
 
-（1）引用单篇文献时，如“二次铣削\cite{ren2010}”。
 
-（2）同一处引用多篇文献时，各篇文献的序号在方括号内全部列出，各序号间用“，”，如
-遇连续序号，可标注讫序号。如，…形成了多种数学模型\cite{Gravagne2003,ren2010}…
-注意此处添加\cs{inlinecite}中文空格\inlinecite{Gravagne2003,ren2010}，可以在cfg文件中修改空格类型。
-
-（3）多次引用同一文献时，在文献序号的“[ ]”后标注引文页码。如，…间质细胞CAMP含量
-测定\cite[100-197]{Gravagne2003}…。…含量测定方法规定
-\cite[92]{Gravagne2003}…。
-
-（4）当提及的参考文献为文中直接说明时，则用小4号字与正文排齐，如“由文献\inlinecite{webster2010}可知”
-
-（5）多\cite{liu2016}引\cite{fu2018}用\cite{zhai2015}一\cite{yao2015}些\cite{jones2006}参\cite{mcmahan2005}考\cite{jones2004}文献以生成附录参考文献。
+\subsection{移位异或码相关研究分析}
