@@ -51,6 +51,9 @@
 \bibitem{weilCephReliableScalable2007}
 \bibauthor{WEIL S~A}\@. \bibtitle{Ceph: {{Reliable}}, {{Scalable}}, and {{High-Performance Distributed Storage}}}\bibmark{\,［D］}\@. \bibaddress{Santa Cruz}\thinspace{}\textnormal{：}\bibschool{University of California}\@，\bibyear{2007}\@.
 
+\bibitem{reedPolynomialCodesCertain1960}
+\bibauthor{REED I~S\@，SOLOMON G}\@. \bibtitle{Polynomial {{Codes Over Certain Finite Fields}}}\bibmark{\,［J］}\@. \bibjournal{Journal of the Society for Industrial and Applied Mathematics}\@，\bibyear{1960}\@，\bibvolume{8}\bibnumber{（2）\!\!}\thinspace{}\textnormal{：}\bibpages{300\textnormal{-}304}\@.
+
 \bibitem{lubyXORBasedErasureResilientCoding1995}
 \bibauthor{LUBY M\@，ZUCKERMANK D}\@. \bibtitle{An {{XOR-Based Erasure-Resilient Coding Scheme}}}\bibmark{\,［J］}\@. \bibjournal{Tech Report, Tech. Rep.}\@，\bibyear{1995}\@.
 
