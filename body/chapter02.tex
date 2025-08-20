@@ -26,6 +26,9 @@
 
 \subsection{移位异或码相关研究分析}
 
-ZigZag Decodable理论：
+ZigZag Decodable理论：基于vandermonde构建移位矩阵并异或计算校验块\cite{sungZigZagDecodableCodeMDS2013}，基于Hankel矩阵构建更高效\cite{gongZigzagDecodableCodes2017}
+结合相关应用领域的拓展
+
+Tow-tone理论：RID、Shift-XOR elimination\cite{chengSuccessivelySolvableShiftAdd2021}，进一步拓展出Two-tone Elimination\cite{fuTwotoneShiftXORStorage2021}形成Two-tone算法
 
 无法直接应用RS码的系统优化策略到移位异或，因为移位异或是所有数据块都会参与异或，避免有限域上其他运算，不同的移位量也导致无公共表达式，偏移量计算方式不同以及数据访问模式不同无法直接应用缓存或指针开销优化
