@@ -11,16 +11,21 @@
 因此，纠删码已成为Google文件系统（GFS）\cite{ghemawatGoogleFileSystem2003}、Windows Azure存储\cite{calderWindowsAzureStorage2011, huangErasureCodingWindows2012}、Hadoop分布式文件系统（HDFS）\cite{shvachkoHadoopDistributedFile2010, chiniahDynamicErasureCoding2019}以及Ceph\cite{weilCephScalableHighPerformance2006, weilCephReliableScalable2007}等大规模存储系统的重要技术。
 
 纠删码通过对原始数据进行编码生成冗余校验信息，从而提升数据可靠性，并在数据丢失时实现恢复。
-与复制技术相比，经典纠删码通常依赖于有限域上的矩阵乘法，编码和解码过程计算量更大\cite{weatherspoonErasureCodingVs2002}。
-众多研究如Jerasure\cite{plankJerasureLibraryFacilitating2008}、Zerasure\cite{zhouFastErasureCoding2019}、SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}、Cerasure\cite{niuCerasureFastAcceleration2023,wangFastAccelerationStrategies2025}和Intel的ISA-L库致力于提升基于有限域矩阵乘法的编解码效率，以降低系统成本并增强服务可靠性。
-近年来，基于移位异或操作的纠删码在理论层面的研究取得许多进展，例如ZigZag Decodable Codes\cite{sungZigZagdecodableCodeMDS2013, daiNewZigzagDecodableCode2017, gongZigzagDecodableCodes2017, daiZigzagDivisionMultipleAccess2019}和Two-tone Shift-XOR Codes\cite{fuOverheadfreeInplaceRecovery2014, fuOverheadfreeInplaceRecovery2015, fuDecodingRepairSchemes2020, fuTwotoneShiftXORStorage2021}，从根本上避免乘法运算，更简单的运算方式达到更高的理论性能。
+与复制技术相比，经典纠删码编码和解码过程计算量更大\cite{weatherspoonErasureCodingVs2002}，其通常依赖于有限域$GF[2^w], w>1$上的矩阵乘法，并在计算时将部分有限域上的运算转换为异或运算（亦即有限域$GF[2]$上的运算）\cite{lubyXORBasedErasureResilientCoding1995}。
+众多研究如Jerasure\cite{plankJerasureLibraryFacilitating2008}、Zerasure\cite{zhouFastErasureCoding2019}、SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}、Cerasure\cite{niuCerasureFastAcceleration2023, wangFastAccelerationStrategies2025}和Intel的ISA-L库\cite{gajalwarExploringDataProtection2024}等都致力于提升基于有限域矩阵乘法的编解码效率，以降低系统成本并增强服务可靠性。
+近年来，基于非循环移位异或运算的纠删码在理论层面取得许多进展，例如ZigZag Decodable Codes\cite{sungZigZagdecodableCodeMDS2013, daiNewZigzagDecodableCode2017, gongZigzagDecodableCodes2017}和Two-tone Shift-XOR Codes\cite{fuOverheadfreeInplaceRecovery2014, fuOverheadfreeInplaceRecovery2015, fuDecodingRepairSchemes2020, chengSuccessivelySolvableShiftAdd2021, fuTwotoneShiftXORStorage2021}，并且在存储\cite{gongZigzagDecodableCodes2017, daiBandwidthOverheadFreeData2017}、密码学\cite{gongZigzagDecodableRampSecret2018, kabiriradEfficientRampSecret2023, chenNewShiftAddSecret2024}和网络\cite{daiZigzagDivisionMultipleAccess2019}等应用领域进行了各种拓展研究。
+对于这类移位异或的编解码算法来说，异或运算就是最基本的运算，而并非像传统纠删码那样需要转化，这种更简单更直接的运算方式也取得了更高的理论性能\cite{gongZigzagDecodableCodes2017}。
+相比于ZigZag算法，Two-tone算法对于移位和异或操作的编排更具有规则性，使得其在解码时无需多次扫描可解出数据的位置，更容易按顺序访问内存，在算法实现层面有更高效的潜能\cite{chengSuccessivelySolvableShiftAdd2021, fuTwotoneShiftXORStorage2021}。
 
+尽管Two-tone纠删码在理论上具备优越性能，其完整的工程实现尚处于探索阶段。现有文献虽展示了算法潜力，但缺乏可用于生产环境的高性能实现。具体来讲，有如下三点问题：
 
+\begin{itemize}
+    \item 缺少完整的实现：当前的算法实现只能在实验测试中证明高效性，但并不具有泛化能力，无法应对所有的丢失情况，不能同时满足存储系统中解码丢失数据块和重新编码丢失校验块的双重需求。
+    \item 缺少系统级优化：没有一些例如缓存、内存的优化
+    \item 缺少更直接的现实应用
+\end{itemize}
 
-尽管Two-tone编码在理论上具备优越性能，其工程实现尚处于探索阶段。现有文献虽展示了算法潜力，但缺乏可用于生产环境的实现。前期工作已对Two-tone编码与解码原语进行了形式化，并分析了其渐近复杂度。
-1. 缺少完整实现：泛化性，无法应对所有丢失情况，解码和重编码双重要求
-2. 缺少系统优化：没有一些例如缓存、内存的优化
-3. 缺少更直接的现实应用
+本课题正来源于上述三点问题，计划Ceph，
 
 \section{研究的目的和意义}
 

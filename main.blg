@@ -16,46 +16,45 @@ Warning--I didn't find a database entry for "yao2015"
 Warning--I didn't find a database entry for "jones2006"
 Warning--I didn't find a database entry for "mcmahan2005"
 Warning--I didn't find a database entry for "jones2004"
-Warning--Require address: plankJerasureLibraryFacilitating2008
-You've used 19 entries,
+You've used 30 entries,
             3189 wiz_defined-function locations,
-            876 strings with 11560 characters,
-and the built_in function-call counts, 36494 in all, are:
-= -- 3954
-> -- 71
-< -- 164
-+ -- 3070
-- -- 256
-* -- 1029
-:= -- 3974
+            952 strings with 15220 characters,
+and the built_in function-call counts, 58764 in all, are:
+= -- 6439
+> -- 113
+< -- 259
++ -- 5083
+- -- 404
+* -- 1602
+:= -- 6504
 add.period$ -- 0
-call.type$ -- 19
-change.case$ -- 104
+call.type$ -- 30
+change.case$ -- 166
 chr.to.int$ -- 0
-cite$ -- 20
-duplicate$ -- 5201
-empty$ -- 1502
-format.name$ -- 208
-if$ -- 9700
+cite$ -- 30
+duplicate$ -- 8351
+empty$ -- 2320
+format.name$ -- 332
+if$ -- 15683
 int.to.chr$ -- 0
-int.to.str$ -- 19
+int.to.str$ -- 30
 missing$ -- 0
-newline$ -- 84
-num.names$ -- 20
-pop$ -- 555
+newline$ -- 117
+num.names$ -- 31
+pop$ -- 859
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 331
+skip$ -- 522
 stack$ -- 0
-substring$ -- 4318
-swap$ -- 1045
+substring$ -- 6978
+swap$ -- 1608
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 1
-while$ -- 508
-width$ -- 21
-write$ -- 319
-(There were 11 warnings)
+warning$ -- 0
+while$ -- 793
+width$ -- 32
+write$ -- 477
+(There were 10 warnings)
