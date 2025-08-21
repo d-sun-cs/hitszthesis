@@ -6,7 +6,7 @@
 
 随着分布式存储系统的快速发展，纠删码作为容错和数据可靠性保障的核心技术，受到了广泛关注。传统的Reed-Solomon（RS）码\cite{reedPolynomialCodesCertain1960}在理论和应用层面都取得了重要进展，其基于有限域的编码方式具有良好的MDS（最大距离可分）特性，能够在任意丢失情况下恢复原始数据。为提升RS码的实际编解码效率，研究者们提出了多种优化策略，包括将有限域运算转化为异或运算（XOR-Based）\cite{lubyXORBasedErasureResilientCoding1995}，以及采用Vandermonde或Cauchy矩阵以减少逆运算开销\cite{makovenkoRevisitingOptimizationCauchy2022}。在程序实现层面，优化矩阵结构以减少异或操作数、提取并复用公共运算表达式、缓存管理和指针优化等技术不断涌现\cite{zhouFastErasureCoding2020, uezatoAcceleratingXORbasedErasure2021, wangFastAccelerationStrategies2025}。例如，Zerasure、SLPEC和Cerasure等库通过矩阵稀疏化、运算链优化和空间局部性提升，显著提高了编码吞吐量。
 
-近年来，基于移位异或运算的新型纠删码逐渐成为研究热点。ZigZag Decodable Codes\cite{sungZigZagdecodableCodeMDS2013, gongZigzagDecodableCodes2017}通过构建特殊的移位矩阵，实现了仅依赖异或和移位操作的高效编码与解码，理论上可达到线性时间复杂度，并在存储、密码学和网络等领域得到拓展应用。Two-tone Shift-XOR Codes\cite{fuTwotoneShiftXORStorage2021, chengSuccessivelySolvableShiftAdd2021}进一步提升了移位异或码的结构规则性和解码效率，具备更低的存储开销和更高的吞吐性能。相关研究表明，Two-tone编码在实际场景下可实现比RS码更高的编码和解码速度，尤其适用于高性能分布式存储系统。
+近年来，基于移位异或运算的新型纠删码逐渐成为研究热点。ZigZag Decodable Codes\cite{sungZigZagDecodableCodeMDS2013, gongZigzagDecodableCodes2017}通过构建特殊的移位矩阵，实现了仅依赖异或和移位操作的高效编码与解码，理论上可达到线性时间复杂度，并在存储、密码学和网络等领域得到拓展应用。Two-tone Shift-XOR Codes\cite{fuTwotoneShiftXORStorage2021, chengSuccessivelySolvableShiftAdd2021}进一步提升了移位异或码的结构规则性和解码效率，具备更低的存储开销和更高的吞吐性能。相关研究表明，Two-tone编码在实际场景下可实现比RS码更高的编码和解码速度，尤其适用于高性能分布式存储系统。
 
 \section{国内外文献综述及简析}
 
@@ -16,7 +16,7 @@ RS码作为经典的纠删码方案，最早由Reed和Solomon提出\cite{reedPol
 
 \subsection{移位异或码相关研究分析}
 
-移位异或码以其简单高效的运算方式成为纠删码领域的新兴方向。ZigZag Decodable Codes\cite{sungZigZagdecodableCodeMDS2013, gongZigzagDecodableCodes2017}通过构建特殊的移位矩阵，实现了仅依赖异或和移位操作的高效编码与解码，理论上可达到线性时间复杂度，并在存储、密码学和网络等领域得到拓展应用。Two-tone Shift-XOR Codes\cite{fuTwotoneShiftXORStorage2021, chengSuccessivelySolvableShiftAdd2021}进一步提升了移位异或码的结构规则性和解码效率，具备更低的存储开销和更高的吞吐性能。相关研究表明，Two-tone编码在实际场景下可实现比RS码更高的编码和解码速度，尤其适用于高性能分布式存储系统。
+移位异或码以其简单高效的运算方式成为纠删码领域的新兴方向。ZigZag Decodable Codes\cite{sungZigZagDecodableCodeMDS2013, gongZigzagDecodableCodes2017}通过构建特殊的移位矩阵，实现了仅依赖异或和移位操作的高效编码与解码，理论上可达到线性时间复杂度，并在存储、密码学和网络等领域得到拓展应用。Two-tone Shift-XOR Codes\cite{fuTwotoneShiftXORStorage2021, chengSuccessivelySolvableShiftAdd2021}进一步提升了移位异或码的结构规则性和解码效率，具备更低的存储开销和更高的吞吐性能。相关研究表明，Two-tone编码在实际场景下可实现比RS码更高的编码和解码速度，尤其适用于高性能分布式存储系统。
 
 与RS码不同，移位异或码的所有数据块均参与异或运算，避免了有限域上的复杂运算。由于移位量的多样性，难以提取公共表达式，且数据访问模式与传统纠删码不同，导致缓存和指针优化策略无法直接迁移。因此，针对移位异或码的系统级优化方法仍需进一步探索和完善。
 减少矩阵的1的个数进而减少运算数的工作有：Zerasure\cite{zhouFastErasureCoding2020}、\cite{makovenkoRevisitingOptimizationCauchy2022}、Cerasure\cite{wangFastAccelerationStrategies2025}
@@ -26,7 +26,9 @@ RS码作为经典的纠删码方案，最早由Reed和Solomon提出\cite{reedPol
 
 \subsection{移位异或码相关研究分析}
 
-ZigZag Decodable理论：基于vandermonde构建移位矩阵并异或计算校验块\cite{sungZigZagDecodableCodeMDS2013}，基于Hankel矩阵构建更高效\cite{gongZigzagDecodableCodes2017}
+% ZigZag Decodable理论：基于vandermonde构建移位矩阵并异或计算校验块\cite{sungZigZagDecodableCodeMDS2013}，基于Hankel矩阵构建更高效\cite{gongZigzagDecodableCodes2017}
+123\cite{sungZigZagDecodableCodeMDS2013}
+ZigZag Decodable理论：基于vandermonde构建移位矩阵并异或计算校验块，基于Hankel矩阵构建更高效\cite{gongZigzagDecodableCodes2017}
 结合相关应用领域的拓展
 
 Tow-tone理论：RID、Shift-XOR elimination\cite{chengSuccessivelySolvableShiftAdd2021}，进一步拓展出Two-tone Elimination\cite{fuTwotoneShiftXORStorage2021}形成Two-tone算法

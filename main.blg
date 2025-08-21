@@ -6,55 +6,44 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: reference.bib
-Warning--I didn't find a database entry for "ren2010"
-Warning--I didn't find a database entry for "Gravagne2003"
-Warning--I didn't find a database entry for "webster2010"
-Warning--I didn't find a database entry for "liu2016"
-Warning--I didn't find a database entry for "fu2018"
-Warning--I didn't find a database entry for "zhai2015"
-Warning--I didn't find a database entry for "yao2015"
-Warning--I didn't find a database entry for "jones2006"
-Warning--I didn't find a database entry for "mcmahan2005"
-Warning--I didn't find a database entry for "jones2004"
-You've used 32 entries,
+You've used 35 entries,
             3189 wiz_defined-function locations,
-            967 strings with 15667 characters,
-and the built_in function-call counts, 62334 in all, are:
-= -- 6820
-> -- 120
-< -- 275
-+ -- 5360
-- -- 430
-* -- 1713
-:= -- 6867
+            974 strings with 16233 characters,
+and the built_in function-call counts, 68255 in all, are:
+= -- 7469
+> -- 131
+< -- 300
++ -- 5878
+- -- 471
+* -- 1879
+:= -- 7521
 add.period$ -- 0
-call.type$ -- 32
-change.case$ -- 176
+call.type$ -- 35
+change.case$ -- 192
 chr.to.int$ -- 0
-cite$ -- 32
-duplicate$ -- 8878
-empty$ -- 2482
-format.name$ -- 352
-if$ -- 16615
+cite$ -- 35
+duplicate$ -- 9722
+empty$ -- 2708
+format.name$ -- 384
+if$ -- 18187
 int.to.chr$ -- 0
-int.to.str$ -- 32
+int.to.str$ -- 35
 missing$ -- 0
-newline$ -- 123
-num.names$ -- 33
-pop$ -- 920
+newline$ -- 132
+num.names$ -- 36
+pop$ -- 1014
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 551
+skip$ -- 599
 stack$ -- 0
-substring$ -- 7410
-swap$ -- 1724
+substring$ -- 8108
+swap$ -- 1897
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 847
-width$ -- 34
-write$ -- 507
-(There were 10 warnings)
+while$ -- 931
+width$ -- 37
+write$ -- 553

@@ -60,11 +60,17 @@
 \bibitem{plankJerasureLibraryFacilitating2008}
 \bibauthor{PLANK J~S\@，SIMMERMAN S\@，SCHUMAN C~D}\@. \bibtitle{Jerasure: {{A Library}} in {{C}}/{{C}}++ {{Facilitating Erasure Coding}} for {{Storage Applications}} - {{Version}} 1.2}\thinspace{}\textnormal{：}\bibnumber{CS-08-627}\bibmark{\,［R］}\@. \bibaddress{Knoxville, TN 37996, USA}\thinspace{}\textnormal{：}\bibinstitution{University of Tennessee}\@，\bibyear{2008}\@.
 
+\bibitem{arslanOpenMPPOSIXThreads2017}
+\bibauthor{ARSLAN S~S\@，LE H\@，LANDMAN J，et~al}\@. \bibtitle{{{OpenMP}} and {{POSIX}} Threads Implementation of {{Jerasure}} 2.0}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{2017 {{IEEE International Black Sea Conference}} on {{Communications}} and {{Networking}} ({{BlackSeaCom}})}\@，\bibaddress{Istanbul, Turkey}\thinspace{}\textnormal{：}\bibpublisher{IEEE}\@，\bibyear{2017}\thinspace{}\textnormal{：}\bibpages{1\textnormal{-}5}\@.
+
 \bibitem{liuGCRSGPUAccelerated2018}
 \bibauthor{LIU C\@，WANG Q\@，CHU X，et~al}\@. \bibtitle{G-{{CRS}}: {{GPU Accelerated Cauchy Reed-Solomon Coding}}}\bibmark{\,［J］}\@. \bibjournal{IEEE Transactions on Parallel and Distributed Systems}\@，\bibyear{2018}\@，\bibvolume{29}\bibnumber{（7）\!\!}\thinspace{}\textnormal{：}\bibpages{1484\textnormal{-}1498}\@.
 
 \bibitem{zhouFastErasureCoding2019}
 \bibauthor{ZHOU T\@，TIAN C}\@. \bibtitle{Fast {{Erasure Coding}} for {{Data Storage}}: {{A Comprehensive Study}} of the {{Acceleration Techniques}}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{17th {{USENIX Conference}} on {{File}} and {{Storage Technologies}} ({{FAST}} 19)}\@，\bibaddress{Boston, MA}\thinspace{}\textnormal{：}\bibpublisher{USENIX Association}\@，\bibyear{2019}\thinspace{}\textnormal{：}\bibpages{317\textnormal{-}329}\@.
+
+\bibitem{zhouFastErasureCoding2020}
+\bibauthor{ZHOU T\@，TIAN C}\@. \bibtitle{Fast {{Erasure Coding}} for {{Data Storage}}: {{A Comprehensive Study}} of the {{Acceleration Techniques}}}\bibmark{\,［J］}\@. \bibjournal{ACM Transactions on Storage}\@，\bibyear{2020}\@，\bibvolume{16}\bibnumber{（1）\!\!}\thinspace{}\textnormal{：}\bibpages{1\textnormal{-}24}\@.
 
 \bibitem{uezatoAcceleratingXORbasedErasure2021}
 \bibauthor{UEZATO Y}\@. \bibtitle{Accelerating {{XOR-based}} Erasure Coding Using Program Optimization Techniques}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{Proceedings of the {{International Conference}} for {{High Performance Computing}}, {{Networking}}, {{Storage}} and {{Analysis}}}\@，\bibaddress{St. Louis Missouri}\thinspace{}\textnormal{：}\bibpublisher{ACM}\@，\bibyear{2021}\thinspace{}\textnormal{：}\bibpages{1\textnormal{-}14}\@.
@@ -78,7 +84,7 @@
 \bibitem{gajalwarExploringDataProtection2024}
 \bibauthor{GAJALWAR Y\@，KHILARI S\@，KULKARNI H，et~al}\@. \bibtitle{Exploring {{Data Protection}} with {{ISA-L}}: {{A Study}} on {{Erasure Coding}}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{2024 {{Asian Conference}} on {{Intelligent Technologies}} ({{ACOIT}})}\@，\bibaddress{KOLAR, India}\thinspace{}\textnormal{：}\bibpublisher{IEEE}\@，\bibyear{2024}\thinspace{}\textnormal{：}\bibpages{1\textnormal{-}6}\@.
 
-\bibitem{sungZigZagdecodableCodeMDS2013}
+\bibitem{sungZigZagDecodableCodeMDS2013}
 \bibauthor{SUNG C~W\@，GONG X}\@. \bibtitle{A {{ZigZag-Decodable Code}} with the {{MDS Property}} for {{Distributed Storage Systems}}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{2013 {{IEEE International Symposium}} on {{Information Theory}}}\@，\bibaddress{Istanbul, Turkey}\thinspace{}\textnormal{：}\bibpublisher{IEEE}\@，\bibyear{2013}\thinspace{}\textnormal{：}\bibpages{341\textnormal{-}345}\@.
 
 \bibitem{daiNewZigzagDecodableCode2017}
@@ -119,5 +125,8 @@
 
 \bibitem{weiCharacterizingOptimizingRemote2021}
 \bibauthor{WEI X\@，XIE X\@，CHEN R，et~al}\@. \bibtitle{Characterizing and {{Optimizing Remote Persistent Memory}} with {{RDMA}} and {{NVM}}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{2021 {{USENIX Annual Technical Conference}} ({{USENIX ATC}} 21)}\@，\bibaddress{Online}\thinspace{}\textnormal{：}\bibpublisher{USENIX Association}\@，\bibyear{2021}\thinspace{}\textnormal{：}\bibpages{523\textnormal{-}536}\@.
+
+\bibitem{makovenkoRevisitingOptimizationCauchy2022}
+\bibauthor{MAKOVENKO M\@，CHENG M\@，TIAN C}\@. \bibtitle{Revisiting the {{Optimization}} of {{Cauchy Reed-Solomon Coding Matrix}} for {{Fault-Tolerant Data Storage}}}\bibmark{\,［J］}\@. \bibjournal{IEEE Transactions on Computers}\@，\bibyear{2022}\@，\bibvolume{71}\bibnumber{（8）\!\!}\thinspace{}\textnormal{：}\bibpages{1839\textnormal{-}1846}\@.
 
 \end{thebibliography}
