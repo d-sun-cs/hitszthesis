@@ -29,7 +29,7 @@
     \label{equ:RSDecode}
 \end{equation}
 
-其中，$\mathbf{D'}$为所有未丢失的数据块和校验块构成的向量，$\mathbf{G'}^{-1}$为根据丢失情况构造的逆生成矩阵，$\mathbf{D}$为原始数据块向量。\figref{fig:RSDecodeExample}以$k=4, m=3$为例，展示了RS码的解码和重编码过程。
+其中，$\mathbf{D'}$为所有未丢失的数据块和校验块构成的向量，$\mathbf{G'}^{-1}$为根据丢失情况构造的逆生成矩阵，$\mathbf{D}$为原始数据块向量。\figref{fig:RSDecodeExample}举例展示了RS码的解码和重编码过程。
 
 \begin{figure}[htbp]
     \centering
@@ -38,7 +38,7 @@
     \label{fig:RSDecodeExample}
 \end{figure}
 
-\subsection{Two-tone Shift-XOR的编码原理}
+\subsection{Two-tone Shift-XOR的编解码原理}
 
 Two-tone Shift-XOR码是一种基于移位和异或操作的高效纠删码。其核心思想是利用规则的移位矩阵和异或运算实现编码与解码，避免有限域上的乘法运算，提升运算效率。Two-tone码的编码过程可由\equref{equ:TwoToneEncode}表示。 
 
@@ -55,35 +55,59 @@ Two-tone Shift-XOR码是一种基于移位和异或操作的高效纠删码。�
     \label{equ:TwoToneEncodeSingle}
 \end{equation}
 
-其中$z^{s_{ij}}D_j$表示对数据块$D_i$进行$s_{i,j}$个单位的非循环移位，$\oplus$为异或操作。\figref{fig:RSEncodeExample}以$k=4, m=3$为例，展示了RS码的编码过程。
+其中$z^{s_{ij}}D_j$表示对数据块$D_i$进行$s_{i,j}$个单位的非循环移位，$\oplus$为异或操作。\figref{fig:TwoToneEncodeExample}举例展示了RS码的编码过程。
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/Two-tone码编码举例.pdf}
+    \caption{Two-tone码编码举例}
+    \label{fig:TwoToneEncodeExample}
+\end{figure}
 
+Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自然按序逐步解出丢失块，提升解码效率。\figref{fig:TwoToneDecodeExampleErase3}举例展示了Two-tone码在丢失三个数据块时的解码过程，总体分成两步，第一步是“代入”，将未丢失的数据块代入至校验块中，第二步即为“Two-tone消除”，每一轮次中，从一边最外侧错开的单位开始，依次向内解出每个单位，直到无法再求解，再从另一边最外侧错开的单位开始，依次向内求解，直到解出该轮次内的所有单位，再进入下一轮，循环解出所有数据。解出的单位要代入至校验块，以便后续继续解出其他单位。这里提到的“一边”和“另一边”，即对应Two-tone算法中的两个子系统\cite{fuTwotoneShiftXORStorage2021}，按序求解这两个子系统，即可高效解出所有数据。
 
-Two-tone算法的生成矩阵具有特殊结构，使得解码时可按序消除丢失块，提升解码效率。
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/Two-tone码丢失3个数据块的解码举例.pdf}
+    \caption{Two-tone码丢失3个数据块的解码举例}
+    \label{fig:TwoToneDecodeExampleErase3}
+\end{figure}
 
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=0.7\textwidth]{figs/twotone_matrix_example.pdf}
-%     \caption{Two-tone Shift-XOR编码矩阵示意图}
-%     \label{fig:twotone_matrix}
-% \end{figure}
+\figref{fig:TwoToneDecodeExampleErase2}举例展示了Two-tone码在丢失两个数据块和一个校验块时的解码过程，不同之处在于，只有一边有错开的单位，相当于两个子系统的其中一个为空集，无需进行操作，其他流程不变即可。本例中由于出现了校验块的丢失，在解码完成后，还需要重新编码丢失的校验块，这样才算完成了全部要求。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/Two-tone码丢失2个数据块和1个校验块的解码举例.pdf}
+    \caption{Two-tone码丢失2个数据块和1个校验块的解码举例}
+    \label{fig:TwoToneDecodeExampleErase2}
+\end{figure}
 
 \subsection{优化问题描述}
 
 尽管Two-tone Shift-XOR码在理论上具备高效性，但实际工程实现仍面临如下优化问题：
+
 \begin{itemize}
-    \item 如何统一处理所有丢失情况，实现解码泛化与高效性兼顾；
-    \item 如何提升缓存局部性，减少内存访问压力；
-    \item 如何在寄存器层面合并数据块，降低内存读写次数；
-    \item 如何针对特殊丢失场景进一步特化优化，发挥硬件指令优势。
+    \item 如何统一处理所有丢失情况，实现解码和重编码的泛化，兼顾高效性；
+    \item 如何提升缓存局部性，减少内存访问压力，缓解算法整体的内存瓶颈；
+    \item 如何针对只丢失一块的常见场景进一步特化优化，发挥硬件指令优势。
 \end{itemize}
+
+基于此，本课题给出了一系列研究方案。
 
 \section{研究方案}
 
 \subsection{统一解码抽象：Erasure-Parity Mapping}
 
-针对多样化丢失情况，提出erasure-parity mapping结构，将所有丢失块（数据块或校验块）统一抽象为erasure结构。每个erasure结构按编号匹配丢失块，数据块优先，校验块后置。对于数据块丢失，寻找对应校验块进行解码；对于校验块丢失，则重新编码。若丢失块数小于阈值，则无需处理。该结构实现了解码流程的统一抽象，简化了条件分支。
+对于不使用特殊抽象方法的解码，在“代入”步骤时，需要判断校验块是否存在，才能确定是否要执行代入计算。在“消除”步骤时，每个丢失的数据块要按顺序匹配未丢失的校验块，从而按照前文所述的消除规则，从错开的单位开始解码，将解出的单位继续“代入”，进而解出完整的数据块。最后，还需要判断是否要重新编码丢失的校验块。\figref{}展示了这种解码方式的总体流程。
 
+图1：未简化时的判断逻辑
+
+针对多样化的丢失情况，本课题提出Erasure-Parity Mapping的解决方案。该方案将所有丢失块（包括数据块和校验块）统一抽象为Erasure结构，每个Erasure结构按块编号顺序匹配未丢失的校验块，若Erasure结构本就来源于丢失的校验块，则其匹配自己即可。在“代入”步骤时，无需额外判断，直接将未丢失的数据块代入Erasure结构即可。在“消除”步骤时，直接从已经匹配好的校验块中解出数据单位即可，将解出的单位同样直接“代入”到所有Erasure结构中。因为以上两个步骤是对所有Erasure结构的统一操作，而Erasure结构包括了所有丢失的数据块和校验块，所以数据块的解码和校验块的重编码可以互相穿插并同时完成，无需单独的重编码步骤，进一步减少了遍历与内存访问次数。
+
+\figref{}展示了Erasure-Parity Mapping解码方案的总体流程。该结构实现了解码流程的统一抽象，将同类操作统一进行，同时处理码字的解码与重编码，实现了简洁与高效。
+
+
+图2：简化后的判断逻辑
 % \begin{figure}[htbp]
 %     \centering
 %     \includegraphics[width=0.7\textwidth]{figs/erasure_parity_map.pdf}
@@ -91,7 +115,7 @@ Two-tone算法的生成矩阵具有特殊结构，使得解码时可按序消除
 %     \label{fig:erasure_parity_map}
 % \end{figure}
 
-\subsection{缓存友好窗口划分：Cache-Friendly Window}
+\subsection{缓存友好的窗口划分：Cache-Friendly Window}
 
 为提升缓存局部性，将较长的数据块（chunk）划分为较小的窗口（window）进行处理。每个window独立初始化，仅在首次访问时进行计算（init on first access），并采用局部异或写入校验块。该方法有效减少缓存失效和初始化开销。
 
@@ -102,7 +126,7 @@ Two-tone算法的生成矩阵具有特殊结构，使得解码时可按序消除
 %     \label{fig:cache_window}
 % \end{figure}
 
-\subsection{内存友好邻域合并访问：Neighbor Merging Access}
+\subsection{内存友好的相邻合并访问：Neighbor Merging Access}
 
 编码时，数据块访问有横向（逐块）和纵向（逐slice）两种模式。横向访问集中处理数据块，纵向访问则针对校验块slice。提出邻域合并策略，将相邻两个数据块chunk在寄存器中合并处理，纵向运算后再写入校验块内存，理论上减少约50\%的内存访问。
 
