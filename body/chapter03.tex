@@ -98,11 +98,11 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
 
 \subsection{统一解码抽象：Erasure-Parity Mapping}
 
-对于不使用特殊抽象方法的解码，在“代入”步骤时，需要判断校验块是否存在，才能确定是否要执行代入计算。在“消除”步骤时，每个丢失的数据块要按顺序匹配未丢失的校验块，从而按照前文所述的消除规则，从错开的单位开始解码，将解出的单位继续“代入”，进而解出完整的数据块。最后，还需要判断是否要重新编码丢失的校验块。\figref{TwoToneDecodeNaiveFlow}展示了这种解码方式的总体流程。
+对于不使用特殊抽象方法的解码，在“代入”步骤时，需要判断校验块是否存在，才能确定是否要执行代入计算。在“消除”步骤时，每个丢失的数据块要按顺序匹配未丢失的校验块，从而按照前文所述的消除规则，从错开的单位开始解码，将解出的单位继续“代入”，进而解出完整的数据块。最后，还需要判断是否要重新编码丢失的校验块。\figref{fig:TwoToneDecodeNaiveFlow}展示了这种解码方式的总体流程。
 
 针对多样化的丢失情况，本课题提出Erasure-Parity Mapping的解决方案。该方案将所有丢失块（包括数据块和校验块）统一抽象为Erasure结构，每个Erasure结构按块编号顺序匹配未丢失的校验块，若Erasure结构本就来源于丢失的校验块，则其匹配自己即可。在“代入”步骤时，无需额外判断，直接将未丢失的数据块代入Erasure结构即可。在“消除”步骤时，直接从已经匹配好的校验块中解出数据单位即可，将解出的单位同样直接“代入”到所有Erasure结构中。因为以上两个步骤是对所有Erasure结构的统一操作，而Erasure结构包括了所有丢失的数据块和校验块，所以数据块的解码和校验块的重编码可以互相穿插并同时完成，无需单独的重编码步骤，进一步减少了遍历与内存访问次数。
 
-\figref{TwoToneDecodeMappingFlow}展示了Erasure-Parity Mapping解码方案的总体流程。该结构实现了解码流程的统一抽象，将同类操作统一进行，同时处理码字的解码与重编码，实现了简洁与高效。
+\figref{fig:TwoToneDecodeMappingFlow}展示了Erasure-Parity Mapping解码方案的总体流程，算法\ref{algo:TwoToneDecodeMapping}列出了该方案的伪代码实现，其中$D$为数据块指针数组，$C$为校验块指针数组，$Ed$为丢失的数据块索引，$Ec$为丢失的校验块索引，$k$为数据块个数，$m$为校验块个数，数据块和校验块依次从$0$到$k+m-1$编码。这种Erasure结构实现了解码流程的统一抽象，将同类操作统一进行，同时处理码字的解码与重编码，实现了简洁与高效。
 
 \begin{figure}[htbp]
     \centering
@@ -111,7 +111,7 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
         \centering
         \includegraphics[width=0.5\textwidth]{Two-tone一般解码实现流程}
         \caption{Two-tone一般解码实现流程}
-        \label{TwoToneDecodeNaiveFlow}
+        \label{fig:TwoToneDecodeNaiveFlow}
     \end{minipage}%
     \hspace{0.05\textwidth}
     \begin{minipage}[t]{0.4\textwidth}
@@ -119,9 +119,58 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
         \centering
         \includegraphics[width=0.5\textwidth]{Erasure-Parity Mapping统一解码实现流程}
         \caption{Erasure-Parity Mapping统一解码实现流程}
-        \label{TwoToneDecodeMappingFlow}
+        \label{fig:TwoToneDecodeMappingFlow}
     \end{minipage}
 \end{figure}
+
+\begin{algorithm}[H]
+\caption{Two-tone Erasure-Parity Mapping解码}
+\label{algo:TwoToneDecodeMapping}
+\KwIn{$D$, $C$, Ascendingly sorted $Ed$ and $Ec$, $k$, $m$}
+\KwOut{Recover all erased data and coding chunks}
+
+\textbf{/* Step 1: Map erasures with parities */}
+
+\For{$i \in Ec$}{
+
+    $map\_erasure\_ptr[i-k] \gets C[i]$ init by $0$
+
+}
+
+\For{$i \in (\{k,...,k+m-1\}-Ec)$ \textbf{and} !Ed.empty()}{
+
+    $coding\_data\_map[i-k] \gets Ed.pop\_front()$
+
+    $map\_erasure\_ptr[i-k] \gets D[coding\_data\_map[i-k]]$ init by $C[i-k]$
+
+}
+
+\textbf{/* Step 2: Substitute available data into mapping erasures */}
+
+\ForEach{non-null data chunk $D[i]$}{
+
+    \ForEach{non-null $map\_erasure\_ptr[j]$}{
+
+        Shift-xor the slices of $D[i]$ into $map\_erasure\_ptr[j]$
+
+    }
+
+}
+
+\textbf{/* Step 3: Decode erased data and substitute it */}
+
+\ForEach{non-null $coding\_data\_map[i]$}{
+
+    Decode the slice of $D[coding\_data\_map[i]]$ from $map\_erasure\_ptr[i]$
+
+    \ForEach{other non-null $map\_erasure\_ptr[j]$}{
+
+        Shift-xor the decoded slice into $map\_erasure\_ptr[j]$
+
+    }
+}
+
+\end{algorithm}
 
 \subsection{缓存友好的窗口划分：Cache-Friendly Window}
 
