@@ -151,7 +151,7 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
     \label{fig:TwoToneEncodeHorizontalVerticalMode}
 \end{figure}
 
-针对上述两种模式各自的内存访问瓶颈，提出了“相邻合并访问”（Neighbor-Merging Access）策略。该策略结合横向和纵向的优点，将相邻的两个数据块chunk在寄存器中合并处理，利用SIMD指令或寄存器批量操作，先在寄存器内完成横向合并，再进行纵向运算，最后一次性写入校验块内存。这样既能充分利用数据块的访问局部性，又能减少对校验块的重复访问，理论上可减少约50\%的内存访问次数，显著提升整体编码效率。
+针对上述两种模式各自的内存访问瓶颈，提出了“相邻合并访问”（Neighbor-Merging Access）策略。该策略结合横向和纵向的优点，将相邻的两个数据块chunk的单位在寄存器中合并处理，利用SIMD指令或寄存器批量操作，总体上横向访问数据块，计算和访存时则先在寄存器内完成纵向合并运算，再一次性写入校验块内存。这样既能充分利用数据块的访问局部性，又能减少对校验块的重复访问，理论上可减少一半对校验块内存的重复访问，显著提升整体编码效率。
 
 \begin{figure}[htbp]
     \centering
@@ -160,15 +160,16 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
     \label{fig:NeighborMergingAccess}
 \end{figure}
 
-综上，Neighbor-Merging Access模式通过横向与纵向访问的有机结合，实现了对数据块和校验块的高效利用，最大程度减少了内存的重复和不集中的访问，提升了Two-tone Shift-XOR码在实际工程中的编解码性能。
+综上，Neighbor-Merging Access模式通过横向与纵向访问的有机结合，实现了对数据块和校验块的高效利用，减少了内存的重复和不集中的访问，提升了Two-tone Shift-XOR码在实际工程中的编解码性能。
 
 \subsection{特化与泛化结合：Special Case Expansibility}
 
-虽然解码流程已实现泛化，但针对特殊丢失场景（如仅丢失一个块），可进一步特化优化。例如，移位异或特性允许直接异或全部chunk恢复丢失块，无需zigzag逐步解码。此时可利用AVX2流指令，提升解码效率。特化与泛化结合，使解码在全场景下均具备高效方案。
+在实际分布式存储系统中，多台设备同时故障的概率远低于单台设备故障，因此只丢失一块的场景极为常见。由于这种情况数较少且逻辑简单，针对其进行特化优化的开发成本很低。具体而言，当仅有一块数据或校验块丢失时，无需采用Two-tone码常规的两侧错位解码流程，只需将所有未丢失的chunk整体异或代入即可恢复丢失块，相当于仅执行“代入”步骤，且只需操作一个Erasure结构。如\figref{fig:TwoToneDecodeExampleErase1}所示。这种特化流程不仅极大简化了解码逻辑，还具备显著的加速潜力。由于只需访问一次所有chunk，可以大胆采用AVX2等SIMD流指令，并利用stream命令绕过缓存，进一步提升解码效率。综上，针对单块丢失场景进行特化优化，能够在实际应用中获得极高的性能收益，且与泛化解码流程结合，实现全场景下的高效编解码方案。
 
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=0.7\textwidth]{figs/special_case.pdf}
-%     \caption{特化场景下的高效解码流程}
-%     \label{fig:special_case}
-% \end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Two-tone解码只丢失一块的特化情况举例}
+    \caption{Two-tone解码只丢失一块的特化情况举例}
+    \label{fig:TwoToneDecodeExampleErase1}
+\end{figure}
+

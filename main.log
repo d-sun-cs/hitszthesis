@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.10)  23 AUG 2025 07:59
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.10)  23 AUG 2025 09:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1995,10 +1995,6 @@ LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
 (Font)              scaled to size 8.0pt on input line 1.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
 (Font)              scaled to size 6.0pt on input line 1.
-)
-\tf@toc=\write6
-\openout6 = `main.toc'.
-
 
 
 
@@ -2023,11 +2019,17 @@ Package fontspec Info:
 (fontspec)             <->"[FandolSong-Bold.otf]/OT:script=hani;language=dflt;"
 
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
-(Font)              scaled to size 9.03374pt on input line 14.
+(Font)              scaled to size 9.03374pt on input line 34.
 [1
 
 
-] (./body/chapter01.tex
+])
+\tf@toc=\write6
+\openout6 = `main.toc'.
+
+
+
+[2] (./body/chapter01.tex
 第1章
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
 (Font)              scaled to size 15.05624pt on input line 6.
@@ -2095,43 +2097,47 @@ File: figures/Cache-Friendly Window效果演示.pdf Graphic file (type pdf)
 [10]
 File: figures/Two-tone编码横向与纵向访问模式.pdf Graphic file (type pdf)
 <use figures/Two-tone编码横向与纵向访问模式.pdf>
-
-
-[11]
 File: figures/Neighbor-Merging Access模式.pdf Graphic file (type pdf)
 <use figures/Neighbor-Merging Access模式.pdf>
 
 
-[12]) (./body/chapter04.tex
+[11]
+
+[12]
+File: figures/Two-tone解码只丢失一块的特化情况举例.pdf Graphic file (type pdf)
+<use figures/Two-tone解码只丢失一块的特化情况举例.pdf>
+) (./body/chapter04.tex
 
 [13]
 第4章
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/b/n' will be
-(Font)              scaled to size 12.045pt on input line 10.
-) (./body/chapter05.tex
+(Font)              scaled to size 12.045pt on input line 22.
+
 
 [14
 
 
-]
+]) (./body/chapter05.tex
+
+[15]
 第5章
 ) (./body/chapter06.tex
 
-[15
+[16
 
 
 ]
 第6章
 ) (./body/chapter07.tex
 
-[16
+[17
 
 
 ]
 第7章
 )
 
-[17
+[18
 
 
 ] (./main.bbl
@@ -2146,21 +2152,21 @@ Underfull \hbox (badness 2980) in paragraph at lines 58--59
 
 
 
-[18
+[19
 
 
 
 ]
 
-[19]
+[20]
 
-[20])
+[21])
 \tf@thm=\write7
 \openout7 = `main.thm'.
 
 
 
-[21] (./main.aux)
+[22] (./main.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2022/08/05>
@@ -2171,15 +2177,15 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.22pt have occurred.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 79CF8F81EB3939D15F2232C69EC1E93F;5185.
+(rerunfilecheck)             Checksum: 274352DBECD76D56CED94AAA0E903843;5730.
  ) 
 Here is how much of TeX's memory you used:
- 47911 strings out of 468442
- 1054314 string characters out of 5445571
- 1554355 words of memory out of 5000000
- 75538 multiletter control sequences out of 15000+600000
+ 47957 strings out of 468442
+ 1057334 string characters out of 5445571
+ 1554984 words of memory out of 5000000
+ 75584 multiletter control sequences out of 15000+600000
  671548 words of font info for 185 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  107i,12n,136p,2551b,1297s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (23 pages).
+Output written on main.pdf (25 pages).
