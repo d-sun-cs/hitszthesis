@@ -98,44 +98,69 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
 
 \subsection{统一解码抽象：Erasure-Parity Mapping}
 
-对于不使用特殊抽象方法的解码，在“代入”步骤时，需要判断校验块是否存在，才能确定是否要执行代入计算。在“消除”步骤时，每个丢失的数据块要按顺序匹配未丢失的校验块，从而按照前文所述的消除规则，从错开的单位开始解码，将解出的单位继续“代入”，进而解出完整的数据块。最后，还需要判断是否要重新编码丢失的校验块。\figref{}展示了这种解码方式的总体流程。
-
-图1：未简化时的判断逻辑
+对于不使用特殊抽象方法的解码，在“代入”步骤时，需要判断校验块是否存在，才能确定是否要执行代入计算。在“消除”步骤时，每个丢失的数据块要按顺序匹配未丢失的校验块，从而按照前文所述的消除规则，从错开的单位开始解码，将解出的单位继续“代入”，进而解出完整的数据块。最后，还需要判断是否要重新编码丢失的校验块。\figref{TwoToneDecodeNaiveFlow}展示了这种解码方式的总体流程。
 
 针对多样化的丢失情况，本课题提出Erasure-Parity Mapping的解决方案。该方案将所有丢失块（包括数据块和校验块）统一抽象为Erasure结构，每个Erasure结构按块编号顺序匹配未丢失的校验块，若Erasure结构本就来源于丢失的校验块，则其匹配自己即可。在“代入”步骤时，无需额外判断，直接将未丢失的数据块代入Erasure结构即可。在“消除”步骤时，直接从已经匹配好的校验块中解出数据单位即可，将解出的单位同样直接“代入”到所有Erasure结构中。因为以上两个步骤是对所有Erasure结构的统一操作，而Erasure结构包括了所有丢失的数据块和校验块，所以数据块的解码和校验块的重编码可以互相穿插并同时完成，无需单独的重编码步骤，进一步减少了遍历与内存访问次数。
 
-\figref{}展示了Erasure-Parity Mapping解码方案的总体流程。该结构实现了解码流程的统一抽象，将同类操作统一进行，同时处理码字的解码与重编码，实现了简洁与高效。
+\figref{TwoToneDecodeMappingFlow}展示了Erasure-Parity Mapping解码方案的总体流程。该结构实现了解码流程的统一抽象，将同类操作统一进行，同时处理码字的解码与重编码，实现了简洁与高效。
 
-
-图2：简化后的判断逻辑
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=0.7\textwidth]{figs/erasure_parity_map.pdf}
-%     \caption{Erasure-Parity Mapping结构示意图}
-%     \label{fig:erasure_parity_map}
-% \end{figure}
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}[t]{0.4\textwidth}
+        \vspace{0pt} % 顶部对齐
+        \centering
+        \includegraphics[width=0.5\textwidth]{Two-tone一般解码实现流程}
+        \caption{Two-tone一般解码实现流程}
+        \label{TwoToneDecodeNaiveFlow}
+    \end{minipage}%
+    \hspace{0.05\textwidth}
+    \begin{minipage}[t]{0.4\textwidth}
+        \vspace{0pt} % 顶部对齐
+        \centering
+        \includegraphics[width=0.5\textwidth]{Erasure-Parity Mapping统一解码实现流程}
+        \caption{Erasure-Parity Mapping统一解码实现流程}
+        \label{TwoToneDecodeMappingFlow}
+    \end{minipage}
+\end{figure}
 
 \subsection{缓存友好的窗口划分：Cache-Friendly Window}
 
-为提升缓存局部性，将较长的数据块（chunk）划分为较小的窗口（window）进行处理。每个window独立初始化，仅在首次访问时进行计算（init on first access），并采用局部异或写入校验块。该方法有效减少缓存失效和初始化开销。
+在Two-tone Shift-XOR码的实际工程实现中，内存访问成为主要瓶颈。由于移位和异或操作本身极为高效，整体性能受限于数据块（chunk）在内存中的读写效率。尤其在大规模分布式存储系统中，频繁的内存访问会导致缓存失效，拖慢整体编解码速度。因此，提升缓存局部性成为优化的关键。
 
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=0.7\textwidth]{figs/cache_window.pdf}
-%     \caption{Cache-Friendly Window处理流程}
-%     \label{fig:cache_window}
-% \end{figure}
+为此，提出了Cache-Friendly Window方案：将较长的数据块划分为更小的窗口（window），每次仅处理一个window的数据。这样可以显著提升数据在CPU缓存中的命中率，减少跨chunk的内存访问，缓解内存瓶颈。\figref{fig:CacheFriendlyWindow}展示了该方案。同时，每个window独立初始化，并采用“首次访问时初始化”（Init On First Access）策略。实际应用如Ceph等分布式存储系统，分配的chunk内存空间通常不会预先初始化，若一开始就对全部chunk进行初始化，开销极大且浪费。因此，结合window划分，只有在window被实际访问时才进行初始化，边操作边init，极大提升了初始化效率和缓存利用率。
 
-\subsection{内存友好的相邻合并访问：Neighbor Merging Access}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Cache-Friendly Window效果演示}
+    \caption{Cache-Friendly Window效果演示}
+    \label{fig:CacheFriendlyWindow}
+\end{figure}
 
-编码时，数据块访问有横向（逐块）和纵向（逐slice）两种模式。横向访问集中处理数据块，纵向访问则针对校验块slice。提出邻域合并策略，将相邻两个数据块chunk在寄存器中合并处理，纵向运算后再写入校验块内存，理论上减少约50\%的内存访问。
+在解码过程中，还需考虑window与解码流程的特殊关系。Two-tone码的解码分为“代入”和“消除”两个步骤，不同块之间存在错位。若仅对当前window进行“代入”，可能导致解码位置的window未被完全覆盖，影响解码正确性。为此，提出off-by-one偏移策略：在“代入”时，窗口处理范围比“消除”领先一个window大小，即“代入”窗口始终覆盖“消除”窗口的全部数据。只需保证window size大于数据块个数$k$，即可实现完整覆盖。这一策略易于实现，既保证了缓存局部性，又确保了解码流程的正确性和高效性。\figref{fig:CacheFriendlyWindow}也展示了这种处理方案。
 
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=0.7\textwidth]{figs/neighbor_merging.pdf}
-%     \caption{Neighbor Merging Access编码模式示意}
-%     \label{fig:neighbor_merging}
-% \end{figure}
+\subsection{内存友好的相邻合并访问：Neighbor-Merging Access}
+
+在Two-tone Shift-XOR码的实际编码过程中，数据块与校验块的一般访问模式可分为横向和纵向两种，如\figref{fig:TwoToneEncodeHorizontalVerticalMode}所示。横向模式是指每次遍历一个数据块，将该块内的所有数据单位依次异或到所有校验块的对应位置，然后再处理下一个数据块。这种方式对单个数据块的利用非常充分，能够集中地访问和处理数据块，但由于每个数据单位都要异或到所有校验块，导致对校验块的内存需要反复多次访问，且访问不集中，容易造成缓存失效。
+
+纵向模式则是针对每个校验块进行处理。每次遍历一个校验块，根据该校验块的每个单位，去访问所有数据块的对应单位并进行异或计算。这样对于同一个校验块来说，只需访问一次即可完成全部计算，提升了校验块的访问效率。但由于不同校验块的移位偏移量不同，无法复用之前数据块异或的结果，导致对数据块的访问变得重复且不集中，影响整体效率。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Two-tone编码横向与纵向访问模式}
+    \caption{Two-tone编码横向与纵向访问模式}
+    \label{fig:TwoToneEncodeHorizontalVerticalMode}
+\end{figure}
+
+针对上述两种模式各自的内存访问瓶颈，提出了“相邻合并访问”（Neighbor-Merging Access）策略。该策略结合横向和纵向的优点，将相邻的两个数据块chunk在寄存器中合并处理，利用SIMD指令或寄存器批量操作，先在寄存器内完成横向合并，再进行纵向运算，最后一次性写入校验块内存。这样既能充分利用数据块的访问局部性，又能减少对校验块的重复访问，理论上可减少约50\%的内存访问次数，显著提升整体编码效率。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Neighbor-Merging Access模式}
+    \caption{Neighbor-Merging Access模式}
+    \label{fig:NeighborMergingAccess}
+\end{figure}
+
+综上，Neighbor-Merging Access模式通过横向与纵向访问的有机结合，实现了对数据块和校验块的高效利用，最大程度减少了内存的重复和不集中的访问，提升了Two-tone Shift-XOR码在实际工程中的编解码性能。
 
 \subsection{特化与泛化结合：Special Case Expansibility}
 
