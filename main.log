@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.10)  24 AUG 2025 02:56
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.10)  24 AUG 2025 09:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1995,6 +1995,10 @@ LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
 (Font)              scaled to size 8.0pt on input line 1.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
 (Font)              scaled to size 6.0pt on input line 1.
+)
+\tf@toc=\write6
+\openout6 = `main.toc'.
+
 
 
 
@@ -2019,17 +2023,11 @@ Package fontspec Info:
 (fontspec)             <->"[FandolSong-Bold.otf]/OT:script=hani;language=dflt;"
 
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
-(Font)              scaled to size 9.03374pt on input line 34.
+(Font)              scaled to size 9.03374pt on input line 14.
 [1
 
 
-])
-\tf@toc=\write6
-\openout6 = `main.toc'.
-
-
-
-[2] (./body/chapter01.tex
+] (./body/chapter01.tex
 第1章
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
 (Font)              scaled to size 15.05624pt on input line 6.
@@ -2052,9 +2050,31 @@ LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
 [3
 
 
-]) (./body/chapter03.tex
+]
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
+Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/OT:script=latn;language=dflt;mapping=tex-text;!
 
-[4]
+
+[4]) (./body/chapter03.tex
+
+[5]
 第3章
 Package hyperref Info: bookmark level for unknown equation defaults to 0 on input line 14.
 File: figures/RS码编码举例.pdf Graphic file (type pdf)
@@ -2063,7 +2083,7 @@ LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
 (Font)              scaled to size 10.53937pt on input line 21.
 
 
-[5
+[6
 
 
 ]
@@ -2071,7 +2091,7 @@ File: figures/RS码解码举例.pdf Graphic file (type pdf)
 <use figures/RS码解码举例.pdf>
 
 
-[6]
+[7]
 File: figures/Two-tone码编码举例.pdf Graphic file (type pdf)
 <use figures/Two-tone码编码举例.pdf>
 File: figures/Two-tone码丢失3个数据块的解码举例.pdf Graphic file (type pdf)
@@ -2080,11 +2100,11 @@ File: figures/Two-tone码丢失2个数据块和1个校验块的解码举例.pdf 
 <use figures/Two-tone码丢失2个数据块和1个校验块的解码举例.pdf>
 
 
-[7]
-
 [8]
 
 [9]
+
+[10]
 File: figures/Two-tone一般解码实现流程.pdf Graphic file (type pdf)
 <use figures/Two-tone一般解码实现流程.pdf>
 File: figures/Erasure-Parity Mapping统一解码实现流程.pdf Graphic file (type pdf)
@@ -2107,57 +2127,55 @@ LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/it' will be
 (Font)              scaled to size 6.0pt on input line 159.
 
 
-[10]
-
 [11]
+
+[12]
 File: figures/Cache-Friendly Window效果演示.pdf Graphic file (type pdf)
 <use figures/Cache-Friendly Window效果演示.pdf>
 File: figures/Two-tone编码横向与纵向访问模式.pdf Graphic file (type pdf)
 <use figures/Two-tone编码横向与纵向访问模式.pdf>
 
 
-[12]
+[13]
 File: figures/Neighbor-Merging Access模式.pdf Graphic file (type pdf)
 <use figures/Neighbor-Merging Access模式.pdf>
 File: figures/Two-tone解码只丢失一块的特化情况举例.pdf Graphic file (type pdf)
 <use figures/Two-tone解码只丢失一块的特化情况举例.pdf>
 ) (./body/chapter04.tex
 
-[13]
-
 [14]
+
+[15]
 第4章
 ) (./body/chapter05.tex
 
-[15
+[16
 
 
 ]
 
-[16]
+[17]
 第5章
 ) (./body/chapter06.tex
 
-[17
+[18
 
 
 ]
 第6章
 ) (./body/chapter07.tex
 
-[18
+[19
 
 
 ]
 第7章
+)
+
+[20
 
 
-[19
-
-
-])
-
-[20] (./main.bbl
+] (./main.bbl
 Underfull \hbox (badness 3635) in paragraph at lines 46--47
 []\TU/texgyretermes(0)/m/n/12.045 CHINIAH A\TU/FandolSong-Regular(0)/m/n/12.045 ，| \TU/texgyretermes(0)/m/n/12.045 MUNGUR A. Dynamic Erasure Coding Policy Allocation
  []
@@ -2194,15 +2212,15 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.22pt have occurred.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 274352DBECD76D56CED94AAA0E903843;5730.
+(rerunfilecheck)             Checksum: 3030EF98CDFA1B55A1CBC1B480BF040F;5548.
  ) 
 Here is how much of TeX's memory you used:
- 47981 strings out of 468442
- 1058333 string characters out of 5445571
- 1555039 words of memory out of 5000000
- 75601 multiletter control sequences out of 15000+600000
+ 47990 strings out of 468442
+ 1058753 string characters out of 5445571
+ 1556898 words of memory out of 5000000
+ 75610 multiletter control sequences out of 15000+600000
  671604 words of font info for 192 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  107i,16n,136p,2551b,1297s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (27 pages).
+Output written on main.pdf (26 pages).

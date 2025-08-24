@@ -126,7 +126,16 @@
 \bibitem{weiCharacterizingOptimizingRemote2021}
 \bibauthor{WEI X\@，XIE X\@，CHEN R，et~al}\@. \bibtitle{Characterizing and {{Optimizing Remote Persistent Memory}} with {{RDMA}} and {{NVM}}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{2021 {{USENIX Annual Technical Conference}} ({{USENIX ATC}} 21)}\@，\bibaddress{Online}\thinspace{}\textnormal{：}\bibpublisher{USENIX Association}\@，\bibyear{2021}\thinspace{}\textnormal{：}\bibpages{523\textnormal{-}536}\@.
 
+\bibitem{jamess.plankOptimizingCauchyReedSolomon2006}
+\bibauthor{JAMES S.~PLANK L~X}\@. \bibtitle{Optimizing {{Cauchy Reed-Solomon Codes}} for {{Fault-Tolerant Network Storage Applications}}}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{Fifth {{IEEE International Symposium}} on {{Network Computing}} and {{Applications}} ({{NCA}}'06)}\@，\bibaddress{Cambridge, MA, USA}\thinspace{}\textnormal{：}\bibpublisher{IEEE}\@，\bibyear{2006}\thinspace{}\textnormal{：}\bibpages{173\textnormal{-}180}\@.
+
 \bibitem{makovenkoRevisitingOptimizationCauchy2022}
 \bibauthor{MAKOVENKO M\@，CHENG M\@，TIAN C}\@. \bibtitle{Revisiting the {{Optimization}} of {{Cauchy Reed-Solomon Coding Matrix}} for {{Fault-Tolerant Data Storage}}}\bibmark{\,［J］}\@. \bibjournal{IEEE Transactions on Computers}\@，\bibyear{2022}\@，\bibvolume{71}\bibnumber{（8）\!\!}\thinspace{}\textnormal{：}\bibpages{1839\textnormal{-}1846}\@.
+
+\bibitem{plankHeuristicsOptimizingMatrixbased2012}
+\bibauthor{PLANK J~S\@，SCHUMAN C~D\@，ROBISON B~D}\@. \bibtitle{Heuristics for Optimizing Matrix-Based Erasure Codes for Fault-Tolerant Storage Systems}\bibmark{\,［C］} //\thinspace{}\bibbooktitle{{{IEEE}}/{{IFIP International Conference}} on {{Dependable Systems}} and {{Networks}} ({{DSN}} 2012)}\@，\bibaddress{Boston, MA, USA}\thinspace{}\textnormal{：}\bibpublisher{IEEE}\@，\bibyear{2012}\thinspace{}\textnormal{：}\bibpages{1\textnormal{-}12}\@.
+
+\bibitem{luoEfficientEncodingSchedules2014}
+\bibauthor{LUO J\@，SHRESTHA M\@，XU L，et~al}\@. \bibtitle{Efficient {{Encoding Schedules}} for {{XOR-Based Erasure Codes}}}\bibmark{\,［J］}\@. \bibjournal{IEEE Transactions on Computers}\@，\bibyear{2014}\@，\bibvolume{63}\bibnumber{（9）\!\!}\thinspace{}\textnormal{：}\bibpages{2259\textnormal{-}2272}\@.
 
 \end{thebibliography}
