@@ -55,7 +55,7 @@ Two-tone Shift-XOR码是一种基于移位和异或操作的高效纠删码。�
     \label{equ:TwoToneEncodeSingle}
 \end{equation}
 
-其中$z^{s_{ij}}D_j$表示对数据块$D_i$进行$s_{i,j}$个单位的非循环移位，$\oplus$为异或操作。\figref{fig:TwoToneEncodeExample}举例展示了RS码的编码过程。
+其中$z^{s_{ij}}D_j$表示对数据块$D_j$进行$s_{i,j}$个单位的非循环移位，$\oplus$为异或操作。\figref{fig:TwoToneEncodeExample}举例展示了RS码的编码过程。
 
 \begin{figure}[htbp]
     \centering
@@ -68,7 +68,7 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/Two-tone码丢失3个数据块的解码举例.pdf}
+    \includegraphics[width=0.65\textwidth]{figures/Two-tone码丢失3个数据块的解码举例.pdf}
     \caption{Two-tone码丢失3个数据块的解码举例}
     \label{fig:TwoToneDecodeExampleErase3}
 \end{figure}
@@ -77,7 +77,7 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/Two-tone码丢失2个数据块和1个校验块的解码举例.pdf}
+    \includegraphics[width=0.65\textwidth]{figures/Two-tone码丢失2个数据块和1个校验块的解码举例.pdf}
     \caption{Two-tone码丢失2个数据块和1个校验块的解码举例}
     \label{fig:TwoToneDecodeExampleErase2}
 \end{figure}
@@ -185,7 +185,7 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
     \label{fig:CacheFriendlyWindow}
 \end{figure}
 
-在解码过程中，还需考虑window与解码流程的特殊关系。Two-tone码的解码分为“代入”和“消除”两个步骤，不同块之间存在错位。若仅对当前window进行“代入”，可能导致解码位置的window未被完全覆盖，影响解码正确性。为此，提出off-by-one偏移策略：在“代入”时，窗口处理范围比“消除”领先一个window大小，即“代入”窗口始终覆盖“消除”窗口的全部数据。只需保证window size大于数据块个数$k$，即可实现完整覆盖。这一策略易于实现，既保证了缓存局部性，又确保了解码流程的正确性和高效性。\figref{fig:CacheFriendlyWindow}也展示了这种处理方案。
+在解码过程中，还需考虑window与解码流程的特殊关系。Two-tone码的解码分为“代入”和“消除”两个步骤，不同块之间存在错位。若仅对当前window进行“代入”，可能导致解码位置的window未被完全覆盖，影响解码正确性。为此，提出off-by-one代入策略：在“代入”时，窗口处理范围比“消除”领先一个window大小，即“代入”窗口始终覆盖“消除”窗口的全部数据。只需保证window size大于数据块个数$k$，即可实现完整覆盖。这一策略易于实现，既保证了缓存局部性，又确保了解码流程的正确性和高效性。\figref{fig:CacheFriendlyWindow}也展示了这种处理方案。
 
 \subsection{内存友好的相邻合并访问：Neighbor-Merging Access}
 

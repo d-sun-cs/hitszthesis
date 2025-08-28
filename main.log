@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.10)  24 AUG 2025 12:27
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.24)  28 AUG 2025 03:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -6,7 +6,7 @@ entering extended mode
 **main
 (./main.tex
 LaTeX2e <2025-06-01> patch level 1
-L3 programming layer <2025-07-20>
+L3 programming layer <2025-08-13>
 (./hitszthesis.cls
 Document Class: hitszthesis 2023/11/27 v3.3 Dissertation Template for Harbin Institute of Technology, ShenZhen (HITSZ)
 (/usr/local/texlive/2025/texmf-dist/tex/latex/base/ifthen.sty
@@ -33,7 +33,7 @@ Package etex Warning: Extended allocation already in use.
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/ctex/ctexbook.cls (/usr/local/texlive/2025/texmf-dist/tex/latex/ctex/config/ctexbackend.cfg
 File: ctexbackend.cfg 2022/07/14 v2.5.10 Backend configuration file (CTEX)
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2025-07-20 L3 programming layer (loader) 
+Package: expl3 2025-08-13 L3 programming layer (loader) 
  (/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
 File: l3backend-xetex.def 2025-06-09 L3 backend support: XeTeX
 \g__graphics_track_int=\count271
@@ -1394,7 +1394,7 @@ File: lstlang3.sty 2024/09/23 1.10c listings language file
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2024/09/23 1.10c (Carsten Heinz)
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/glossaries/base/glossaries.sty
-Package: glossaries 2025/05/14 v4.7 (NLCT)
+Package: glossaries 2025/08/11 v4.8 (NLCT)
  (/usr/local/texlive/2025/texmf-dist/tex/latex/mfirstuc/mfirstuc.sty
 Package: mfirstuc 2025/04/03 v2.09 (NLCT)
 \@glsmfirst=\toks61
@@ -1452,16 +1452,16 @@ File: datatool-utf8.ldf 2025/04/25 v3.4.1 (NLCT)
 \glsshorttok=\toks67
 \glslongtok=\toks68
  (/usr/local/texlive/2025/texmf-dist/tex/latex/glossaries/styles/glossary-hypernav.sty
-Package: glossary-hypernav 2025/05/14 v4.7 (NLCT)
+Package: glossary-hypernav 2025/08/11 v4.8 (NLCT)
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/glossaries/styles/glossary-list.sty
-Package: glossary-list 2025/05/14 v4.7 (NLCT)
+Package: glossary-list 2025/08/11 v4.8 (NLCT)
 \glslistdottedwidth=\skip146
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/glossaries/styles/glossary-long.sty
-Package: glossary-long 2025/05/14 v4.7 (NLCT)
+Package: glossary-long 2025/08/11 v4.8 (NLCT)
 \glsdescwidth=\skip147
 \glspagelistwidth=\skip148
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/glossaries/styles/glossary-super.sty
-Package: glossary-super 2025/05/14 v4.7 (NLCT)
+Package: glossary-super 2025/08/11 v4.8 (NLCT)
  (/usr/local/texlive/2025/texmf-dist/tex/latex/supertabular/supertabular.sty
 Package: supertabular 2024/07/20 v4.2c the supertabular environment
 \c@tracingst=\count494
@@ -1480,7 +1480,7 @@ Package: supertabular 2024/07/20 v4.2c the supertabular environment
 \ST@dimen=\dimen344
 \ST@pbox=\box147
 )) (/usr/local/texlive/2025/texmf-dist/tex/latex/glossaries/styles/glossary-tree.sty
-Package: glossary-tree 2025/05/14 v4.7 (NLCT)
+Package: glossary-tree 2025/08/11 v4.8 (NLCT)
 \l__glossaries_tree_max_known_level_int=\count495
 \l__glossaries_tree_offset_dim=\dimen345
 \l__glossaries_tree_namewidth_dim=\dimen346
@@ -1500,11 +1500,11 @@ Package: glossary-tree 2025/05/14 v4.7 (NLCT)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
 \pgfutil@abb=\box148
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/pgf.revision.tex)
-Package: pgfrcs 2023-01-15 v3.1.10 (3.1.10)
+Package: pgfrcs 2025-08-14 v3.1.11 (3.1.11)
 ))
-Package: pgf 2023-01-15 v3.1.10 (3.1.10)
+Package: pgf 2025-08-14 v3.1.11 (3.1.11)
  (/usr/local/texlive/2025/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (/usr/local/texlive/2025/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
-Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
+Package: pgfsys 2025-08-14 v3.1.11 (3.1.11)
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
 \pgfkeys@pathtoks=\toks70
 \pgfkeys@temptoks=\toks71
@@ -1532,25 +1532,25 @@ Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
 \t@pgf@tokc=\toks75
 \pgf@sys@id@count=\count501
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
-File: pgf.cfg 2023-01-15 v3.1.10 (3.1.10)
+File: pgf.cfg 2025-08-14 v3.1.11 (3.1.11)
 )
 Driver file for pgf: pgfsys-xetex.def
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-xetex.def
-File: pgfsys-xetex.def 2023-01-15 v3.1.10 (3.1.10)
+File: pgfsys-xetex.def 2025-08-14 v3.1.11 (3.1.11)
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-dvipdfmx.def
-File: pgfsys-dvipdfmx.def 2023-01-15 v3.1.10 (3.1.10)
+File: pgfsys-dvipdfmx.def 2025-08-14 v3.1.11 (3.1.11)
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
-File: pgfsys-common-pdf.def 2023-01-15 v3.1.10 (3.1.10)
+File: pgfsys-common-pdf.def 2025-08-14 v3.1.11 (3.1.11)
 )
 \pgfsys@objnum=\count502
 ))) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
-File: pgfsyssoftpath.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfsyssoftpath.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgfsyssoftpath@smallbuffer@items=\count503
 \pgfsyssoftpath@bigbuffer@items=\count504
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
-File: pgfsysprotocol.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfsysprotocol.code.tex 2025-08-14 v3.1.11 (3.1.11)
 )) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
-Package: pgfcore 2023-01-15 v3.1.10 (3.1.10)
+Package: pgfcore 2025-08-14 v3.1.11 (3.1.11)
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen366
 \pgfmath@count=\count505
@@ -1561,7 +1561,7 @@ Package: pgfcore 2023-01-15 v3.1.10 (3.1.10)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
 \c@pgfmathroundto@lastzeros=\count506
 )) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfint.code.tex) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
-File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcorepoints.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgf@picminx=\dimen367
 \pgf@picmaxx=\dimen368
 \pgf@picminy=\dimen369
@@ -1577,75 +1577,75 @@ File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@zx=\dimen379
 \pgf@zy=\dimen380
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
-File: pgfcorepathconstruct.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcorepathconstruct.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgf@path@lastx=\dimen381
 \pgf@path@lasty=\dimen382
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
-File: pgfcorepathusage.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcorepathusage.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgf@shorten@end@additional=\dimen383
 \pgf@shorten@start@additional=\dimen384
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
-File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcorescopes.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgfpic=\box150
 \pgf@hbox=\box151
 \pgf@layerbox@main=\box152
 \pgf@picture@serial@count=\count507
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
-File: pgfcoregraphicstate.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcoregraphicstate.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgflinewidth=\dimen385
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex
-File: pgfcoretransformations.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcoretransformations.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgf@pt@x=\dimen386
 \pgf@pt@y=\dimen387
 \pgf@pt@temp=\dimen388
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
-File: pgfcorequick.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcorequick.code.tex 2025-08-14 v3.1.11 (3.1.11)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex
-File: pgfcoreobjects.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcoreobjects.code.tex 2025-08-14 v3.1.11 (3.1.11)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex
-File: pgfcorepathprocessing.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcorepathprocessing.code.tex 2025-08-14 v3.1.11 (3.1.11)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
-File: pgfcorearrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcorearrows.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgfarrowsep=\dimen389
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
-File: pgfcoreshade.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcoreshade.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgf@max=\dimen390
 \pgf@sys@shading@range@num=\count508
 \pgf@shadingcount=\count509
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
-File: pgfcoreimage.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcoreimage.code.tex 2025-08-14 v3.1.11 (3.1.11)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
-File: pgfcoreexternal.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcoreexternal.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgfexternal@startupbox=\box153
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
-File: pgfcorelayers.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcorelayers.code.tex 2025-08-14 v3.1.11 (3.1.11)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex
-File: pgfcoretransparency.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcoretransparency.code.tex 2025-08-14 v3.1.11 (3.1.11)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex
-File: pgfcorepatterns.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcorepatterns.code.tex 2025-08-14 v3.1.11 (3.1.11)
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex
-File: pgfcorerdf.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfcorerdf.code.tex 2025-08-14 v3.1.11 (3.1.11)
 ))) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
-File: pgfmoduleshapes.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfmoduleshapes.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgfnodeparttextbox=\box154
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
-File: pgfmoduleplot.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfmoduleplot.code.tex 2025-08-14 v3.1.11 (3.1.11)
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
-Package: pgfcomp-version-0-65 2023-01-15 v3.1.10 (3.1.10)
+Package: pgfcomp-version-0-65 2025-08-14 v3.1.11 (3.1.11)
 \pgf@nodesepstart=\dimen391
 \pgf@nodesepend=\dimen392
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty
-Package: pgfcomp-version-1-18 2023-01-15 v3.1.10 (3.1.10)
+Package: pgfcomp-version-1-18 2025-08-14 v3.1.11 (3.1.11)
 )) (/usr/local/texlive/2025/texmf-dist/tex/latex/pgf/utilities/pgffor.sty (/usr/local/texlive/2025/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)) (/usr/local/texlive/2025/texmf-dist/tex/latex/pgf/math/pgfmath.sty (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
-Package: pgffor 2023-01-15 v3.1.10 (3.1.10)
+Package: pgffor 2025-08-14 v3.1.11 (3.1.11)
 \pgffor@iter=\dimen393
 \pgffor@skip=\dimen394
 \pgffor@stack=\toks79
 \pgffor@toks=\toks80
 )) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
-Package: tikz 2023-01-15 v3.1.10 (3.1.10)
+Package: tikz 2025-08-14 v3.1.11 (3.1.11)
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex
-File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgflibraryplothandlers.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgf@plot@mark@count=\count510
 \pgfplotmarksize=\dimen395
 )
@@ -1666,14 +1666,14 @@ File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \tikznumberofcurrentchild=\count513
 \tikz@fig@count=\count514
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
-File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: pgfmodulematrix.code.tex 2025-08-14 v3.1.11 (3.1.11)
 \pgfmatrixcurrentrow=\count515
 \pgfmatrixcurrentcolumn=\count516
 \pgf@matrix@numberofcolumns=\count517
 )
 \tikz@expandcount=\count518
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
-File: tikzlibrarytopaths.code.tex 2023-01-15 v3.1.10 (3.1.10)
+File: tikzlibrarytopaths.code.tex 2025-08-14 v3.1.11 (3.1.11)
 ))))
 Package translations Info: No language package found. I am going to use `english' as default language. on input line 7.
  (./main.aux)
@@ -2105,8 +2105,6 @@ File: figures/Two-tone码丢失2个数据块和1个校验块的解码举例.pdf 
 [8]
 
 [9]
-
-[10]
 File: figures/Two-tone一般解码实现流程.pdf Graphic file (type pdf)
 <use figures/Two-tone一般解码实现流程.pdf>
 File: figures/Erasure-Parity Mapping统一解码实现流程.pdf Graphic file (type pdf)
@@ -2129,23 +2127,26 @@ LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/it' will be
 (Font)              scaled to size 6.0pt on input line 159.
 
 
-[11]
+[10]
 
-[12]
+[11]
 File: figures/Cache-Friendly Window效果演示.pdf Graphic file (type pdf)
 <use figures/Cache-Friendly Window效果演示.pdf>
+
+
+[12]
 File: figures/Two-tone编码横向与纵向访问模式.pdf Graphic file (type pdf)
 <use figures/Two-tone编码横向与纵向访问模式.pdf>
+File: figures/Neighbor-Merging Access模式.pdf Graphic file (type pdf)
+<use figures/Neighbor-Merging Access模式.pdf>
 
 
 [13]
-File: figures/Neighbor-Merging Access模式.pdf Graphic file (type pdf)
-<use figures/Neighbor-Merging Access模式.pdf>
+
+[14]
 File: figures/Two-tone解码只丢失一块的特化情况举例.pdf Graphic file (type pdf)
 <use figures/Two-tone解码只丢失一块的特化情况举例.pdf>
 ) (./body/chapter04.tex
-
-[14]
 
 [15]
 第4章
@@ -2217,10 +2218,10 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 3030EF98CDFA1B55A1CBC1B480BF040F;5548.
  ) 
 Here is how much of TeX's memory you used:
- 47990 strings out of 468442
- 1058753 string characters out of 5445571
- 1556898 words of memory out of 5000000
- 75610 multiletter control sequences out of 15000+600000
+ 47991 strings out of 468441
+ 1058776 string characters out of 5445543
+ 1557014 words of memory out of 5000000
+ 75612 multiletter control sequences out of 15000+600000
  671604 words of font info for 192 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  107i,16n,136p,2551b,1297s stack positions out of 10000i,1000n,20000p,200000b,200000s
