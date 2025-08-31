@@ -6,28 +6,28 @@
 \contentsline {section}{\numberline {2.2}国内外文献综述及简析}{3}{section.2.2}%
 \contentsline {subsection}{\numberline {2.2.1}RS码相关研究分析}{3}{subsection.2.2.1}%
 \contentsline {subsection}{\numberline {2.2.2}移位异或码相关研究分析}{4}{subsection.2.2.2}%
-\contentsline {chapter}{\numberline {第3章}主要研究内容及研究方案}{6}{chapter.3}%
-\contentsline {section}{\numberline {3.1}研究内容}{6}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}存储编码的基本原理}{6}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Two-tone Shift-XOR的编解码原理}{7}{subsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.1.3}优化问题描述}{9}{subsection.3.1.3}%
-\contentsline {section}{\numberline {3.2}研究方案}{9}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}统一解码抽象：Erasure-Parity Mapping}{9}{subsection.3.2.1}%
+\contentsline {chapter}{\numberline {第3章}主要研究内容及研究方案}{7}{chapter.3}%
+\contentsline {section}{\numberline {3.1}研究内容}{7}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}存储编码的基本原理}{7}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Two-tone Shift-XOR的编解码原理}{8}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}优化问题描述}{10}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}研究方案}{10}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}统一解码抽象：Erasure-Parity Mapping}{10}{subsection.3.2.1}%
 \contentsline {subsection}{\numberline {3.2.2}缓存友好的窗口划分：Cache-Friendly Window}{12}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}内存友好的相邻合并访问：Neighbor-Merging Access}{13}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.3}内存友好的相邻合并访问：Neighbor-Merging Access}{14}{subsection.3.2.3}%
 \contentsline {subsection}{\numberline {3.2.4}特化与泛化结合：Special Case Expansibility}{15}{subsection.3.2.4}%
-\contentsline {chapter}{\numberline {第4章}预期目标}{16}{chapter.4}%
-\contentsline {section}{\numberline {4.1}系统集成与应用目标}{16}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}接口集成与功能验证}{16}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}集群集成与应用验证}{16}{subsection.4.1.2}%
-\contentsline {section}{\numberline {4.2}性能优化与方法论总结目标}{16}{section.4.2}%
-\contentsline {chapter}{\numberline {第5章}已完成的研究工作及进度安排}{18}{chapter.5}%
-\contentsline {section}{\numberline {5.1}已完成的研究工作}{18}{section.5.1}%
-\contentsline {section}{\numberline {5.2}进度安排}{18}{section.5.2}%
-\contentsline {chapter}{\numberline {第6章}已具备的研究条件和所需条件及经费}{19}{chapter.6}%
-\contentsline {section}{\numberline {6.1}实验室条件和经费保障}{19}{section.6.1}%
-\contentsline {section}{\numberline {6.2}所需条件及经费}{19}{section.6.2}%
-\contentsline {chapter}{\numberline {第7章}预计困难及解决方案}{20}{chapter.7}%
-\contentsline {section}{\numberline {7.1}预计困难与技术难点}{20}{section.7.1}%
-\contentsline {section}{\numberline {7.2}解决方案}{20}{section.7.2}%
-\contentsline {chapter}{\heiti 参考文献}{21}{section*.11}%
+\contentsline {chapter}{\numberline {第4章}预期目标}{18}{chapter.4}%
+\contentsline {section}{\numberline {4.1}系统集成与应用目标}{18}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}接口集成与功能验证}{18}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}集群集成与应用验证}{18}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}性能优化与方法论总结目标}{18}{section.4.2}%
+\contentsline {chapter}{\numberline {第5章}已完成的研究工作及进度安排}{20}{chapter.5}%
+\contentsline {section}{\numberline {5.1}已完成的研究工作}{20}{section.5.1}%
+\contentsline {section}{\numberline {5.2}进度安排}{20}{section.5.2}%
+\contentsline {chapter}{\numberline {第6章}已具备的研究条件和所需条件及经费}{21}{chapter.6}%
+\contentsline {section}{\numberline {6.1}实验室条件和经费保障}{21}{section.6.1}%
+\contentsline {section}{\numberline {6.2}所需条件及经费}{21}{section.6.2}%
+\contentsline {chapter}{\numberline {第7章}预计困难及解决方案}{22}{chapter.7}%
+\contentsline {section}{\numberline {7.1}预计困难与技术难点}{22}{section.7.1}%
+\contentsline {section}{\numberline {7.2}解决方案}{22}{section.7.2}%
+\contentsline {chapter}{\heiti 参考文献}{24}{section*.11}%

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.24)  28 AUG 2025 03:59
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.24)  31 AUG 2025 06:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1778,7 +1778,7 @@ Package translations Info: loading dictionary `translations-basic-dictionary' fo
 \c@lstlisting=\count519
  (./front/coverinformation.tex)
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
-(Font)              scaled to size 18.06749pt on input line 11.
+(Font)              scaled to size 18.06749pt on input line 13.
 
 Package fontspec Info: 
 (fontspec)             Script 'CJK' not explicitly supported within font
@@ -1801,11 +1801,11 @@ Package fontspec Info:
 (fontspec)             <->"[FandolKai-Regular.otf]/OT:script=hani;language=dflt;embolden=2;"
 
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/b/n' will be
-(Font)              scaled to size 18.06749pt on input line 11.
+(Font)              scaled to size 18.06749pt on input line 13.
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
-(Font)              scaled to size 24.09pt on input line 11.
+(Font)              scaled to size 24.09pt on input line 13.
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/b/n' will be
-(Font)              scaled to size 24.09pt on input line 11.
+(Font)              scaled to size 24.09pt on input line 13.
 
 Package fontspec Info: 
 (fontspec)             Script 'CJK' not explicitly supported within font
@@ -1828,104 +1828,104 @@ Package fontspec Info:
 (fontspec)             <->"[FandolHei-Bold.otf]/OT:script=hani;language=dflt;"
 
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/b/n' will be
-(Font)              scaled to size 16.06pt on input line 11.
-LaTeX Font Info:    Trying to load font information for OT1+ntxtlf on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
+LaTeX Font Info:    Trying to load font information for OT1+ntxtlf on input line 13.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/newtx/ot1ntxtlf.fd
 File: ot1ntxtlf.fd 2021/05/24 v1.0 font definition file for OT1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 14.05249pt on input line 11.
+(Font)              scaled to size 14.05249pt on input line 13.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 10.53937pt on input line 11.
+(Font)              scaled to size 10.53937pt on input line 13.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 14.05249pt on input line 11.
+(Font)              scaled to size 14.05249pt on input line 13.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 10.53937pt on input line 11.
+(Font)              scaled to size 10.53937pt on input line 13.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 14.05249pt on input line 11.
+(Font)              scaled to size 14.05249pt on input line 13.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 10.53937pt on input line 11.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 11.
+(Font)              scaled to size 10.53937pt on input line 13.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 13.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 11.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 13.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+ntxmia on input line 11.
+LaTeX Font Info:    Trying to load font information for U+ntxmia on input line 13.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/newtx/untxmia.fd
 File: untxmia.fd 2024/04/09 Fontinst v1.933 font definitions for U/ntxmia.
 )
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 14.05249pt on input line 11.
+(Font)              scaled to size 14.05249pt on input line 13.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 10.53937pt on input line 11.
-LaTeX Font Info:    Trying to load font information for U+ntxsym on input line 11.
+(Font)              scaled to size 10.53937pt on input line 13.
+LaTeX Font Info:    Trying to load font information for U+ntxsym on input line 13.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/newtx/untxsym.fd
 File: untxsym.fd 2023/08/16 Fontinst v1.933 font definitions for U/ntxsym.
 )
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 14.05249pt on input line 11.
+(Font)              scaled to size 14.05249pt on input line 13.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 10.53937pt on input line 11.
-LaTeX Font Info:    Trying to load font information for U+ntxsyc on input line 11.
+(Font)              scaled to size 10.53937pt on input line 13.
+LaTeX Font Info:    Trying to load font information for U+ntxsyc on input line 13.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/newtx/untxsyc.fd
 File: untxsyc.fd 2012/04/12 Fontinst v1.933 font definitions for U/ntxsyc.
 )
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 14.05249pt on input line 11.
+(Font)              scaled to size 14.05249pt on input line 13.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 10.53937pt on input line 11.
+(Font)              scaled to size 10.53937pt on input line 13.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 14.05249pt on input line 11.
+(Font)              scaled to size 14.05249pt on input line 13.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 10.53937pt on input line 11.
+(Font)              scaled to size 10.53937pt on input line 13.
 LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 14.05249pt on input line 11.
+(Font)              scaled to size 14.05249pt on input line 13.
 LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
-(Font)              scaled to size 10.53937pt on input line 11.
+(Font)              scaled to size 10.53937pt on input line 13.
 LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 14.05249pt on input line 11.
+(Font)              scaled to size 14.05249pt on input line 13.
 LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
-(Font)              scaled to size 10.53937pt on input line 11.
+(Font)              scaled to size 10.53937pt on input line 13.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 16.06pt on input line 11.
+(Font)              scaled to size 16.06pt on input line 13.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 14.05249pt on input line 11.
+(Font)              scaled to size 14.05249pt on input line 13.
 LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
-(Font)              scaled to size 10.53937pt on input line 11.
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 11.
+(Font)              scaled to size 10.53937pt on input line 13.
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 13.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <16.06> not available
-(Font)              size <17.28> substituted on input line 11.
+(Font)              size <17.28> substituted on input line 13.
 
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <10.53937> not available
-(Font)              size <10.95> substituted on input line 11.
+(Font)              size <10.95> substituted on input line 13.
 
 
 
@@ -2023,16 +2023,16 @@ Package fontspec Info:
 (fontspec)             <->"[FandolSong-Bold.otf]/OT:script=hani;language=dflt;"
 
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
-(Font)              scaled to size 9.03374pt on input line 14.
+(Font)              scaled to size 9.03374pt on input line 16.
 [1
 
 
 ] (./body/chapter01.tex
 第1章
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
-(Font)              scaled to size 15.05624pt on input line 6.
+(Font)              scaled to size 15.05624pt on input line 7.
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
-(Font)              scaled to size 8.0pt on input line 7.
+(Font)              scaled to size 8.0pt on input line 8.
 
 
 [1
@@ -2077,6 +2077,8 @@ Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/
 ) (./body/chapter03.tex
 
 [5]
+
+[6]
 第3章
 Package hyperref Info: bookmark level for unknown equation defaults to 0 on input line 14.
 File: figures/RS码编码举例.pdf Graphic file (type pdf)
@@ -2085,7 +2087,7 @@ LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
 (Font)              scaled to size 10.53937pt on input line 21.
 
 
-[6
+[7
 
 
 ]
@@ -2093,18 +2095,21 @@ File: figures/RS码解码举例.pdf Graphic file (type pdf)
 <use figures/RS码解码举例.pdf>
 
 
-[7]
+[8]
 File: figures/Two-tone码编码举例.pdf Graphic file (type pdf)
 <use figures/Two-tone码编码举例.pdf>
 File: figures/Two-tone码丢失3个数据块的解码举例.pdf Graphic file (type pdf)
 <use figures/Two-tone码丢失3个数据块的解码举例.pdf>
+
+
+[9]
 File: figures/Two-tone码丢失2个数据块和1个校验块的解码举例.pdf Graphic file (type pdf)
 <use figures/Two-tone码丢失2个数据块和1个校验块的解码举例.pdf>
 
 
-[8]
+[10]
 
-[9]
+[11]
 File: figures/Two-tone一般解码实现流程.pdf Graphic file (type pdf)
 <use figures/Two-tone一般解码实现流程.pdf>
 File: figures/Erasure-Parity Mapping统一解码实现流程.pdf Graphic file (type pdf)
@@ -2127,58 +2132,60 @@ LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/it' will be
 (Font)              scaled to size 6.0pt on input line 159.
 
 
-[10]
+[12]
 
-[11]
+[13]
 File: figures/Cache-Friendly Window效果演示.pdf Graphic file (type pdf)
 <use figures/Cache-Friendly Window效果演示.pdf>
 
 
-[12]
+[14]
 File: figures/Two-tone编码横向与纵向访问模式.pdf Graphic file (type pdf)
 <use figures/Two-tone编码横向与纵向访问模式.pdf>
 File: figures/Neighbor-Merging Access模式.pdf Graphic file (type pdf)
 <use figures/Neighbor-Merging Access模式.pdf>
 
 
-[13]
-
-[14]
+[15]
 File: figures/Two-tone解码只丢失一块的特化情况举例.pdf Graphic file (type pdf)
 <use figures/Two-tone解码只丢失一块的特化情况举例.pdf>
 ) (./body/chapter04.tex
 
-[15]
-第4章
-) (./body/chapter05.tex
-
-[16
-
-
-]
+[16]
 
 [17]
+第4章
+
+
+[18
+
+
+]) (./body/chapter05.tex
+
+[19]
 第5章
 ) (./body/chapter06.tex
 
-[18
+[20
 
 
 ]
 第6章
 ) (./body/chapter07.tex
 
-[19
+[21
 
 
 ]
 第7章
-)
-
-[20
 
 
-] (./main.bbl
+[22
+
+
+])
+
+[23] (./main.bbl
 Underfull \hbox (badness 3635) in paragraph at lines 46--47
 []\TU/texgyretermes(0)/m/n/12.045 CHINIAH A\TU/FandolSong-Regular(0)/m/n/12.045 ，| \TU/texgyretermes(0)/m/n/12.045 MUNGUR A. Dynamic Erasure Coding Policy Allocation
  []
@@ -2190,21 +2197,21 @@ Underfull \hbox (badness 2980) in paragraph at lines 58--59
 
 
 
-[21
+[24
 
 
 
 ]
 
-[22]
+[25]
 
-[23])
+[26])
 \tf@thm=\write7
 \openout7 = `main.thm'.
 
 
 
-[24] (./main.aux)
+[27] (./main.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2022/08/05>
@@ -2220,10 +2227,10 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Here is how much of TeX's memory you used:
  47991 strings out of 468441
  1058776 string characters out of 5445543
- 1557014 words of memory out of 5000000
+ 1556015 words of memory out of 5000000
  75612 multiletter control sequences out of 15000+600000
  671604 words of font info for 192 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  107i,16n,136p,2551b,1297s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (26 pages).
+Output written on main.pdf (29 pages).
