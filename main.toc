@@ -15,7 +15,7 @@
 \contentsline {subsection}{\numberline {3.2.1}统一解码抽象：Erasure-Parity Mapping}{11}{subsection.3.2.1}%
 \contentsline {subsection}{\numberline {3.2.2}缓存友好的窗口划分：Cache-Friendly Window}{13}{subsection.3.2.2}%
 \contentsline {subsection}{\numberline {3.2.3}内存友好的相邻合并访问：Neighbor-Merging Access}{14}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}特化与泛化结合：Special Case Expansibility}{16}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.4}特化与泛化结合：Special Case Expansibility}{15}{subsection.3.2.4}%
 \contentsline {chapter}{\numberline {第4章}预期目标}{17}{chapter.4}%
 \contentsline {section}{\numberline {4.1}系统集成与应用目标}{17}{section.4.1}%
 \contentsline {subsection}{\numberline {4.1.1}接口集成与功能验证}{17}{subsection.4.1.1}%

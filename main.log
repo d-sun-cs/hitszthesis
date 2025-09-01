@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.24)  1 SEP 2025 09:18
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.8.24)  1 SEP 2025 10:54
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -2069,11 +2069,11 @@ Missing character: There is no ​ (U+200B) in font [texgyretermes-regular.otf]/
 
 [5]
 第3章
-Package hyperref Info: bookmark level for unknown equation defaults to 0 on input line 15.
+Package hyperref Info: bookmark level for unknown equation defaults to 0 on input line 17.
 File: figures/RS码编码举例.pdf Graphic file (type pdf)
 <use figures/RS码编码举例.pdf>
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
-(Font)              scaled to size 10.53937pt on input line 22.
+(Font)              scaled to size 10.53937pt on input line 25.
 
 
 [6
@@ -2105,21 +2105,146 @@ File: figures/Two-tone一般解码实现流程.pdf Graphic file (type pdf)
 File: figures/Erasure-Parity Mapping统一解码实现流程.pdf Graphic file (type pdf)
 <use figures/Erasure-Parity Mapping统一解码实现流程.pdf>
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/b/n' will be
-(Font)              scaled to size 12.045pt on input line 134.
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
+(Font)              scaled to size 5.0pt on input line 155.
+LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
+(Font)              scaled to size 5.0pt on input line 155.
+LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
+(Font)              scaled to size 5.0pt on input line 155.
+LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
+(Font)              scaled to size 5.0pt on input line 155.
+LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
+(Font)              scaled to size 5.0pt on input line 155.
+LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
+(Font)              scaled to size 5.0pt on input line 155.
+LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
+(Font)              scaled to size 5.0pt on input line 155.
+LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `OML/ntxmi/b/it' will be
+(Font)              scaled to size 5.0pt on input line 155.
+LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `LMS/ntxsy/b/n' will be
+(Font)              scaled to size 5.0pt on input line 155.
+LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
+(Font)              scaled to size 9.03374pt on input line 155.
+LaTeX Font Info:    Font shape `LMX/ntxexx/b/n' will be
+(Font)              scaled to size 5.0pt on input line 155.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 158.
+
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/b/n' will be
-(Font)              scaled to size 7.52812pt on input line 137.
-LaTeX Font Info:    Font shape `TU/texgyretermes(0)/b/n' will be
-(Font)              scaled to size 8.36461pt on input line 137.
+(Font)              scaled to size 6.52437pt on input line 158.
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 165.
+
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/it' will be
-(Font)              scaled to size 12.045pt on input line 144.
+(Font)              scaled to size 9.03374pt on input line 165.
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 165.
+
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
-(Font)              scaled to size 6.0pt on input line 144.
+(Font)              scaled to size 6.0pt on input line 165.
+LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/n' will be
+(Font)              scaled to size 5.0pt on input line 165.
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 165.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 173.
+
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/b/it' will be
-(Font)              scaled to size 12.045pt on input line 152.
+(Font)              scaled to size 9.03374pt on input line 173.
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 173.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 173.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 173.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 174.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 185.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 185.
+
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/it' will be
-(Font)              scaled to size 8.0pt on input line 164.
+(Font)              scaled to size 6.0pt on input line 185.
 LaTeX Font Info:    Font shape `TU/texgyretermes(0)/m/it' will be
-(Font)              scaled to size 6.0pt on input line 164.
+(Font)              scaled to size 5.0pt on input line 185.
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 185.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 185.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 185.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 186.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 198.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 198.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 198.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 198.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 198.
+
+
+Package relsize Warning: Font size 6.27344pt is too small.
+(relsize)                Using 6.52437pt instead on input line 198.
+
 
 
 [11]
@@ -2132,12 +2257,11 @@ File: figures/Cache-Friendly Window效果演示.pdf Graphic file (type pdf)
 [13]
 File: figures/Two-tone编码横向与纵向访问模式.pdf Graphic file (type pdf)
 <use figures/Two-tone编码横向与纵向访问模式.pdf>
-
-
-[14]
 File: figures/Neighbor-Merging Access模式.pdf Graphic file (type pdf)
 <use figures/Neighbor-Merging Access模式.pdf>
 
+
+[14]
 
 [15]
 File: figures/Two-tone解码只丢失一块的特化情况举例.pdf Graphic file (type pdf)
@@ -2146,6 +2270,8 @@ File: figures/Two-tone解码只丢失一块的特化情况举例.pdf Graphic fil
 
 [16]
 第4章
+LaTeX Font Info:    Font shape `TU/texgyretermes(0)/b/n' will be
+(Font)              scaled to size 12.045pt on input line 22.
 
 
 [17
@@ -2216,11 +2342,11 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 3030EF98CDFA1B55A1CBC1B480BF040F;5548.
  ) 
 Here is how much of TeX's memory you used:
- 47991 strings out of 468441
- 1058776 string characters out of 5445543
+ 48026 strings out of 468441
+ 1059423 string characters out of 5445543
  1559015 words of memory out of 5000000
- 75612 multiletter control sequences out of 15000+600000
- 671604 words of font info for 192 fonts, out of 8000000 for 9000
+ 75644 multiletter control sequences out of 15000+600000
+ 685738 words of font info for 223 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  107i,16n,136p,2551b,1297s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
