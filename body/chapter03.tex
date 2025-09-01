@@ -6,78 +6,83 @@
 
 \subsection{存储编码的基本原理}
 
-纠删码是一类通过冗余编码提升数据可靠性的算法，可作为存储编码应用到存储系统中，相比于创建多个数据副本以防数据丢失，它通过数学算法将原始数据转换为带冗余信息的编码数据，在可靠性与存储效率间取得平衡，非常适用于大规模分布式存储场景。以最经典的Reed-Solomon（RS）码\cite{reedPolynomialCodesCertain1960}为例，假设将原始数据均分成$k$个数据块，再同生成矩阵进行有限域上的矩阵乘法运算，编码出$m$个校验块，总计得到$n=k+m$个块，并将这$n$个块分别存储到$n$台分布式的存储设备中，这样最多能容忍$m$块数据丢失，即$m$台设备故障。RS码的编码过程可由\equref{equ:RSEncode}表示。
+纠删码是一类通过冗余编码提升数据可靠性的算法，可作为存储编码应用到存储系统中，相比于创建多个数据副本防丢失，它通过数学算法将原始数据转换为带冗余信息的编码数据，在可靠性与存储效率间取得平衡，适用于大规模分布式存储场景。以最经典的Reed-Solomon（RS）码\cite{reedPolynomialCodesCertain1960}为例，假设将原始数据均分成$k$个数据块，再同生成矩阵进行有限域上的矩阵乘法运算，编码出$m$个校验块，总计得到$n=k+m$个块，并将这$n$个块分别存储到$n$台分布式的存储设备中，这样最多能容忍$m$块数据丢失，即$m$台设备故障。RS码的编码过程可由\equref{equ:RSEncode}表示。
 
+\vspace{-1em}
 \begin{equation}
     \mathbf{C} = \mathbf{G} \times_{GF[2^w]} \mathbf{D}
     \label{equ:RSEncode}
 \end{equation}
 
-其中，$\mathbf{D}$为原始数据块向量，$\mathbf{G}$为生成矩阵（通常为Vandermonde或Cauchy矩阵\cite{lubyXORBasedErasureResilientCoding1995}），$\mathbf{C}$为编码后的校验块向量。\figref{fig:RSEncodeExample}以$k=4, m=3$为例，展示了RS码的编码过程。
+其中，$\mathbf{D}$为原始数据块向量，$\mathbf{G}$为生成矩阵（通常为Vandermonde矩阵或Cauchy矩阵\cite{lubyXORBasedErasureResilientCoding1995}），$\mathbf{C}$为编码后的校验块向量。\figref{fig:RSEncodeExample}以$k=4, m=3$为例，展示了RS码的编码过程，图中的$D_i$、$C_i$和$g_{ij}$均对应\equref{equ:RSEncode}中变量的分量。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/RS码编码举例.pdf}
+    \includegraphics[width=0.85\textwidth]{figures/RS码编码举例.pdf}
     \caption{RS码编码举例}
     \label{fig:RSEncodeExample}
 \end{figure}
 
 解码时，根据丢失数据块的情况，基于编码公式构造逆矩阵，得出新的解码公式，从而恢复丢失的数据块，再重新编码以恢复丢失的校验块，可由\equref{equ:RSDecode}表示。
 
+\vspace{-1em}
 \begin{equation}
     \mathbf{D} = \mathbf{G'}^{-1} \times_{GF[2^w]} \mathbf{D'}
     \label{equ:RSDecode}
 \end{equation}
 
-其中，$\mathbf{D'}$为所有未丢失的数据块和校验块构成的向量，$\mathbf{G'}^{-1}$为根据丢失情况构造的逆生成矩阵，$\mathbf{D}$为原始数据块向量。\figref{fig:RSDecodeExample}举例展示了RS码的解码和重编码过程。
+其中，$\mathbf{D'}$为所有未丢失的数据块和未丢失的校验块构成的向量，$\mathbf{G'}^{-1}$为根据丢失情况构造的逆生成矩阵，$\mathbf{D}$为编码前的原始数据块向量。\figref{fig:RSDecodeExample}展示了RS码的解码和重编码过程，以丢失两个数据块$D_2$、$D_4$和一个校验块$C_1$为例。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/RS码解码举例.pdf}
+    \includegraphics[width=0.82\textwidth]{figures/RS码解码举例.pdf}
     \caption{RS码解码举例}
     \label{fig:RSDecodeExample}
 \end{figure}
 
 \subsection{Two-tone Shift-XOR的编解码原理}
 
-Two-tone Shift-XOR码是一种基于移位和异或操作的高效纠删码。其核心思想是利用规则的移位矩阵和异或运算实现编码与解码，避免有限域上的乘法运算，提升运算效率。Two-tone码的编码过程可由\equref{equ:TwoToneEncode}表示。 
+Two-tone Shift-XOR码是一种基于非循环移位和异或操作的高效纠删码。其核心思想是利用规则的移位矩阵和异或运算实现编码与解码，避免有限域上的乘法运算，提升运算效率。Two-tone码的编码过程可由\equref{equ:TwoToneEncode}表示。 
 
+\vspace{-2em}
 \begin{equation}
     \mathbf{C} = \mathbf{Z} \times \mathbf{D}
     \label{equ:TwoToneEncode}
 \end{equation}
+\vspace{-2em}
 
 其中，$\mathbf{Z}$为移位生成矩阵，采用最简单且规则的Two-tone矩阵\cite{fuTwotoneShiftXORStorage2021}，其中每个元素$z^{s_{ij}}$代表偏移量。
 假设原始数据块分别为$\{D_1, D_2, \dots, D_k\}$，编码后得到的校验块分别为$\{C_1, C_2, \dots, C_m\}$，则Two-tone的编码公式还可以表示为\equref{equ:TwoToneEncodeSingle}。
 
+\vspace{-1.6em}
 \begin{equation}
     C_i = \bigoplus_{j=1}^{k} z^{s_{ij}}D_j
     \label{equ:TwoToneEncodeSingle}
 \end{equation}
 
-其中$z^{s_{ij}}D_j$表示对数据块$D_j$进行$s_{i,j}$个单位的非循环移位，$\oplus$为异或操作。\figref{fig:TwoToneEncodeExample}举例展示了RS码的编码过程。
+其中$z^{s_{ij}}D_j$表示对数据块$D_j$进行$s_{i,j}$个码字的非循环移位，$\oplus$为异或操作。\figref{fig:TwoToneEncodeExample}同样以$k=4, m=3$为例展示了Two-tone码的编码过程和移位异或拆解示意。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/Two-tone码编码举例.pdf}
+    \includegraphics[width=0.8\textwidth]{figures/Two-tone码编码举例.pdf}
     \caption{Two-tone码编码举例}
     \label{fig:TwoToneEncodeExample}
 \end{figure}
 
-Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自然按序逐步解出丢失块，提升解码效率。\figref{fig:TwoToneDecodeExampleErase3}举例展示了Two-tone码在丢失三个数据块时的解码过程，总体分成两步，第一步是“代入”，将未丢失的数据块代入至校验块中，第二步即为“Two-tone消除”，每一轮次中，从一边最外侧错开的单位开始，依次向内解出每个单位，直到无法再求解，再从另一边最外侧错开的单位开始，依次向内求解，直到解出该轮次内的所有单位，再进入下一轮，循环解出所有数据。解出的单位要代入至校验块，以便后续继续解出其他单位。这里提到的“一边”和“另一边”，即对应Two-tone算法中的两个子系统\cite{fuTwotoneShiftXORStorage2021}，按序求解这两个子系统，即可高效解出所有数据。
+Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以按序逐步解出丢失块，提升解码效率。\figref{fig:TwoToneDecodeExampleErase3}举例展示了Two-tone码在丢失三个数据块时的解码过程，总体分成两步，第一步是“代入”，将未丢失的数据块代入至校验块中，第二步是“Two-tone消除”，每一轮中，从一边最外侧错开的码字开始，依次向内解出每个码字，直到无法再求解，再从另一边最外侧错开的码字开始，依次向内求解，直到解出该轮的所有码字，再进入下一轮，循环解出所有数据。解出的码字也代入校验块，以便后续继续解码。这里提到的“一边”和“另一边”，即对应Two-tone算法中的两个子系统\cite{fuTwotoneShiftXORStorage2021}，按序求解这两个子系统，即可高效解出所有数据。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.65\textwidth]{figures/Two-tone码丢失3个数据块的解码举例.pdf}
+    \includegraphics[width=0.98\textwidth]{figures/Two-tone码丢失3个数据块的解码举例.pdf}
     \caption{Two-tone码丢失3个数据块的解码举例}
     \label{fig:TwoToneDecodeExampleErase3}
 \end{figure}
 
-\figref{fig:TwoToneDecodeExampleErase2}举例展示了Two-tone码在丢失两个数据块和一个校验块时的解码过程，不同之处在于，只有一边有错开的单位，相当于两个子系统的其中一个为空集，无需进行操作，其他流程不变即可。本例中由于出现了校验块的丢失，在解码完成后，还需要重新编码丢失的校验块，这样才算完成了全部要求。
+\figref{fig:TwoToneDecodeExampleErase2}举例展示了Two-tone码在丢失两个数据块和一个校验块时的解码过程，不同之处在于，这种情况下只有一边有错开的码字，相当于两个子系统的其中一个为空集，无需进行操作，其他流程不变即可。本例中由于出现了校验块的丢失，在解码完成后，还需要重新编码丢失的校验块，这样才算达成了所有要求。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.65\textwidth]{figures/Two-tone码丢失2个数据块和1个校验块的解码举例.pdf}
+    \includegraphics[width=0.825\textwidth]{figures/Two-tone码丢失2个数据块和1个校验块的解码举例.pdf}
     \caption{Two-tone码丢失2个数据块和1个校验块的解码举例}
     \label{fig:TwoToneDecodeExampleErase2}
 \end{figure}
@@ -98,9 +103,9 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
 
 \subsection{统一解码抽象：Erasure-Parity Mapping}
 
-对于不使用特殊抽象方法的解码，在“代入”步骤时，需要判断校验块是否存在，才能确定是否要执行代入计算。在“消除”步骤时，每个丢失的数据块要按顺序匹配未丢失的校验块，从而按照前文所述的消除规则，从错开的单位开始解码，将解出的单位继续“代入”，进而解出完整的数据块。最后，还需要判断是否要重新编码丢失的校验块。\figref{fig:TwoToneDecodeNaiveFlow}展示了这种解码方式的总体流程。
+对于不使用特殊抽象方法的解码，在“代入”步骤时，需要判断校验块是否存在，才能确定是否要执行代入计算。在“消除”步骤时，每个丢失的数据块要按顺序匹配未丢失的校验块，从而按照前文所述的消除规则，从错开的码字开始解码，将解出的码字继续“代入”，进而解出完整的数据块。最后，还需要判断是否要重新编码丢失的校验块。\figref{fig:TwoToneDecodeNaiveFlow}展示了这种解码方式的总体流程。
 
-针对多样化的丢失情况，本课题提出Erasure-Parity Mapping的解决方案。该方案将所有丢失块（包括数据块和校验块）统一抽象为Erasure结构，每个Erasure结构按块编号顺序匹配未丢失的校验块，若Erasure结构本就来源于丢失的校验块，则其匹配自己即可。在“代入”步骤时，无需额外判断，直接将未丢失的数据块代入Erasure结构即可。在“消除”步骤时，直接从已经匹配好的校验块中解出数据单位即可，将解出的单位同样直接“代入”到所有Erasure结构中。因为以上两个步骤是对所有Erasure结构的统一操作，而Erasure结构包括了所有丢失的数据块和校验块，所以数据块的解码和校验块的重编码可以互相穿插并同时完成，无需单独的重编码步骤，进一步减少了遍历与内存访问次数。
+针对多样化的丢失情况，本课题提出Erasure-Parity Mapping的解决方案。该方案将所有丢失块（包括数据块和校验块）统一抽象为Erasure结构，每个Erasure结构按块编号顺序匹配未丢失的校验块，若Erasure结构本就来源于丢失的校验块，则其匹配自己即可。在“代入”步骤时，无需额外判断，直接将未丢失的数据块代入Erasure结构即可。在“消除”步骤时，直接从已经匹配好的校验块中解出数据码字即可，将解出的码字同样直接“代入”到所有Erasure结构中。因为以上两个步骤是对所有Erasure结构的统一操作，而Erasure结构包括了所有丢失的数据块和校验块，所以数据块的解码和校验块的重编码可以互相穿插并同时完成，无需单独的重编码步骤，进一步减少了遍历与内存访问次数。
 
 \figref{fig:TwoToneDecodeMappingFlow}展示了Erasure-Parity Mapping解码方案的总体流程，算法\ref{algo:TwoToneDecodeMapping}列出了该方案的伪代码实现，其中$D$为数据块指针数组，$C$为校验块指针数组，$Ed$为丢失的数据块索引，$Ec$为丢失的校验块索引，$k$为数据块个数，$m$为校验块个数，数据块和校验块依次从$0$到$k+m-1$编码。这种Erasure结构实现了解码流程的统一抽象，将同类操作统一进行，同时处理码字的解码与重编码，实现了简洁与高效。
 
@@ -189,9 +194,9 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
 
 \subsection{内存友好的相邻合并访问：Neighbor-Merging Access}
 
-在Two-tone Shift-XOR码的实际编码过程中，数据块与校验块的一般访问模式可分为横向和纵向两种，如\figref{fig:TwoToneEncodeHorizontalVerticalMode}所示。横向模式是指每次遍历一个数据块，将该块内的所有数据单位依次异或到所有校验块的对应位置，然后再处理下一个数据块。这种方式对单个数据块的利用非常充分，能够集中地访问和处理数据块，但由于每个数据单位都要异或到所有校验块，导致对校验块的内存需要反复多次访问，且访问不集中，容易造成缓存失效。
+在Two-tone Shift-XOR码的实际编码过程中，数据块与校验块的一般访问模式可分为横向和纵向两种，如\figref{fig:TwoToneEncodeHorizontalVerticalMode}所示。横向模式是指每次遍历一个数据块，将该块内的所有数据码字依次异或到所有校验块的对应位置，然后再处理下一个数据块。这种方式对单个数据块的利用非常充分，能够集中地访问和处理数据块，但由于每个数据码字都要异或到所有校验块，导致对校验块的内存需要反复多次访问，且访问不集中，容易造成缓存失效。
 
-纵向模式则是针对每个校验块进行处理。每次遍历一个校验块，根据该校验块的每个单位，去访问所有数据块的对应单位并进行异或计算。这样对于同一个校验块来说，只需访问一次即可完成全部计算，提升了校验块的访问效率。但由于不同校验块的移位偏移量不同，无法复用之前数据块异或的结果，导致对数据块的访问变得重复且不集中，影响整体效率。
+纵向模式则是针对每个校验块进行处理。每次遍历一个校验块，根据该校验块的每个码字，去访问所有数据块的对应码字并进行异或计算。这样对于同一个校验块来说，只需访问一次即可完成全部计算，提升了校验块的访问效率。但由于不同校验块的移位偏移量不同，无法复用之前数据块异或的结果，导致对数据块的访问变得重复且不集中，影响整体效率。
 
 \begin{figure}[htbp]
     \centering
@@ -200,7 +205,7 @@ Two-tone算法的移位生成矩阵具有规则结构，使得解码时可以自
     \label{fig:TwoToneEncodeHorizontalVerticalMode}
 \end{figure}
 
-针对上述两种模式各自的内存访问瓶颈，提出了“相邻合并访问”（Neighbor-Merging Access）策略。该策略结合横向和纵向的优点，将相邻的两个数据块chunk的单位在寄存器中合并处理，利用SIMD指令或寄存器批量操作，总体上横向访问数据块，计算和访存时则先在寄存器内完成纵向合并运算，再一次性写入校验块内存。这样既能充分利用数据块的访问局部性，又能减少对校验块的重复访问，理论上可减少一半对校验块内存的重复访问，显著提升整体编码效率。
+针对上述两种模式各自的内存访问瓶颈，提出了“相邻合并访问”（Neighbor-Merging Access）策略。该策略结合横向和纵向的优点，将相邻的两个数据块chunk的码字在寄存器中合并处理，利用SIMD指令或寄存器批量操作，总体上横向访问数据块，计算和访存时则先在寄存器内完成纵向合并运算，再一次性写入校验块内存。这样既能充分利用数据块的访问局部性，又能减少对校验块的重复访问，理论上可减少一半对校验块内存的重复访问，显著提升整体编码效率。
 
 \begin{figure}[htbp]
     \centering

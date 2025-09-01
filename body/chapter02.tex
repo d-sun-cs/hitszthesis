@@ -4,44 +4,66 @@
 
 \section{国内外研究现状}
 
-随着分布式存储系统的快速发展，纠删码作为容错和数据可靠性保障的核心技术，受到了广泛关注。传统的Reed-Solomon（RS）码\cite{reedPolynomialCodesCertain1960}在理论和应用层面都取得了重要进展，其基于有限域的编码方式具有良好的MDS（最大距离可分）特性，能够在任意丢失情况下恢复原始数据。为提升RS码的实际编解码效率，研究者们提出了多种优化策略，包括将有限域运算转化为异或运算（XOR-Based）以及采用Vandermonde或Cauchy矩阵以减少逆运算开销\cite{lubyXORBasedErasureResilientCoding1995}。在程序实现层面，优化矩阵结构以减少异或操作数、提取并复用公共运算表达式、缓存管理和指针优化等技术不断涌现，综合各优化技术的Cerasure\cite{wangFastAccelerationStrategies2025}显著提高了编码吞吐量，在一定条件下取得了SOTA成果。
+随着分布式存储系统的快速发展，纠删码作为容错和数据可靠性保障的核心技术，受到了广泛关注。
+传统的Reed-Solomon（RS）码\cite{reedPolynomialCodesCertain1960}在理论创新和系统优化层面都取得了重要进展，其基于有限域的编码方式具有良好的MDS（最大距离可分）特性，能够保证在容忍范围内丢失时恢复原始数据。
+在此基础上，将有限域运算转化为异或运算（XOR-Based）以及采用Vandermonde或Cauchy矩阵以减少逆运算开销进一步提升了RS码的理论编解码效率\cite{lubyXORBasedErasureResilientCoding1995}。
+在系统实现上，优化矩阵结构以减少异或操作数和提取并复用公共运算表达式等技术不断涌现，综合各优化方案的Cerasure\cite{wangFastAccelerationStrategies2025}显著提高了编码吞吐量，在一定条件下取得了SOTA成果。
 
-近年来，基于移位异或运算的新型纠删码逐渐成为新的研究热点。ZigZag Decodable Codes\cite{gongZigzagDecodableCodes2017}通过构建特殊的移位矩阵，实现了仅依赖异或和移位操作的高效编码与解码，理论上可达到线性时间复杂度，并在存储、密码学和网络等领域得到拓展。Two-tone Shift-XOR Codes\cite{fuTwotoneShiftXORStorage2021}进一步提升了移位异或码的结构规则性和解码效率，具备更高的吞吐性能。在测试环境的特定条件下，Two-tone编码可实现比RS码更高的编码和解码速度，尤其适用于高性能分布式存储系统。
+近年来，基于非循环移位异或运算的新型纠删码逐渐成为新的理论研究热点。
+ZigZag Decodable Codes\cite{gongZigzagDecodableCodes2017}通过构建特殊的移位矩阵，实现了仅依赖异或和移位操作的高效编码与解码，理论上可达到线性时间复杂度，并在存储、密码学和网络等领域得到拓展。
+Two-tone Shift-XOR Codes\cite{fuTwotoneShiftXORStorage2021}进一步提升了移位异或码的结构规则性和解码效率，具备更高的吞吐性能。在测试环境的特定条件下，Two-tone编码可实现比RS码更高的编码和解码速度，尤其适用于高性能分布式存储系统。
 
 \section{国内外文献综述及简析}
 
 \subsection{RS码相关研究分析}
 
-RS码作为经典的纠删码方案，最早由Reed和Solomon提出\cite{reedPolynomialCodesCertain1960}，其理论基础和MDS特性为后续编码技术奠定了坚实基础。Luby等人提出了基于异或运算的优化方法\cite{lubyXORBasedErasureResilientCoding1995}，并且使用求逆运算更快的Cauchy矩阵代替Vandermonde矩阵，使得RS码编码和解码达到了理论最优性能，后续的优化研究工作几乎都依赖于这项成果。随着硬件并行能力提升，Jerasure库\cite{plankJerasureLibraryFacilitating2008, arslanOpenMPPOSIXThreads2017}和G-CRS\cite{liuGCRSGPUAccelerated2018}等实现了CPU多线程并发和GPU加速，但对硬件资源有特定要求。
+RS码是最经典的纠删码，最早由Reed和Solomon提出\cite{reedPolynomialCodesCertain1960}，其理论基础和MDS特性为后续编码技术奠定了坚实基础。
+Luby等人提出了基于异或运算的优化方法\cite{lubyXORBasedErasureResilientCoding1995}，并使用求逆运算更快的Cauchy矩阵代替Vandermonde矩阵，达到RS码理论最优性能，后续研究工作都依赖于这项成果。
+随着硬件并行能力提升，Jerasure\cite{plankJerasureLibraryFacilitating2008, arslanOpenMPPOSIXThreads2017}和G-CRS\cite{liuGCRSGPUAccelerated2018}等实现了CPU多线程并发和GPU加速，但对硬件资源有特定要求。
 
-为进一步减少运算量，提高RS码在实际应用中的编解码吞吐量，研究者们陆续提出了许多有效的系统级优化实现策略：
+为进一步提高RS码吞吐量，研究者们陆续提出了许多系统级优化实现策略：
 
 \begin{itemize}
-    \item 减少矩阵中$1$的个数进而减少运算：\inlinecite{jamess.plankOptimizingCauchyReedSolomon2006}通过开发一种“Good Cauchy (GC)”矩阵的构造算法，系统性地优化Cauchy生成序列的选择，以最小化比特矩阵中$1$的个数；\inlinecite{makovenkoRevisitingOptimizationCauchy2022}通过混合整数线性规划、带启发式扰动的局部最优算法和分支定界法来优化扩展柯西编码矩阵的生成序列组合从而显著降低对应比特矩阵中$1$的密度；Zerasure\cite{zhouFastErasureCoding2020}通过遗传算法或模拟退火优化Cauchy生成序列，最小化比特矩阵权重即1的数量；Cerasure\cite{wangFastAccelerationStrategies2025}提出V-search算法同时搜索Cauchy和Vandermonde矩阵的特殊构造，得到含最少非零元素的编码矩阵。
-    \item 提取并复用公共异或运算表达式：\inlinecite{plankHeuristicsOptimizingMatrixbased2012}通过引入X-Sets数据结构动态识别公共子表达式，并结合Uber-CSHR的参数化扩展，复用异或运算来最小化冗余计算；Zerasure\cite{zhouFastErasureCoding2020}应用未加权匹配或加权匹配算法构建需求图，识别高频数据位对，通过贪婪策略提取公共XOR链；SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}通过将编码过程转化为​​直线程序（SLP）​​，利用扩展的​​XorRePair算法​识别并复用重复的异或表达式，同时结合XOR的幂等性消除冗余计算；Cerasure\cite{wangFastAccelerationStrategies2025}采用智能调度技术和拆解编码计算，从而尽可能多地复用计算的公共中间结果。
-    \item 内存与缓存访问优化：\inlinecite{luoEfficientEncodingSchedules2014}通过引入数据导向的XOR调度算法重新排序XOR操作的执行顺序以增强数据局部性；Zerasure\cite{zhouFastErasureCoding2020}采用顺序数据访问策略及相关调度器提升空间局部性；SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}采用​​Deforestation技术​​消除中间数组分配，通过分块策略​​划分数据块，最小化缓存冲突并减少内存访问；Cerasure\cite{wangFastAccelerationStrategies2025}的智能调度和​编码编码拆解还可用于让局部的计算适配缓存大小从而提升缓存命中率。
-    \item 降低数据指针相关开销：Cerasure\cite{wangFastAccelerationStrategies2025}使用 ​​二维数组存储指针结合SIMD指令提出地址计算模式，从而减少反复构造和操作指针引发的额外开销
+    \item 减少比特矩阵中$1$的个数进而减少运算：
+    \inlinecite{jamess.plankOptimizingCauchyReedSolomon2006}开发“Good Cauchy (GC)”矩阵优化生成序列，从而最小化$1$的个数；
+    \inlinecite{makovenkoRevisitingOptimizationCauchy2022}通过整数线性规划和分支定界等算法优化Cauchy矩阵的生成序列组合从而降低$1$的密度；
+    Zerasure\cite{zhouFastErasureCoding2020}通过智能算法优化Cauchy生成序列，最小化权重即1的数量；
+    Cerasure\cite{wangFastAccelerationStrategies2025}提出V-search算法同时搜索Cauchy和Vandermonde矩阵的特殊构造，得到含最少非零元素的编码矩阵。
+    \item 提取并复用公共异或运算表达式：
+    \inlinecite{plankHeuristicsOptimizingMatrixbased2012}引入X-Sets数据结构动态识别公共子表达式，再结合Uber-CSHR参数化扩展复用异或运算；
+    Zerasure\cite{zhouFastErasureCoding2020}应用匹配算法构建需求图，识别高频数据位对，通过贪婪策略提取公共XOR链；
+    SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}将编码过程转化为直线程序（SLP）​​，利用扩展的​​XorRePair算法识别并复用重复的异或表达式，再结合XOR的幂等性消除冗余计算；
+    Cerasure\cite{wangFastAccelerationStrategies2025}采用智能调度技术和拆解编码计算，从而尽可能多地复用计算的公共中间结果。
+    \item 内存与缓存访问优化：
+    \inlinecite{luoEfficientEncodingSchedules2014}通过引入数据导向的XOR调度算法重新排序XOR操作的执行顺序以增强数据局部性；
+    Zerasure\cite{zhouFastErasureCoding2020}采用顺序数据访问策略及相关调度器提升空间局部性；SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}采用​​Deforestation技术​​消除中间数组分配，通过分块策略​​划分数据块，最小化缓存冲突并减少内存访问；
+    Cerasure\cite{wangFastAccelerationStrategies2025}的智能调度和编码拆解还可用于让局部的计算适配缓存大小从而提升缓存命中率。
+    \item 降低数据指针相关开销：
+    Cerasure\cite{wangFastAccelerationStrategies2025}使用 ​​二维数组存储指针结合SIMD指令提出地址计算模式，从而减少反复构造和操作指针引发的额外开销。
 \end{itemize}
 
-如上文所述，在这些优化研究中，Cerasure综合了所有常见策略，给出了更进一步的优化方式，并提出了降低数据指针相关开销的优化方案，是目前基于有限域矩阵乘法的纠删码（RS码）的SOTA实现。
+正如上文所述，在这些系统实现优化研究中，Cerasure综合了所有常见策略，给出了更进一步的优化方式，并提出了降低数据指针相关开销的优化方案，是目前基于有限域矩阵乘法的纠删码（RS码）系统级优化的SOTA实现。
 
 \subsection{移位异或码相关研究分析}
 
-ZigZag Decodable Codes（ZD Codes）是较早提出的移位异或码，首先验证了基于Vandermonde矩阵构建移位矩阵并异或计算校验块的可行性与高效性\cite{sungZigZagDecodableCodeMDS2013}，又在此基础上换用Hankel矩阵构建更高效的移位异或编码和解码算式，进一步提高了编解码效率\cite{gongZigzagDecodableCodes2017}。在存储应用拓展方面，\inlinecite{daiNewZigzagDecodableCode2017}提出新型循环矩阵结构，进一步降低最大存储开销，并通过物理层网络编码实现无线分布式存储的高效修复，显著降低节点修复带宽；\inlinecite{daiBandwidthOverheadFreeData2017} 设计最优带宽重建方案，其子包抓取算法使带宽消耗严格等于待重建数据量，彻底消除额外开销，适用于高密度存储系统。
+ZigZag Decodable Codes（ZD Codes）是较早提出的移位异或码，首先验证了基于Vandermonde矩阵构建移位矩阵并异或计算校验块的可行性与高效性\cite{sungZigZagDecodableCodeMDS2013}，又在此基础上换用Hankel矩阵构建更高效的算式，进一步提高编解码效率\cite{gongZigzagDecodableCodes2017}。
+在存储应用拓展方面，\inlinecite{daiNewZigzagDecodableCode2017}提出新型循环矩阵结构，进一步降低存储开销，并通过物理层编码实现无线分布式存储的高效修复，显著降低节点修复带宽；
+\inlinecite{daiBandwidthOverheadFreeData2017}设计最优带宽重建方案，其子包抓取算法使带宽消耗严格等于待重建数据量，消除额外开销，适用于高密度存储系统。
 在网络应用拓展方面，\inlinecite{daiZigzagDivisionMultipleAccess2019}将ZD Codes应用于无线多址接入场景，允许多个发射机同时传输数据并使用ZigZag Decoding解析叠加信号，突破传统系统吞吐量的限制。
-在密码学应用拓展方面，\inlinecite{gongZigzagDecodableRampSecret2018}利用ZD Codes构建渐近线性泄密的门限秘密共享方案，通过Vandermonde矩阵生成编码多项式并截断处理，实现完美保密性和高效解码；\inlinecite{kabiriradEfficientRampSecret2023}提出新型生成矩阵降低ZD Codes存储开销，通过重构半Vandermonde半循环矩阵结构减少存储开销，并证明非“递增差”条件的ZD Codes仍满足解码性和安全性，扩展了其在资源受限场景的应用边界；\inlinecite{chenNewShiftAddSecret2024}将ZD Codes应用于分布式存储的部分数据保护，提出轻量级秘密共享方案，实现低存储开销和小修复度，同时支持并行解码加速，显著提升分布式存储的可靠性和修复效率。
+在密码学应用拓展方面，\inlinecite{gongZigzagDecodableRampSecret2018}利用ZD Codes构建门限秘密共享方案，通过Vandermonde矩阵生成编码多项式并截断处理，实现完美保密性和高效解码；
+\inlinecite{kabiriradEfficientRampSecret2023}提出新型生成矩阵降低ZD Codes存储开销，通过重构半Vandermonde半循环矩阵结构减少存储开销并证明其解码性和安全性，扩展了其在资源受限场景的应用边界；\inlinecite{chenNewShiftAddSecret2024}将ZD Codes应用于分布式存储的部分数据保护，提出轻量级秘密共享方案，实现低存储开销和小修复度，同时支持并行解码加速，显著提升分布式存储的可靠性和修复效率。
 
-Two-tone Shift-XOR Codes的提出是基于对移位异或纠删码理论本质的探索，主要体现在明确化和规范化上。
-\inlinecite{fuOverheadfreeInplaceRecovery2014}和\inlinecite{fuOverheadfreeInplaceRecovery2015}初步提出了移位异或纠删码的递增差（Increasing-Difference）性质，保证编码时移位的偏移量具有可解性与解码逻辑的正确性，并探索了理想情况下原地解码的可行性。
-\inlinecite{fuDecodingRepairSchemes2020}进一步明确了改进的递增差（Refined Increasing-Difference）性质，优化了偏移量递增差的约束，允许更灵活且正确的设计，降低存储额外开销至常数级，还提出了移位异或消除法（Shift-XOR Elimination），可以直接在接收缓冲区上进行解码运算，无需额外存储空间，即可逐层消除并解出所有数据块。
-\inlinecite{chengSuccessivelySolvableShiftAdd2021}提出了连续可解性（Successive Solvability）理论，更加规范地定义移位矩阵，从而保证了解码时可以按索引顺序依次解码，不再需要每次都扫描全部索引，简化了移位异或纠删码的解码，也提供了移位异或系统可解性的统一且可判定的理论框架。
+Two-tone Shift-XOR Codes的提出是基于对移位异或纠删码理论本质的探索，主要体现在算法规范化上。
+\inlinecite{fuOverheadfreeInplaceRecovery2014}和\inlinecite{fuOverheadfreeInplaceRecovery2015}初步提出移位异或纠删码的递增差（Increasing-Difference）性质，保证编码移位的偏移量的可解性与解码逻辑的正确性，并探索了理想情况下原地解码的可行性。
+\inlinecite{fuDecodingRepairSchemes2020}进一步明确改进的递增差（Refined Increasing-Difference）性质，优化偏移量递增差的约束，允许更灵活的设计，降低存储额外开销至常数级，还提出了移位异或消除法（Shift-XOR Elimination），可以直接在接收缓冲区上进行解码运算，逐层消除并解出所有数据块。
+\inlinecite{chengSuccessivelySolvableShiftAdd2021}提出连续可解性（Successive Solvability）理论，更加规范地定义移位矩阵，从而保证解码时可以按索引顺序依次解码，不再需要每次都扫描全部索引，简化了移位异或纠删码的解码，也提供了移位异或系统可解性的统一且可判定的理论框架。
 
 在上述移位异或理论的基础上，Two-tone纠删码算法\cite{fuTwotoneShiftXORStorage2021}得以正式提出。
-Two-tone突破了一般RID矩阵单调偏移的约束，继承了连续可解性，设计​​先递减后递增​​的对称偏移模式，并巧妙地将解码系统划分成两个子系统进行解码，两个子系统分别对应编码时递减和递增的部分，可以规则且高效地完成数据块的解码，达到更高效的理论性能，并且其规范性也使得后续进行系统优化有更大的潜能。
+Two-tone突破了一般RID矩阵单调偏移的约束，继承了连续可解性，设计先递减后递增的对称偏移模式，并巧妙地将解码系统划分成两个子系统进行解码，两个子系统分别对应编码时递减和递增的部分，可以规则且高效地完成数据块的解码，达到更高效的理论性能，并且其规范性也使得后续进行系统优化有更大的潜能。
 
-虽然关于ZD Codes和Two-tone Codes这类移位异或纠删码的理论研究已经相当充分，但关于对其进行系统级优化的工作依然较少，其落地到工业级应用场景下的优化与实验依然有较大空白。
-并且RS纠删码的系统优化策略无法直接应用到Two-tone移位异或纠删码上，因为在移位异或纠删码中所有数据块都会参与异或，无法直接使用RS码减少异或运算的方法。
-这是由移位矩阵决定的，也是避免了有限域上其他运算后的结果。
+虽然关于ZD Codes和Two-tone Codes这类移位异或纠删码的理论研究已经相当充分，但关于对其进行系统级优化的工作依然缺少，其落地到工业级应用场景下的优化与实验依然有较大空白。
+并且RS纠删码的系统优化策略无法直接应用到Two-tone移位异或纠删码上，因为在移位异或纠删码中所有数据块码字都会参与异或，无法直接使用RS码减少异或运算的方法。
+这是由移位矩阵决定的，也是避免了有限域上其他运算的结果。
 而编码不同校验块时不同的移位偏移量也导致无公共表达式，偏移量计算方式的不同以及数据访问模式的不同也无法直接应用RS码内存缓存和指针开销的优化策略。
 因此，针对移位异或码的系统级优化方法仍需进一步探索和完善。
 本课题正是基于更规范高效的Two-tone移位异或纠删码，研究其系统优化策略，填补移位异或纠删码在系统优化方法论上的空白。
