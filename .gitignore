@@ -1,5 +1,3 @@
 build/
-# *.pdf
-*.sty
-*.cfg
-*.cls
+*.synctex.gz
+# 注意：hithesisart.cls / hithesisart.cfg / hithesis.bst 为本模板核心文件，必须纳入版本管理，不要忽略。

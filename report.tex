@@ -1,0 +1,43 @@
+% !Mode:: "TeX:UTF-8"
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 哈尔滨工业大学（深圳）硕士学位论文中期报告
+%
+% 模板说明：
+%   本中期报告模板基于 ruicx 的 HITSZ-Mid-Term-LaTex-Template
+%   (https://github.com/ruicx/HITSZ-Mid-Term-LaTex-Template) 整合而来，
+%   该模板由 hithesis v3 (https://github.com/dustincys/hithesis) 改进。
+%   开题报告（proposal 分支）使用的是 hitszthesis 模板，
+%   两者文档类不同，中期报告单独使用 hithesisart 文档类。
+%
+% 主要选项：
+%   type=doctor|master|bachelor    学位类型
+%   stage=opening|midterm          阶段（中期请用 midterm）
+%   campus=shenzhen|weihai|harbin  校区
+%   fontset=windows|mac|ubuntu|fandol  字体集，Linux/CI 下用 fandol（开源）
+%   printWithe=true|false          双面打印留白页
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[fontset=fandol,toc=true,type=master,stage=midterm,campus=shenzhen,printWithe=false]{hithesisart}
+% 此处选项中不要有空格
+
+\graphicspath{{figures/}{logos/}}
+
+\begin{document}
+
+\input{front/coverart.tex}
+\makecover
+
+% 深圳硕士中期报告 -----------------------------------------------
+\pagestyle{hit@headingsmunual} % 页眉
+\input{body/report_midterm}
+
+\FloatBarrier
+\section*{参考文献}
+\bibliographystyle{hithesis}
+\bibliography{reference}
+% inline style \inlinecite, upper style \cite
+
+\end{document}
+
+% Local Variables:
+% TeX-engine: xetex
+% End:
