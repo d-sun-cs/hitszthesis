@@ -8,121 +8,372 @@
 % * -------------------------------------------------------------------------
 \subsection{课题主要研究内容}
 
-\lipsum[1]
+在现代大规模分布式存储系统中，数据可用性是应对软硬件故障的基本保障\cite{fordAvailabilityGloballyDistributed2010}。
+当前主流的容错技术包括数据复制和纠删码：数据复制实现简单，但存储开销大（如三副本需要三倍存储空间）；
+而纠删码通过对原始数据分块编码生成冗余校验信息，能够以远低于复制的存储成本提供同等甚至更高的数据可靠性\cite{weatherspoonErasureCodingVs2002}。
+正因如此，纠删码已成为Google文件系统（GFS）\cite{ghemawatGoogleFileSystem2003}、Windows Azure存储\cite{calderWindowsAzureStorage2011}、Hadoop分布式文件系统（HDFS）\cite{shvachkoHadoopDistributedFile2010}以及Ceph\cite{weilCephScalableHighPerformance2006}等大规模存储系统的核心技术。
+
+经典的Reed-Solomon（RS）码\cite{reedPolynomialCodesCertain1960}基于有限域$GF[2^w]$上的矩阵乘法进行编解码，具有良好的最大距离可分（MDS）特性。
+为提升其性能，研究者将部分有限域运算转化为异或运算\cite{lubyXORBasedErasureResilientCoding1995}，并在矩阵稀疏化、公共子表达式复用、内存与缓存访问优化、指针开销削减等系统层面持续改进，
+代表性工作包括Jerasure\cite{plankJerasureLibraryFacilitating2008}、G-CRS\cite{liuGCRSGPUAccelerated2018}、Zerasure\cite{zhouFastErasureCoding2020}、SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}、Cerasure\cite{wangFastAccelerationStrategies2025}以及Intel的ISA-L库\cite{gajalwarExploringDataProtection2024}。
+近年来，基于非循环移位异或（Shift-XOR）运算的新型纠删码逐渐成为理论研究热点。
+ZigZag Decodable Codes\cite{gongZigzagDecodableCodes2017}通过构建特殊的移位矩阵，仅依赖移位和异或操作即可实现高效编解码；
+Two-tone Shift-XOR Codes\cite{fuTwotoneShiftXORStorage2021}在连续可解性（Successive Solvability）理论\cite{chengSuccessivelySolvableShiftAdd2021}的基础上进一步规范了移位矩阵结构，设计了先递减后递增的对称偏移模式，是目前移位异或纠删码的SOTA成果。
+对这类编码而言，异或就是最基本的运算，无需像RS码那样进行有限域转换，因而具备更高的理论性能潜力。
+
+然而，尽管Two-tone移位异或纠删码在理论上性能优越，其完整的工程实现与系统级优化仍然缺失。
+现有文献仅在实验测试中验证了算法潜力，缺乏可用于生产环境的高性能实现，具体表现为三方面问题：
+
+\begin{semiQuotList}
+    \item \textbf{缺少泛化性实现}：现有实现无法应对数据块和校验块的所有丢失情况，不能同时满足存储系统中“解码丢失数据块”与“重编码丢失校验块”的双重需求。
+    \item \textbf{缺少系统级优化}：理论算法未给出减少条件分支与遍历、增强缓存局部性、缓解内存访问压力等优化策略，而RS码的系统级优化方法因算法本质不同而无法直接迁移到移位异或纠删码上。
+    \item \textbf{缺少工业级应用}：移位异或纠删码尚未集成到Ceph、Hadoop等开源存储系统中，缺乏工业级场景下的高效性验证。
+\end{semiQuotList}
+
+针对上述问题，本课题以Two-tone非循环移位异或纠删码为研究对象，研究其系统级高效实现方法，主要研究内容包括：
+（1）深入分析Two-tone移位异或纠删码的编解码原理，明确其在工程实现中的内存访问瓶颈与优化方向；
+（2）提出并实现一套面向移位异或纠删码的系统级优化方案，包括统一解码抽象、缓存友好的窗口划分、内存友好的相邻合并访问以及面向常见丢失场景的特化优化；
+（3）将优化后的Two-tone纠删码以插件形式集成至Ceph分布式存储系统，验证其功能完整性与工业级部署能力；
+（4）通过消融实验与对比实验，验证各项优化的有效性，并与SOTA纠删码（ISA-L、Cerasure等）进行性能对比，最终提炼出针对移位异或纠删码的系统优化方法论，填补该领域的空白。
 
 % * -------------------------------------------------------------------------
 % * 进度介绍
 % * -------------------------------------------------------------------------
 \subsection{进度介绍}
 
-\lipsum[2]
+截至中期，本课题已完成开题报告中规划的绝大部分核心研究工作，并取得了显著的阶段性成果。
+相关研究成果已整理形成一篇学术论文，投稿至并行与分布式处理国际会议（IPDPS 2026）。总体进度如下：
+
+\begin{semiQuotList}
+    \item \textbf{理论分析与方案设计（已完成）}：完成了纠删码相关理论与系统优化方法的文献调研，深入剖析了Two-tone移位异或纠删码的编解码原理，明确了其“内存受限（memory-bound）”的本质瓶颈，并据此设计了四项系统级优化方案。
+    \item \textbf{高效实现与系统集成（已完成）}：使用约2000行C++代码实现了名为\,FastTT\,的高性能Two-tone纠删码库，集成了全部四项优化，并以插件形式集成至Ceph v18.2.7存储系统，成功通过了Ceph纠删码接口测试与端到端集群读写测试。
+    \item \textbf{实验评估（已完成）}：在多种$(k,m)$配置下完成了编码吞吐、解码吞吐、消融实验以及基于磁盘的端到端吞吐实验，验证了各项优化的有效性，并相较ISA-L、Jerasure、Cerasure等SOTA实现取得了显著的性能优势。
+    \item \textbf{方法论总结与论文撰写（进行中）}：已系统性总结移位异或纠删码的系统优化方法论并完成学术论文撰写与投稿，后续将持续完善实验与论文，并撰写毕业论文。
+\end{semiQuotList}
+
+需要说明的是，本节仅对总体进度做概括性介绍，已完成工作的具体技术细节与实验结果将在第二部分详细展开。
 
 % * =========================================================================
 % * 目前已完成的主要研究工作及结果
 % * =========================================================================
 \section{目前已完成的主要研究工作及结果}
 
-\subsection{二级标题}
+本部分详细介绍中期阶段已完成的主要研究工作，包括移位异或纠删码的原理分析、四项系统级优化方案的设计与实现、Ceph系统集成，以及完整的实验评估结果。
 
-\subsubsection{三级标题}
+\subsection{Two-tone移位异或纠删码的原理分析}
 
-\paragraph{四级标题}
+\subsubsection{移位异或编码原理}
 
-\lipsum[2]
+移位异或纠删码采用系统化$(k,k+m)$编码。
+原始消息被划分为$k$个数据块$\boldsymbol{d}_1,\boldsymbol{d}_2,\ldots,\boldsymbol{d}_{k}$，每块含$l$个码字（symbol），一个码字通常设为一个SIMD寄存器的长度（如256位）。
+前$k$个编码块即为数据块本身，其余$m$个块$\boldsymbol{c}_1,\ldots,\boldsymbol{c}_{m}$为校验块。
+系统化移位异或码的生成矩阵可由偏移矩阵$S=(s_{i,j})$刻画，其中每个$s_{i,j}$为非负整数，表示移位偏移量。第$i$个校验块由\eqref{eq:shift-xor-encode}得到：
 
-\paragraph{公式与图表}
-
-式\eqref{eq: example} 是一个公式示例。表 \ref{tab: table example} 是一个表格实例。图 \ref{fig: figure example} 是一个插图示例。
-
-\begin{equation} \label{eq: example}
-    H_{\epsilon}(z)=\frac{1}{2}\left[1+\frac{2}{\pi} \arctan \left(\frac{z}{\epsilon}\right)\right] .
+\begin{equation}
+\label{eq:shift-xor-encode}
+c_{i}[x] = \bigoplus_{j=1}^{k} d_j[x-s_{i,j}],
 \end{equation}
 
-\begin{table}[htbp]
-    \caption{页面宽度表格}
-    \newcolumntype{Y}{>{\centering\arraybackslash}X}
-    % 仍然可以使用 p{3em} 指定某列宽度, 并保持整个表格宽度，从而适应不等宽列
-    \begin{tabularx}{\textwidth}{*{5}{Y}}
-        \toprule
-             & Dice   & JS     & BF     & PN     \\
-        \midrule
-        Mean & 0.9999 & 0.9999 & 0.9999 & 0.9999 \\
-        Max  & 0.9999 & 0.9999 & 0.9999 & 0.9999 \\
-        Min  & 0.9999 & 0.9999 & 0.9999 & 0.9999 \\
-        Std. & 0.9999 & 0.9999 & 0.9999 & 0.9999 \\
-        \bottomrule
-    \end{tabularx}
-    \label{tab: table example}
-\end{table}
+其中越界访问按零处理（即$x\le0$或$x>l$时$d_j[x]=0$）。
+移位操作可通过地址偏移直接实现，几乎无额外开销，这正是移位异或码相较RS码的核心优势。
+
+在各类移位异或码中，Two-tone码\cite{fuTwotoneShiftXORStorage2021}泛化了既有构造并成为SOTA。
+其偏移矩阵采用先递减后递增的对称结构。以$(k,m)=(4,3)$为例，可取偏移矩阵\eqref{eq:two-tone-mat}：
+
+\begin{equation}
+\label{eq:two-tone-mat}
+    \begin{pmatrix}
+        3 & 2 & 1 & 0\\
+        0 & 0 & 0 & 0\\
+        0 & 1 & 2 & 3
+    \end{pmatrix}.
+\end{equation}
+
+即每个数据块分别右移、不移或左移若干码字后异或得到校验块，编码过程如图\ref{fig:tt-encode}所示。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\textwidth]{hitlogo.eps}
-    \caption{示例图片}
-    \label{fig: figure example}
+    \includegraphics[width=0.8\textwidth]{Two-tone码编码举例.pdf}
+    \caption{Two-tone码编码举例（$k=4,m=3$）}
+    \label{fig:tt-encode}
 \end{figure}
 
-\paragraph{参考文献}
-当文献做主语时，需要将文献放在行内，使用 \verb|\inlinecite{cnproceed}|，如：文献 \inlinecite{cnproceed} 中描述了 XXXX。
-其他情况下使用 \verb|\cite{cnproceed}| 如：XXXX\cite{cnproceed}。
+\subsubsection{移位异或解码原理}
 
-\subsection{二级标题}
-\subsubsection{三级标题}
-\paragraph{四级标题}
-\lipsum[2]
-\paragraph{四级标题}
-\lipsum[3]
+得益于高度规则的Two-tone构造，解码可按“连续可解”\cite{chengSuccessivelySolvableShiftAdd2021}的顺序进行，每个码字的求解顺序可预先确定，无需暴力搜索。
+解码总体分为两个步骤：第一步“代入（Substitution）”，将未丢失的数据块异或代入未丢失的校验块；
+第二步“Two-tone消除（Elimination）”，从两侧最外侧错开的码字开始，依次向内逐个解出码字，并将解出的码字继续代入，循环直至解出全部丢失数据。
+这里的“两侧”恰好对应Two-tone算法的两个子系统，分别对应编码时递减和递增的部分。
+图\ref{fig:tt-decode3}与图\ref{fig:tt-decode2}分别展示了丢失三个数据块、以及丢失两个数据块和一个校验块时的解码过程；后者只有一侧存在错开码字（相当于一个子系统为空集），且因出现校验块丢失，解码完成后还需重新编码以修复该校验块。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.96\textwidth]{Two-tone码丢失3个数据块的解码举例.pdf}
+    \caption{Two-tone码丢失3个数据块的解码举例}
+    \label{fig:tt-decode3}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Two-tone码丢失2个数据块和1个校验块的解码举例.pdf}
+    \caption{Two-tone码丢失2个数据块和1个校验块的解码举例}
+    \label{fig:tt-decode2}
+\end{figure}
+
+\subsubsection{直观实现的性能瓶颈}
+
+对上述算法的直观实现进行分析可知，其性能受限于内存访问，主要存在三方面瓶颈：
+
+\begin{semiQuotList}
+    \item \textbf{冗余内存访问与较差的时间局部性}：编码时按数据块顺序逐码字扫描，每次更新都需访问全部校验块，导致校验块被反复读写，时间局部性差；解码的代入与消除阶段存在同样问题，使整体实现成为内存受限型。
+    \item \textbf{低效的数据遍历模式}：编码可采用横向或纵向两种遍历模式。横向遍历对数据块利用充分，但对校验块反复写入；纵向遍历减少了校验块写入，却需重复加载数据块。两者各有内存访问瓶颈。
+    \item \textbf{复杂的解码流程与次优遍历模式}：多数已有工作只重视数据块的及时修复而对校验块采取惰性策略，但校验块同样关键——若校验块不及时修复，再发生一次数据块丢失就可能造成数据永久不可用。此外，对所有丢失情况采用统一的遍历模式也会导致次优性能。
+\end{semiQuotList}
+
+针对上述瓶颈，本课题提出了四项系统级优化技术，并将其整合进\,FastTT\,实现中。
+
+\subsection{系统级优化方案的设计与实现}
+
+\subsubsection{统一解码抽象：Erasure-Parity Mapping}
+
+在通用的存储场景中，解码必须同时保证数据块和校验块的及时恢复。
+直观实现需要在解码完成后单独执行一个“修复（Repair）”阶段来重新编码丢失的校验块，引入了冗余操作和额外的内存访问。
+为此，本课题提出Erasure-Parity Mapping统一抽象：将所有丢失的数据块和丢失的校验块统一表示为同一种映射结构，每个丢失块按编号顺序匹配一个未丢失的校验块；若丢失块本身就是校验块，则将其映射至自身。
+在代入步骤中无需额外判断，直接将未丢失数据块代入所有映射结构；
+在消除步骤中，每解出一个码字便立即代入到所有相关映射结构（包括对应丢失校验块的结构）中。
+由于数据块的解码与校验块的重编码被统一为对同类映射结构的操作，二者得以相互穿插、同时完成，从而省去了独立的修复阶段，进一步减少了遍历与内存访问次数。
+图\ref{fig:naive-flow}与图\ref{fig:mapping-flow}对比了一般解码流程与本方案的统一解码流程。
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}[t]{0.45\textwidth}
+        \vspace{0pt}
+        \centering
+        \includegraphics[width=0.46\textwidth]{Two-tone一般解码实现流程.pdf}
+        \caption{Two-tone一般解码实现流程}
+        \label{fig:naive-flow}
+    \end{minipage}%
+    \hspace{0.04\textwidth}
+    \begin{minipage}[t]{0.45\textwidth}
+        \vspace{0pt}
+        \centering
+        \includegraphics[width=0.46\textwidth]{Erasure-Parity Mapping统一解码实现流程.pdf}
+        \caption{Erasure-Parity Mapping统一解码实现流程}
+        \label{fig:mapping-flow}
+    \end{minipage}
+\end{figure}
+
+\subsubsection{缓存友好的窗口划分：Cache-Friendly Window Partitioning}
+
+由于移位和异或操作本身极为高效，整体性能受限于数据块在内存中的读写效率，频繁的跨块内存访问极易导致缓存失效。
+为此，本课题将每个较长的数据块划分为连续、定长的窗口（window），并在处理下一个窗口前完成当前窗口内的全部移位异或操作，如图\ref{fig:cfw}所示，从而显著提升缓存命中率。
+同时，考虑到Ceph等系统分配的块内存通常未预先初始化，本方案采用“首次访问时初始化”（Init On First Access）策略，仅在窗口被实际访问时才进行初始化，避免了对全部块一次性初始化造成的开销与浪费。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Cache-Friendly Window效果演示.pdf}
+    \caption{Cache-Friendly Window效果演示}
+    \label{fig:cfw}
+\end{figure}
+
+在解码过程中，由于代入与消除两个步骤在不同块之间存在错位，若仅对当前窗口代入，可能导致消除位置的数据未被完全覆盖。
+为此本方案采用off-by-one代入策略：代入窗口始终比消除窗口领先一个窗口，从而保证代入覆盖消除将要读取的全部位置。
+该策略要求窗口大小至少能跨越$k-1$个码字位置，以覆盖Two-tone偏移矩阵引入的全部相对偏移；
+据此选取满足$W\ge k-1$的最小2的幂作为窗口大小$W$，兼顾对齐简洁性与覆盖要求，实验证明该取值能取得最佳的吞吐折中。
+
+\subsubsection{内存友好的相邻合并访问：Neighbor-Merging Access}
+
+针对编码时横向与纵向遍历模式各自的内存访问瓶颈（如图\ref{fig:hv-pattern}所示），本课题提出相邻合并访问策略。
+该策略在横向遍历的基础上，将相邻的两个数据块码字先加载到SIMD寄存器中，通过一次寄存器内异或合并，再一次性写入对应校验块，如图\ref{fig:nma}所示。
+横向遍历的内存访问复杂度约为$\Theta((k+km)l)$，相邻合并访问则降低为约$\Theta((k+\tfrac{km}{2})l)$，在实际$(k,m)$配置下普遍优于横向与纵向两种模式。
+该方法既避免了对同一数据块内存的重复访问，又将对校验块内存的访问理论上减少一半，同时通过指令级两块异或提升了SIMD通道吞吐利用率。
+考虑到SIMD寄存器数量有限且更多校验块会增加偏移复杂度，本方案有意将合并限制在相邻两块之间。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Two-tone编码横向与纵向访问模式.pdf}
+    \caption{Two-tone编码的横向与纵向访问模式}
+    \label{fig:hv-pattern}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Neighbor-Merging Access模式.pdf}
+    \caption{Neighbor-Merging Access模式}
+    \label{fig:nma}
+\end{figure}
+
+\subsubsection{遍历模式选择：Traversal Pattern Selection}
+
+在大规模存储集群中，故障模式高度偏向单块丢失，同时丢失两块及以上的概率远低于丢失一块。
+为此本课题针对“仅丢失一个数据块或一个校验块”的常见场景设计了特化优化。
+此时解码无需执行完整的Two-tone消除流程，只需对所有相关的未丢失块做一次全局异或，一次性恢复丢失块。
+由于该操作对每个相关码字恰好访问一次，特别适合采用纵向遍历模式（此时无重复访问，效率高于横向模式），并可进一步采用AVX2的stream类指令让内存访问绕过缓存，省去缓存相关处理流程，如图\ref{fig:special}所示。
+该特化分支与统一解码框架完美兼容：解码器先执行Erasure-Parity Mapping构造映射，再根据丢失块数量选择遍历模式——丢失一块时走单遍纵向异或快路径，否则回退到标准的“代入+消除”流程。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Two-tone解码只丢失一块的特化情况举例.pdf}
+    \caption{Two-tone解码只丢失一块的特化情况举例}
+    \label{fig:special}
+\end{figure}
+
+\subsection{基于Ceph的系统集成}
+
+为验证上述优化方案的工业级可用性，本课题将优化后的Two-tone纠删码以插件形式集成至Ceph v18.2.7分布式存储系统。
+集成工作分为两个层次：
+其一是接口集成与功能验证，通过Ceph标准纠删码接口对编解码的正确性与性能进行测试，借助Erasure-Parity Mapping机制确保算法能够应对所有可能的数据块与校验块丢失组合；
+其二是集群集成与应用验证，利用Ceph自带的\texttt{vstart}工具搭建测试集群，创建采用Two-tone编码的纠删码存储池，并完成文件的端到端读写。
+完整的功能性测试表明，\,FastTT\,插件能够稳定可靠地在分布式环境中完成编解码与读写流程，具备工业级部署能力。
+
+\subsection{实验评估与结果}
+
+\subsubsection{实验环境与配置}
+
+实验在配备Intel Core i9-14900K（6.0\,GHz，24核，36\,MiB L3缓存）和64\,GB DDR5内存的工作站上进行，操作系统为Ubuntu 22.04，编译器为GCC 11.4.0，并启用AVX2指令。
+对比基线包括三种代表性纠删码实现：Jerasure\cite{plankJerasureLibraryFacilitating2008}、Intel ISA-L\cite{gajalwarExploringDataProtection2024}（Ceph官方支持、业界公认最高性能的生产级实现）以及学术界SOTA实现Cerasure\cite{wangFastAccelerationStrategies2025}。
+实验在$(6,2)$、$(8,3)$、$(10,4)$、$(6,3)$四种代表性配置下进行，块大小固定为2\,MB，每组实验取重复2000次的平均吞吐。
+
+\subsubsection{编码与解码吞吐}
+
+在Ceph基准测试工具下，\,FastTT\,的编码吞吐相较ISA-L平均提升59.1\%（最高84.1\%），相较Jerasure平均提升261.4\%（最高342.8\%），如表\ref{tab:encode}所示。
+即便在$(10,4)$这一相对不利的配置下（因第四个校验块需2码字移位、无法在AVX2 256位寄存器约束下合并），\,FastTT\,仍优于两种基线。
+
+\begin{table}[htbp]
+    \caption{FastTT、ISA-L与Jerasure的编码吞吐（GB/s）}
+    \label{tab:encode}
+    \centering
+    \begin{tabularx}{0.8\textwidth}{*{4}{>{\centering\arraybackslash}X}}
+        \toprule
+        配置 & FastTT & ISA-L & Jerasure \\
+        \midrule
+        (6, 2)  & 34.74 & 24.37 & 17.03 \\
+        (6, 3)  & 31.69 & 17.59 & 7.64  \\
+        (8, 3)  & 31.35 & 17.03 & 7.08  \\
+        (10, 4) & 17.59 & 13.56 & 4.58  \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+在解码方面，\,FastTT\,相较ISA-L平均提升50.9\%，相较Jerasure平均提升161.1\%。
+其中单块丢失场景的优势尤为突出，相较ISA-L提升超过130\%（最高182.1\%），这得益于绕过完整消除流程的直接异或快路径。
+表\ref{tab:decode}给出了部分典型配置下的解码吞吐（\emph{Erasures}列为丢失块数）。
+
+\begin{table}[htbp]
+    \caption{FastTT、ISA-L与Jerasure的解码吞吐（GB/s）}
+    \label{tab:decode}
+    \centering
+    \begin{tabularx}{0.85\textwidth}{*{5}{>{\centering\arraybackslash}X}}
+        \toprule
+        配置 & 丢失块数 & FastTT & ISA-L & Jerasure \\
+        \midrule
+        (6, 2)  & 1 & 95.99 & 38.38 & 42.70 \\
+        (6, 2)  & 2 & 25.60 & 24.89 & 16.26 \\
+        (8, 3)  & 1 & 93.11 & 33.01 & 37.04 \\
+        (8, 3)  & 2 & 26.18 & 23.16 & 10.97 \\
+        (8, 3)  & 3 & 21.44 & 18.38 & 5.00  \\
+        (10, 4) & 1 & 81.01 & 34.42 & 35.11 \\
+        (10, 4) & 4 & 11.53 & 13.97 & 3.69  \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+在与学术界SOTA的RS码实现Cerasure对比时，\,FastTT\,的编码吞吐平均提升13.2\%（最高27.0\%），解码吞吐平均提升16.0\%（最高43.6\%），全面验证了优化方案在各类配置下的泛化性与有效性。
+
+\subsubsection{消融实验}
+
+为评估各项优化的独立贡献，本课题在$(8,3)$配置下进行消融实验，结果如表\ref{tab:ablation}所示，解码吞吐为所有丢失情况的平均值。
+以原始Two-tone实现为基线：Erasure-Parity Mapping（EPM）带来约100.2\%的解码性能提升；
+在此基础上加入Cache-Friendly Window Partitioning（CFWP）使编解码吞吐进一步提升约43.0\%；
+再加入Neighbor-Merging Access（NMA）带来约58.6\%的编码性能提升；
+最后Traversal Pattern Selection（TPS）贡献了约43.5\%的解码吞吐提升。
+每项优化都对最终性能有清晰而显著的贡献。
+
+\begin{table}[htbp]
+    \caption{各项优化技术的性能影响（GB/s）。CFWP：缓存友好窗口划分；NMA：相邻合并访问；EPM：统一解码抽象；TPS：遍历模式选择}
+    \label{tab:ablation}
+    \centering
+    \begin{tabularx}{0.9\textwidth}{*{4}{>{\centering\arraybackslash}c}*{2}{>{\centering\arraybackslash}X}}
+        \toprule
+        CFWP & NMA & EPM & TPS & 编码 & 解码 \\
+        \midrule
+                  &            &            &            & 13.16 & 7.54  \\
+                  &            & \checkmark &            & 13.16 & 16.85 \\
+        \checkmark &            & \checkmark &            & 23.32 & 24.10 \\
+        \checkmark & \checkmark & \checkmark &            & 31.23 & 24.10 \\
+        \checkmark & \checkmark & \checkmark & \checkmark & 32.78 & 35.23 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\subsubsection{端到端存储系统实验}
+
+除上述基于内存（不含磁盘I/O）的编解码吞吐实验外，本课题还进行了基于磁盘的端到端实验：利用Ceph的\texttt{vstart}搭建测试集群并创建纠删码存储池，再通过\texttt{rados}工具执行端到端\emph{PUT}操作（将本地文件作为对象写入Ceph）。
+由于\emph{PUT}不仅包含编码过程，还包含较慢的磁盘写入，整体速度显著低于前述实验，但更能体现\,FastTT\,在生产级场景中的实际表现。
+结果（见表\ref{tab:put}）表明，\,FastTT\,的端到端吞吐持续优于ISA-L，平均提升7.1\%（最高13.3\%）。
+
+\begin{table}[htbp]
+    \caption{Ceph纠删码存储池的端到端\emph{PUT}吞吐（MB/s）}
+    \label{tab:put}
+    \centering
+    \begin{tabularx}{0.8\textwidth}{*{4}{>{\centering\arraybackslash}X}}
+        \toprule
+        配置 & FastTT & ISA-L & Jerasure \\
+        \midrule
+        (6, 2)  & 457.69 & 444.64 & 401.39 \\
+        (6, 3)  & 450.03 & 397.06 & 362.83 \\
+        (8, 3)  & 877.32 & 817.60 & 709.31 \\
+        (10, 4) & 573.04 & 546.44 & 490.08 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+综上，已完成的工作系统性地解决了Two-tone移位异或纠删码工程实现中的内存访问瓶颈，并在编码、解码、消融及端到端实验中全面验证了优化方案的有效性，达成了开题报告中设定的核心目标。
 
 % * =========================================================================
 % * 后期拟完成的研究工作及进度安排
 % * =========================================================================
 \section{后期拟完成的研究工作及进度安排}
 
-本课题的所定目标已经完成了大部分，后期需要完成的工作包括 XXXXXX，具体工作为：
+本课题所定核心目标已基本完成，后期工作以成果深化、方法论凝练与论文撰写为主，具体包括：
 \begin{semiQuotList}
-    \item 工作 1。
-    \item 工作 2。
-    \item 工作 3。
+    \item 持续完善学术论文，根据IPDPS 2026的审稿意见进行修改与补充实验，提升工作的完整性与说服力。
+    \item 扩展实验维度，补充不同块大小、不同$(k,m)$配置以及更多丢失模式下的性能分析，并对$(10,4)$等不利配置下的性能瓶颈做进一步优化探索。
+    \item 在已有系统优化方法论的基础上规划新的创新点，探索面向更广移位异或码族（如ZigZag、其他RID构造）的通用优化框架或新的硬件加速手段。
+    \item 系统整理研究成果，撰写硕士毕业论文并准备答辩。
 \end{semiQuotList}
 
 具体工作进度安排为：
 \begin{closeItemize}
-    \item 202X 年 X 月 -- 202X 年 X 月：XXXXX。
-    \item 202X 年 X 月 -- 202X 年 X 月：将牙齿方向判断合并到牙齿检测模型中，并尝试使用 Anchor Free 检测方法。
-    \item 202X 年 X 月 -- 202X 年 X 月：尝试将活动轮廓处理流程合并到深度学习模型内部。
-    \item 202X 年 X 月 -- 202X 年 X 月：整理结果，撰写毕业论文，准备毕业答辩。
+    \item 2026年3月 -- 2026年4月：完善论文与补充实验，凝练移位异或纠删码系统优化方法论，规划毕业设计的新增创新点。
+    \item 2026年4月 -- 2026年5月：开展新创新点的初步研究与验证，扩展实验，整理全部实验数据与结论。
+    \item 2026年5月 -- 2026年6月：撰写硕士毕业论文，完善图表与方法论总结，准备毕业答辩。
 \end{closeItemize}
 
 % * =========================================================================
 % * 存在的困难与问题
 % * =========================================================================
 \section{存在的困难与问题}
-本课题涉及 XXXXXX。此外，XXXXXXX，给课题的实现带来了一定的困难。总体上，预期可能遇到的困难有：
+
+本课题在推进过程中，主要面临以下困难与问题：
+
+\subsection{存在问题与困难}
+
 \begin{semiQuotList}
-    \item 问题 1。
-    \item 问题 2。
-    \item 问题 3。
-    \item 问题 4。
-    \item 问题 5。
+    \item \textbf{特定配置下的性能瓶颈}：在$(10,4)$等配置中，第四个校验块需要2个码字的移位偏移，无法在AVX2的256位寄存器约束下与其他校验块合并，导致编码和解码性能相对下降，这是当前实现尚未完全克服的瓶颈。
+    \item \textbf{两块丢失场景的优化空间}：两块丢失时既无法使用单块丢失的直接异或快路径，又不具备高丢失数场景下异或占比高的特点，必须完整执行代入与消除，性能优势相对有限。
+    \item \textbf{优化方法论的通用性}：当前优化方案主要针对Two-tone码的特定移位结构，如何将其推广到更广泛的移位异或码族并形成通用方法论，仍需进一步研究。
+    \item \textbf{工程实现与系统集成的复杂性}：将算法以插件形式稳定集成进Ceph这类大型分布式系统，涉及接口适配、内存管理与正确性验证等诸多工程细节，调试与测试成本较高。
 \end{semiQuotList}
 
-% * -------------------------------------------------------------------------
-% * 存在问题与困难
-% * -------------------------------------------------------------------------
-\subsection{存在问题与困难}
-\lipsum[4-5]
-
-% * -------------------------------------------------------------------------
-% * 解决方案
-% * -------------------------------------------------------------------------
 \subsection{解决方案}
-为了 XXXXXXX。具体来说，有以下解决方案：
+
+针对上述困难，拟采取以下解决方案：
 \begin{semiQuotList}
-    \item 解决方法 1。
-    \item 解决方法 2。
-    \item 解决方法 3。
-    \item 解决方法 4。
-    \item 解决方法 5。
+    \item 针对寄存器约束导致的瓶颈，探索更灵活的码字分组与SIMD指令调度策略，或结合AVX-512等更宽寄存器进一步挖掘合并潜力。
+    \item 针对两块丢失场景，分析其访问模式特征，尝试设计介于单块快路径与通用消除之间的中间优化策略。
+    \item 通过抽象Two-tone优化技术中与具体偏移结构无关的共性部分，逐步构建面向移位异或码族的通用优化框架。
+    \item 充分利用Ceph官方的测试工具与社区文档，结合单元测试与端到端测试保证集成的正确性与稳定性。
 \end{semiQuotList}
 
 % * =========================================================================
@@ -130,6 +381,8 @@
 % * =========================================================================
 \section{如期完成全部论文工作的可能性}
 
-本课题目前基本 XXXXXX，已经完成了  XXXXXX 构建。
-目前正在进行 XXXXXXX，将要进行 XXXXX。
-综上所述，论文能够按期完成，并取得一定的研究成果。
+本课题目前进展顺利，已经完成了开题报告中规划的绝大部分核心工作：
+完成了Two-tone移位异或纠删码的原理分析与四项系统级优化方案的设计与实现，构建了高性能的\,FastTT\,纠删码库并成功集成至Ceph分布式存储系统，
+并通过编码、解码、消融以及端到端实验全面验证了优化方案的有效性，相关成果已整理形成学术论文投稿至IPDPS 2026。
+后期主要工作集中在论文完善、方法论凝练、新增创新点的探索以及毕业论文撰写，工作目标明确、技术路线清晰，且已有扎实的代码与实验基础作为支撑。
+综上所述，本课题能够按期完成全部论文工作，并有望取得高质量的研究成果。
