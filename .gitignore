@@ -1,3 +1,17 @@
 build/
 *.synctex.gz
+# LaTeX 编译产物（根目录直接编译时产生）
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.thm
+*.fdb_latexmk
+*.fls
+*.nav
+*.snm
+# 根目录主文档 PDF 产物（figures/ 下的素材 PDF 不受影响）
+/report.pdf
 # 注意：hithesisart.cls / hithesisart.cfg / hithesis.bst 为本模板核心文件，必须纳入版本管理，不要忽略。
