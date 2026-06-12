@@ -1,0 +1,125 @@
+% * =========================================================================
+% * 目前已完成的主要研究工作及结果
+% * =========================================================================
+\section{目前已完成的主要研究工作及结果}
+
+本部分详细介绍中期阶段已完成的主要研究工作，包括移位异或纠删码的原理分析、四项系统级优化方案的设计与实现、Ceph系统集成，以及完整的实验评估结果。
+
+\subsection{Two-tone移位异或纠删码的原理分析}
+
+\subsubsection{移位异或编码原理}
+
+移位异或纠删码采用系统化$(k,k+m)$编码。
+原始消息被划分为$k$个数据块$\boldsymbol{d}_1,\boldsymbol{d}_2,\ldots,\boldsymbol{d}_{k}$，每块含$l$个码字（symbol），一个码字通常设为一个SIMD寄存器的长度（如256位）。
+前$k$个编码块即为数据块本身，其余$m$个块$\boldsymbol{c}_1,\ldots,\boldsymbol{c}_{m}$为校验块。
+系统化移位异或码的生成矩阵可由偏移矩阵$S=(s_{i,j})$刻画，其中每个$s_{i,j}$为非负整数，表示移位偏移量。第$i$个校验块由\eqref{eq:shift-xor-encode}得到：
+
+\begin{equation}
+\label{eq:shift-xor-encode}
+c_{i}[x] = \bigoplus_{j=1}^{k} d_j[x-s_{i,j}],
+\end{equation}
+
+其中越界访问按零处理（即$x\le0$或$x>l$时$d_j[x]=0$）。
+移位操作可通过地址偏移直接实现，几乎无额外开销，这正是移位异或码相较RS码的核心优势。
+
+在各类移位异或码中，Two-tone码\cite{fuTwotoneShiftXORStorage2021}泛化了既有构造并成为SOTA。
+其偏移矩阵采用先递减后递增的对称结构。以$(k,m)=(4,3)$为例，可取偏移矩阵\eqref{eq:two-tone-mat}：
+
+\begin{equation}
+\label{eq:two-tone-mat}
+    \begin{pmatrix}
+        3 & 2 & 1 & 0\\
+        0 & 0 & 0 & 0\\
+        0 & 1 & 2 & 3
+    \end{pmatrix}.
+\end{equation}
+
+即每个数据块分别右移、不移或左移若干码字后异或得到校验块，编码过程如图\ref{fig:tt-encode}所示。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Example of Two-tone Encoding.pdf}
+    \caption{Two-tone码编码举例（$k=4,m=3$）}
+    \label{fig:tt-encode}
+\end{figure}
+
+算法\ref{algo:tt-encode}给出了Two-tone编码的直观实现：按数据块逐码字扫描，并依据偏移矩阵$(s_{i,j})$将其异或贡献累加到对应的校验块码字上。
+这种实现方式会使不同数据块码字分散且重复地写入相同的校验块码字，造成较差的局部性与冗余的内存访问。
+
+\begin{algorithm}[htbp]
+\small
+\caption{\textsc{Two-tone Encoding}}
+\label{algo:tt-encode}
+\KwIn{Data chunks $\boldsymbol{d}_1,\boldsymbol{d}_2,\ldots,\boldsymbol{d}_{k}$, each of length $l$, Two-tone offset matrix $(s_{i,j})$.}
+\KwOut{Parity chunks $\boldsymbol{c}_1,\boldsymbol{c}_2,\ldots,\boldsymbol{c}_{m}$.}
+\For{$j \gets 1$ \KwTo $k$} {
+    \For{$x \gets 1$ \KwTo $l$} {
+        \For{$i \gets 1$ \KwTo $m$} {
+            $c_i[x+s_{i,j}] \gets c_i[x+s_{i,j}] \oplus d_j[x]$\;
+        }
+    }
+}
+\end{algorithm}
+
+\subsubsection{移位异或解码原理}
+
+得益于高度规则的Two-tone构造，解码可按“连续可解”\cite{chengSuccessivelySolvableShiftAdd2021}的顺序进行，每个码字的求解顺序可预先确定，无需暴力搜索。
+沿用前述$(k,m)=(4,3)$的例子，假设丢失了数据块$\boldsymbol{d}_1$、$\boldsymbol{d}_2$以及校验块$\boldsymbol{c}_2$，存活的数据块为$\boldsymbol{d}_3,\boldsymbol{d}_4$、存活的校验块为$\boldsymbol{c}_1,\boldsymbol{c}_3$，完整的解码与$\boldsymbol{c}_2$修复过程如图\ref{fig:tt-decode}所示。
+
+解码总体分为三个阶段。
+第一阶段“代入（Substitution）”：将存活的数据块$\boldsymbol{d}_3,\boldsymbol{d}_4$按偏移异或代入存活的校验块$\boldsymbol{c}_1,\boldsymbol{c}_3$，从而消去已知数据的贡献，使与丢失块相关的码字暴露出来。
+第二阶段“Two-tone消除（Elimination）”：从两侧最外侧错开的码字开始逐个求解丢失数据块。
+具体地，$\boldsymbol{d}_1,\boldsymbol{d}_2$的首个码字可直接得到；将$d_1[1]$、$d_2[1]$分别代入$\boldsymbol{c}_3$、$\boldsymbol{c}_1$后，可得$d_1[2]=c_3[2]\oplus d_2[1]$、$d_2[2]=c_1[4]\oplus d_1[1]$；
+再将$d_1[2]$、$d_2[2]$代入，又得$d_1[3]=c_3[3]\oplus d_2[2]$、$d_2[3]=c_1[5]\oplus d_1[2]$；如此交替推进，直至顺序解出全部码字。
+这里的“两侧”恰好对应Two-tone算法的两个子系统，分别对应编码时递减与递增的部分。
+第三阶段“修复（Repair）”：由于校验块$\boldsymbol{c}_2$也已丢失，需在数据块全部恢复后重新编码以修复之；因偏移矩阵中$s_{2,j}=0$（$1\le j\le 4$），有$\boldsymbol{c}_2=\boldsymbol{d}_1\oplus\boldsymbol{d}_2\oplus\boldsymbol{d}_3\oplus\boldsymbol{d}_4$。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{Example of Two-tone Decoding.pdf}
+    \caption{Two-tone码解码举例（假设$\boldsymbol{d}_1$、$\boldsymbol{d}_2$、$\boldsymbol{c}_2$丢失）}
+    \label{fig:tt-decode}
+\end{figure}
+
+算法\ref{algo:tt-decode}给出了上述解码流程的直观实现，包含代入、Two-tone消除与修复三个逻辑阶段。
+代入阶段与编码同理，会带来相同的冗余访问问题；消除阶段以一个同步偏移$\Delta$对齐不同的移位量，并围绕中心索引$j_{mid}$将存活校验块划分为两个子系统，从两端向中间确定性地依次暴露并求解码字；
+最后再对丢失的校验块单独执行一次修复。可以看到，直观实现将丢失数据块的解码与丢失校验块的修复分离处理，且对所有丢失情况默认采用以数据块为中心的同一种遍历模式。
+
+\begin{algorithm}[htbp]
+\small
+\caption{\textsc{Two-tone Decoding}}
+\label{algo:tt-decode}
+\KwIn{Ascendingly sorted indices of survived parity chunks $I_{svd}$, indices of erased parity chunks $I_{erd}$, indices of survived data chunks $J_{svd}$, indices of erased data chunks $J_{erd}$, survived data chunks $\boldsymbol{d}_j,j\in J_{svd}$, survived parity chunks $\boldsymbol{c}_i, i\in I_{svd}$, Two-tone offset matrix $(s_{i,j})$}
+\KwOut{Decoded data chunks $\boldsymbol{d}_j,j\in J_{erd}$, repaired parity chunks $\boldsymbol{c}_i,i\in I_{erd}$}
+\tcc{Line 1-7: $Substitution(d[J_{svd}] \rightarrow c[I_{svd}])$}
+\ForEach{$j \in J_{svd}$} {
+    \For{$x \gets 1$ \KwTo $l$} {
+        \ForEach{$i \in I_{svd}$} {
+            $c_i[x+s_{i,j}] \gets c_i[x+s_{i,j}] \oplus d_j[x]$\;
+        }
+    }
+}
+\tcc{Line 8-17: $Elimination(d[J_{erd}]\leftrightarrow c[I_{svd}])$}
+$j_{mid}\gets\mathop{argmin}\limits_j|I_{svd}[j]-1-m/2|$\;
+\For{$x \gets min(2-m/2,1)$ \KwTo $l$} {
+    \For{\textnormal{(}$j_{idx} \gets |J_{erd}|$ \KwTo $j_{mid}+1$\textnormal{)}  \\ \quad~~\textnormal{\textbf{then}} \textnormal{(}$j_{idx} \gets 1$ \KwTo $j_{mid}$\textnormal{)}} {
+        $j \gets J_{erd}[j_{idx}]$; $i \gets I_{svd}[j_{idx}]$\;
+        $\Delta\gets max(|i-1-m/2| - 1, 0)$\;
+        $d_j[x+\Delta]\gets c_i[x+\Delta+s_{i,j}]$\;
+        $Substitute(d_j[x+\Delta] \rightarrow c[I_{svd}-i])$\;
+    }
+}
+Repair $c[I_{erd}]$\;
+\end{algorithm}
+
+\subsubsection{直观实现的性能瓶颈}
+
+对上述算法的直观实现进行分析可知，其性能受限于内存访问，主要存在三方面瓶颈：
+
+\begin{semiQuotList}
+    \item \textbf{冗余内存访问与较差的时间局部性}：编码时按数据块顺序逐码字扫描，每次更新都需访问全部校验块，导致校验块被反复读写，时间局部性差；解码的代入与消除阶段存在同样问题，使整体实现成为内存受限型。
+    \item \textbf{低效的数据遍历模式}：编码可采用横向或纵向两种遍历模式。横向遍历对数据块利用充分，但对校验块反复写入；纵向遍历减少了校验块写入，却需重复加载数据块。两者各有内存访问瓶颈。
+    \item \textbf{复杂的解码流程与次优遍历模式}：多数已有工作只重视数据块的及时修复而对校验块采取惰性策略，但校验块同样关键——若校验块不及时修复，再发生一次数据块丢失就可能造成数据永久不可用。此外，对所有丢失情况采用统一的遍历模式也会导致次优性能。
+\end{semiQuotList}
+
+针对上述瓶颈，本课题提出了四项系统级优化技术，并将其整合进\,FastTT\,实现中。

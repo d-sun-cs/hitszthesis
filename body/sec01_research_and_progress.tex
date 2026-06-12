@@ -1,0 +1,54 @@
+% * =========================================================================
+% * 课题主要研究内容及进度
+% * =========================================================================
+\section{课题主要研究内容及进度}
+
+% * -------------------------------------------------------------------------
+% * 课题主要研究内容
+% * -------------------------------------------------------------------------
+\subsection{课题主要研究内容}
+
+在现代大规模分布式存储系统中，数据可用性是应对软硬件故障的基本保障\cite{fordAvailabilityGloballyDistributed2010}。
+当前主流的容错技术包括数据复制和纠删码：数据复制实现简单，但存储开销大（如三副本需要三倍存储空间）；
+而纠删码通过对原始数据分块编码生成冗余校验信息，能够以远低于复制的存储成本提供同等甚至更高的数据可靠性\cite{weatherspoonErasureCodingVs2002}。
+正因如此，纠删码已成为Google文件系统（GFS）\cite{ghemawatGoogleFileSystem2003}、Windows Azure存储\cite{calderWindowsAzureStorage2011}、Hadoop分布式文件系统（HDFS）\cite{shvachkoHadoopDistributedFile2010}以及Ceph\cite{weilCephScalableHighPerformance2006}等大规模存储系统的核心技术。
+
+经典的Reed-Solomon（RS）码\cite{reedPolynomialCodesCertain1960}基于有限域$GF[2^w]$上的矩阵乘法进行编解码，具有良好的最大距离可分（MDS）特性。
+为提升其性能，研究者将部分有限域运算转化为异或运算\cite{lubyXORBasedErasureResilientCoding1995}，并在矩阵稀疏化、公共子表达式复用、内存与缓存访问优化、指针开销削减等系统层面持续改进，
+代表性工作包括Jerasure\cite{plankJerasureLibraryFacilitating2008}、G-CRS\cite{liuGCRSGPUAccelerated2018}、Zerasure\cite{zhouFastErasureCoding2020}、SLPEC\cite{uezatoAcceleratingXORbasedErasure2021}、Cerasure\cite{wangFastAccelerationStrategies2025}以及Intel的ISA-L库\cite{gajalwarExploringDataProtection2024}。
+近年来，基于非循环移位异或（Shift-XOR）运算的新型纠删码逐渐成为理论研究热点。
+ZigZag Decodable Codes\cite{gongZigzagDecodableCodes2017}通过构建特殊的移位矩阵，仅依赖移位和异或操作即可实现高效编解码；
+Two-tone Shift-XOR Codes\cite{fuTwotoneShiftXORStorage2021}在连续可解性（Successive Solvability）理论\cite{chengSuccessivelySolvableShiftAdd2021}的基础上进一步规范了移位矩阵结构，设计了先递减后递增的对称偏移模式，是目前移位异或纠删码的SOTA成果。
+对这类编码而言，异或就是最基本的运算，无需像RS码那样进行有限域转换，因而具备更高的理论性能潜力。
+
+然而，尽管Two-tone移位异或纠删码在理论上性能优越，其完整的工程实现与系统级优化仍然缺失。
+现有文献仅在实验测试中验证了算法潜力，缺乏可用于生产环境的高性能实现，具体表现为三方面问题：
+
+\begin{semiQuotList}
+    \item \textbf{缺少泛化性实现}：现有实现无法应对数据块和校验块的所有丢失情况，不能同时满足存储系统中“解码丢失数据块”与“重编码丢失校验块”的双重需求。
+    \item \textbf{缺少系统级优化}：理论算法未给出减少条件分支与遍历、增强缓存局部性、缓解内存访问压力等优化策略，而RS码的系统级优化方法因算法本质不同而无法直接迁移到移位异或纠删码上。
+    \item \textbf{缺少工业级应用}：移位异或纠删码尚未集成到Ceph、Hadoop等开源存储系统中，缺乏工业级场景下的高效性验证。
+\end{semiQuotList}
+
+针对上述问题，本课题以Two-tone非循环移位异或纠删码为研究对象，研究其系统级高效实现方法，主要研究内容包括：
+（1）深入分析Two-tone移位异或纠删码的编解码原理，明确其在工程实现中的内存访问瓶颈与优化方向；
+（2）提出并实现一套面向移位异或纠删码的系统级优化方案，包括统一解码抽象、缓存友好的窗口划分、内存友好的相邻合并访问以及面向常见丢失场景的特化优化；
+（3）将优化后的Two-tone纠删码以插件形式集成至Ceph分布式存储系统，验证其功能完整性与工业级部署能力；
+（4）通过消融实验与对比实验，验证各项优化的有效性，并与SOTA纠删码（ISA-L、Cerasure等）进行性能对比，最终提炼出针对移位异或纠删码的系统优化方法论，填补该领域的空白。
+
+% * -------------------------------------------------------------------------
+% * 进度介绍
+% * -------------------------------------------------------------------------
+\subsection{进度介绍}
+
+截至中期，本课题已完成开题报告中规划的绝大部分核心研究工作，并取得了显著的阶段性成果。
+相关研究成果已整理形成一篇学术论文，投稿至并行与分布式处理国际会议（IPDPS 2026）。总体进度如下：
+
+\begin{semiQuotList}
+    \item \textbf{理论分析与方案设计（已完成）}：完成了纠删码相关理论与系统优化方法的文献调研，深入剖析了Two-tone移位异或纠删码的编解码原理，明确了其“内存受限（memory-bound）”的本质瓶颈，并据此设计了四项系统级优化方案。
+    \item \textbf{高效实现与系统集成（已完成）}：使用约2000行C++代码实现了名为\,FastTT\,的高性能Two-tone纠删码库，集成了全部四项优化，并以插件形式集成至Ceph v18.2.7存储系统，成功通过了Ceph纠删码接口测试与端到端集群读写测试。
+    \item \textbf{实验评估（已完成）}：在多种$(k,m)$配置下完成了编码吞吐、解码吞吐、消融实验以及基于磁盘的端到端吞吐实验，验证了各项优化的有效性，并相较ISA-L、Jerasure、Cerasure等SOTA实现取得了显著的性能优势。
+    \item \textbf{方法论总结与论文撰写（进行中）}：已系统性总结移位异或纠删码的系统优化方法论并完成学术论文撰写与投稿，后续将持续完善实验与论文，并撰写毕业论文。
+\end{semiQuotList}
+
+需要说明的是，本节仅对总体进度做概括性介绍，已完成工作的具体技术细节与实验结果将在第二部分详细展开。

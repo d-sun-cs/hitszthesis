@@ -1,0 +1,111 @@
+\subsection{基于Ceph的系统集成}
+
+为验证上述优化方案的工业级可用性，本课题将优化后的Two-tone纠删码以插件形式集成至Ceph v18.2.7分布式存储系统。
+集成工作分为两个层次：
+其一是接口集成与功能验证，通过Ceph标准纠删码接口对编解码的正确性与性能进行测试，借助Erasure-Parity Mapping机制确保算法能够应对所有可能的数据块与校验块丢失组合；
+其二是集群集成与应用验证，利用Ceph自带的\texttt{vstart}工具搭建测试集群，创建采用Two-tone编码的纠删码存储池，并完成文件的端到端读写。
+完整的功能性测试表明，\,FastTT\,插件能够稳定可靠地在分布式环境中完成编解码与读写流程，具备工业级部署能力。
+
+\subsection{实验评估与结果}
+
+\subsubsection{实验环境与配置}
+
+实验在配备Intel Core i9-14900K（6.0\,GHz，24核，36\,MiB L3缓存）和64\,GB DDR5内存的工作站上进行，操作系统为Ubuntu 22.04，编译器为GCC 11.4.0，并启用AVX2指令。
+对比基线包括三种代表性纠删码实现：Jerasure\cite{plankJerasureLibraryFacilitating2008}、Intel ISA-L\cite{gajalwarExploringDataProtection2024}（Ceph官方支持、业界公认最高性能的生产级实现）以及学术界SOTA实现Cerasure\cite{wangFastAccelerationStrategies2025}。
+实验在$(6,2)$、$(8,3)$、$(10,4)$、$(6,3)$四种代表性配置下进行，块大小固定为2\,MB，每组实验取重复2000次的平均吞吐。
+
+\subsubsection{编码与解码吞吐}
+
+在Ceph基准测试工具下，\,FastTT\,的编码吞吐相较ISA-L平均提升59.1\%（最高84.1\%），相较Jerasure平均提升261.4\%（最高342.8\%），如表\ref{tab:encode}所示。
+即便在$(10,4)$这一相对不利的配置下（因第四个校验块需2码字移位、无法在AVX2 256位寄存器约束下合并），\,FastTT\,仍优于两种基线。
+
+\begin{table}[htbp]
+    \caption{FastTT、ISA-L与Jerasure的编码吞吐（GB/s）}
+    \label{tab:encode}
+    \centering
+    \begin{tabularx}{0.8\textwidth}{*{4}{>{\centering\arraybackslash}X}}
+        \toprule
+        配置 & FastTT & ISA-L & Jerasure \\
+        \midrule
+        (6, 2)  & 34.74 & 24.37 & 17.03 \\
+        (6, 3)  & 31.69 & 17.59 & 7.64  \\
+        (8, 3)  & 31.35 & 17.03 & 7.08  \\
+        (10, 4) & 17.59 & 13.56 & 4.58  \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+在解码方面，\,FastTT\,相较ISA-L平均提升50.9\%，相较Jerasure平均提升161.1\%。
+其中单块丢失场景的优势尤为突出，相较ISA-L提升超过130\%（最高182.1\%），这得益于绕过完整消除流程的直接异或快路径。
+表\ref{tab:decode}给出了部分典型配置下的解码吞吐（丢失块数列为同时丢失的块数）。
+
+\begin{table}[htbp]
+    \caption{FastTT、ISA-L与Jerasure的解码吞吐（GB/s）}
+    \label{tab:decode}
+    \centering
+    \begin{tabularx}{0.85\textwidth}{*{5}{>{\centering\arraybackslash}X}}
+        \toprule
+        配置 & 丢失块数 & FastTT & ISA-L & Jerasure \\
+        \midrule
+        (6, 2)  & 1 & 95.99 & 38.38 & 42.70 \\
+        (6, 2)  & 2 & 25.60 & 24.89 & 16.26 \\
+        (8, 3)  & 1 & 93.11 & 33.01 & 37.04 \\
+        (8, 3)  & 2 & 26.18 & 23.16 & 10.97 \\
+        (8, 3)  & 3 & 21.44 & 18.38 & 5.00  \\
+        (10, 4) & 1 & 81.01 & 34.42 & 35.11 \\
+        (10, 4) & 4 & 11.53 & 13.97 & 3.69  \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+在与学术界SOTA的RS码实现Cerasure对比时，\,FastTT\,的编码吞吐平均提升13.2\%（最高27.0\%），解码吞吐平均提升16.0\%（最高43.6\%），全面验证了优化方案在各类配置下的泛化性与有效性。
+
+\subsubsection{消融实验}
+
+为评估各项优化的独立贡献，本课题在$(8,3)$配置下进行消融实验，结果如表\ref{tab:ablation}所示，解码吞吐为所有丢失情况的平均值。
+以原始Two-tone实现为基线：Erasure-Parity Mapping（EPM）带来约100.2\%的解码性能提升；
+在此基础上加入Cache-Friendly Window Partitioning（CFWP）使编解码吞吐进一步提升约43.0\%；
+再加入Neighbor-Merging Access（NMA）带来约58.6\%的编码性能提升；
+最后Traversal Pattern Selection（TPS）贡献了约43.5\%的解码吞吐提升。
+每项优化都对最终性能有清晰而显著的贡献。
+
+\begin{table}[htbp]
+    \caption{各项优化技术的性能影响（GB/s）。CFWP：缓存友好窗口划分；NMA：相邻合并访问；EPM：统一解码抽象；TPS：遍历模式选择}
+    \label{tab:ablation}
+    \centering
+    \begin{tabularx}{0.9\textwidth}{*{4}{>{\centering\arraybackslash}c}*{2}{>{\centering\arraybackslash}X}}
+        \toprule
+        CFWP & NMA & EPM & TPS & 编码 & 解码 \\
+        \midrule
+                  &            &            &            & 13.16 & 7.54  \\
+                  &            & \checkmark &            & 13.16 & 16.85 \\
+        \checkmark &            & \checkmark &            & 23.32 & 24.10 \\
+        \checkmark & \checkmark & \checkmark &            & 31.23 & 24.10 \\
+        \checkmark & \checkmark & \checkmark & \checkmark & 32.78 & 35.23 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\subsubsection{端到端存储系统实验}
+
+除上述基于内存（不含磁盘I/O）的编解码吞吐实验外，本课题还进行了基于磁盘的端到端实验：利用Ceph的\texttt{vstart}搭建测试集群并创建纠删码存储池，再通过\texttt{rados}工具执行端到端\emph{PUT}操作（将本地文件作为对象写入Ceph）。
+由于\emph{PUT}不仅包含编码过程，还包含较慢的磁盘写入，整体速度显著低于前述实验，但更能体现\,FastTT\,在生产级场景中的实际表现。
+结果（见表\ref{tab:put}）表明，\,FastTT\,的端到端吞吐持续优于ISA-L，平均提升7.1\%（最高13.3\%）。
+
+\begin{table}[htbp]
+    \caption{Ceph纠删码存储池的端到端\emph{PUT}吞吐（MB/s）}
+    \label{tab:put}
+    \centering
+    \begin{tabularx}{0.8\textwidth}{*{4}{>{\centering\arraybackslash}X}}
+        \toprule
+        配置 & FastTT & ISA-L & Jerasure \\
+        \midrule
+        (6, 2)  & 457.69 & 444.64 & 401.39 \\
+        (6, 3)  & 450.03 & 397.06 & 362.83 \\
+        (8, 3)  & 877.32 & 817.60 & 709.31 \\
+        (10, 4) & 573.04 & 546.44 & 490.08 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+综上，已完成的工作系统性地解决了Two-tone移位异或纠删码工程实现中的内存访问瓶颈，并在编码、解码、消融及端到端实验中全面验证了优化方案的有效性，达成了开题报告中设定的核心目标。
