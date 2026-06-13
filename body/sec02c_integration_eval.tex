@@ -111,6 +111,7 @@
     \end{tabularx}
 \end{table}
 
+\FloatBarrier
 \subsubsection{消融实验}
 
 为评估各项优化的独立贡献，本课题在$(8,3)$配置下进行消融实验，结果如表\ref{tab:ablation}所示，解码吞吐为所有丢失情况的平均值。
@@ -137,6 +138,7 @@
     \end{tabularx}
 \end{table}
 
+\FloatBarrier
 \subsubsection{端到端存储系统实验}
 
 除上述基于内存（不含磁盘I/O）的编解码吞吐实验外，本课题还进行了基于磁盘的端到端实验：利用Ceph的\texttt{vstart}搭建测试集群并创建纠删码存储池，再通过\texttt{rados}工具执行端到端\emph{PUT}操作（将本地文件作为对象写入Ceph）。

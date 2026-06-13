@@ -24,6 +24,15 @@
 % 算法伪代码（与学术论文一致，使用 algorithm2e）
 \usepackage[ruled,linesnumbered]{algorithm2e}
 
+% 浮动体排版调优：让图表更靠近正文、减少整页只放图的情况
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+
 \begin{document}
 
 \input{front/coverart.tex}

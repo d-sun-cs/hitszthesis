@@ -6,11 +6,12 @@
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.82\textwidth]{Two-tone Optimization Overview.pdf}
+    \includegraphics[width=0.6\textwidth]{Two-tone Optimization Overview.pdf}
     \caption{FastTT的整体优化框架}
     \label{fig:opt-overview}
 \end{figure}
 
+\FloatBarrier
 \subsubsection{统一解码抽象：Erasure-Parity Mapping}
 
 在通用的存储场景中，解码必须同时保证数据块和校验块的及时恢复。
@@ -30,7 +31,7 @@
     \begin{minipage}[t]{0.46\textwidth}
         \vspace{0pt}
         \centering
-        \includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Two-tone Naive Decoding Flow.pdf}
+        \includegraphics[width=\linewidth,height=0.34\textheight,keepaspectratio]{Two-tone Naive Decoding Flow.pdf}
         \caption{Two-tone一般解码实现流程}
         \label{fig:naive-flow}
     \end{minipage}%
@@ -38,7 +39,7 @@
     \begin{minipage}[t]{0.46\textwidth}
         \vspace{0pt}
         \centering
-        \includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Erasure-Parity Mapping Decoding Flow.pdf}
+        \includegraphics[width=\linewidth,height=0.34\textheight,keepaspectratio]{Erasure-Parity Mapping Decoding Flow.pdf}
         \caption{Erasure-Parity Mapping统一解码流程}
         \label{fig:mapping-flow}
     \end{minipage}
@@ -50,11 +51,12 @@
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.85\textwidth]{Erasure-Parity Mapping Decoding Demonstration.pdf}
+    \includegraphics[width=0.62\textwidth]{Erasure-Parity Mapping Decoding Demonstration.pdf}
     \caption{Erasure-Parity Mapping解码举例（假设$\boldsymbol d_1$、$\boldsymbol d_2$、$\boldsymbol c_2$丢失，虚线箭头与删除线标注表示被消除的冗余操作）}
     \label{fig:epm-demo}
 \end{figure}
 
+\FloatBarrier
 算法\ref{algo:epm-decode}给出了基于Erasure-Parity Mapping抽象的解码过程，包含映射、代入与Two-tone消除三个步骤。
 映射步骤将所有丢失的数据块与校验块统一表示为结构\texttt{mpe}，记录每个丢失块及其匹配的存活校验块；若丢失块本身为校验块，则映射至自身。
 代入与消除步骤随后对所有\texttt{mpe}条目按统一规则处理，从而省去独立的修复阶段。
@@ -80,6 +82,7 @@ $Substitution(\boldsymbol d[J_{svd}] \rightarrow mpe[I_{mpd}+I_{erd}])$\;
 $Elimination(mpe[I_{mpd}] \leftrightarrow mpe[I_{mpd}+I_{erd}])$\;
 \end{algorithm}
 
+\FloatBarrier
 \subsubsection{缓存友好的窗口划分：Cache-Friendly Window Partitioning}
 
 由于移位和异或操作本身极为高效，整体性能受限于数据块在内存中的读写效率，频繁的跨块内存访问极易导致缓存失效。
@@ -88,7 +91,7 @@ $Elimination(mpe[I_{mpd}] \leftrightarrow mpe[I_{mpd}+I_{erd}])$\;
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.78\textwidth]{Cache-Friendly Window Demonstration.pdf}
+    \includegraphics[width=0.6\textwidth]{Cache-Friendly Window Demonstration.pdf}
     \caption{缓存友好窗口划分效果演示。同色片段表示同一窗口内的局部访问，校验块中的阴影区域表示与相邻窗口的重叠}
     \label{fig:cfw}
 \end{figure}
@@ -98,6 +101,7 @@ $Elimination(mpe[I_{mpd}] \leftrightarrow mpe[I_{mpd}+I_{erd}])$\;
 该策略要求窗口大小至少能跨越$k-1$个码字位置，以覆盖Two-tone偏移矩阵引入的全部相对偏移；
 据此选取满足$W\ge k-1$的最小2的幂作为窗口大小$W$，兼顾对齐简洁性与覆盖要求，实验证明该取值能取得最佳的吞吐折中。
 
+\FloatBarrier
 \subsubsection{内存友好的相邻合并访问：Neighbor-Merging Access}
 
 编码时存在横向与纵向两种遍历模式（如图\ref{fig:access-pattern}(a)、(b)所示）：横向遍历逐个读取数据块码字并立即更新所有对应校验块，数据访问局部性好，但校验块写入分散且重复，内存访问复杂度约为$\Theta((k+km)l)$；
@@ -133,6 +137,7 @@ $Elimination(mpe[I_{mpd}] \leftrightarrow mpe[I_{mpd}+I_{erd}])$\;
     \label{fig:access-pattern}
 \end{figure}
 
+\FloatBarrier
 \subsubsection{遍历模式选择：Traversal Pattern Selection}
 
 在大规模存储集群中，故障模式高度偏向单块丢失，同时丢失两块及以上的概率远低于丢失一块。
@@ -143,7 +148,7 @@ $Elimination(mpe[I_{mpd}] \leftrightarrow mpe[I_{mpd}+I_{erd}])$\;
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.78\textwidth]{Vertical Traversal Pattern Demonstration.pdf}
+    \includegraphics[width=0.6\textwidth]{Vertical Traversal Pattern Demonstration.pdf}
     \caption{单块丢失场景下的纵向遍历模式演示：丢失块（如$\boldsymbol d_2$或$\boldsymbol c_1$）通过对未丢失块的一遍全局异或一次性恢复，无需Two-tone消除}
     \label{fig:special}
 \end{figure}
@@ -176,3 +181,5 @@ $MapErasure(J_{erd}\,|\,I_{erd}\leftrightarrow I_{svd})$\;
     $Elimination(mpe[I_{mpd}]~from~mpe[I_{mpd}+I_{erd}])$\;
 }
 \end{algorithm}
+
+\FloatBarrier

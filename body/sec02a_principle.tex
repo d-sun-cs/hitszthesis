@@ -38,7 +38,7 @@ c_{i}[x] = \bigoplus_{j=1}^{k} d_j[x-s_{i,j}],
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{Example of Two-tone Encoding.pdf}
+    \includegraphics[width=0.6\textwidth]{Example of Two-tone Encoding.pdf}
     \caption{Two-tone码编码举例（$k=4,m=3$）}
     \label{fig:tt-encode}
 \end{figure}
@@ -66,6 +66,13 @@ c_{i}[x] = \bigoplus_{j=1}^{k} d_j[x-s_{i,j}],
 得益于高度规则的Two-tone构造，解码可按“连续可解”\cite{chengSuccessivelySolvableShiftAdd2021}的顺序进行，每个码字的求解顺序可预先确定，无需暴力搜索。
 沿用前述$(k,m)=(4,3)$的例子，假设丢失了数据块$\boldsymbol{d}_1$、$\boldsymbol{d}_2$以及校验块$\boldsymbol{c}_2$，存活的数据块为$\boldsymbol{d}_3,\boldsymbol{d}_4$、存活的校验块为$\boldsymbol{c}_1,\boldsymbol{c}_3$，完整的解码与$\boldsymbol{c}_2$修复过程如图\ref{fig:tt-decode}所示。
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Example of Two-tone Decoding.pdf}
+    \caption{Two-tone码解码举例（假设$\boldsymbol{d}_1$、$\boldsymbol{d}_2$、$\boldsymbol{c}_2$丢失）}
+    \label{fig:tt-decode}
+\end{figure}
+
 解码总体分为三个阶段。
 第一阶段“代入（Substitution）”：将存活的数据块$\boldsymbol{d}_3,\boldsymbol{d}_4$按偏移异或代入存活的校验块$\boldsymbol{c}_1,\boldsymbol{c}_3$，从而消去已知数据的贡献，使与丢失块相关的码字暴露出来。
 第二阶段“Two-tone消除（Elimination）”：从两侧最外侧错开的码字开始逐个求解丢失数据块。
@@ -74,12 +81,6 @@ c_{i}[x] = \bigoplus_{j=1}^{k} d_j[x-s_{i,j}],
 这里的“两侧”恰好对应Two-tone算法的两个子系统，分别对应编码时递减与递增的部分。
 第三阶段“修复（Repair）”：由于校验块$\boldsymbol{c}_2$也已丢失，需在数据块全部恢复后重新编码以修复之；因偏移矩阵中$s_{2,j}=0$（$1\le j\le 4$），有$\boldsymbol{c}_2=\boldsymbol{d}_1\oplus\boldsymbol{d}_2\oplus\boldsymbol{d}_3\oplus\boldsymbol{d}_4$。
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{Example of Two-tone Decoding.pdf}
-    \caption{Two-tone码解码举例（假设$\boldsymbol{d}_1$、$\boldsymbol{d}_2$、$\boldsymbol{c}_2$丢失）}
-    \label{fig:tt-decode}
-\end{figure}
 
 算法\ref{algo:tt-decode}给出了上述解码流程的直观实现，包含代入、Two-tone消除与修复三个逻辑阶段。
 代入阶段与编码同理，会带来相同的冗余访问问题；消除阶段以一个同步偏移$\Delta$对齐不同的移位量，并围绕中心索引$j_{mid}$将存活校验块划分为两个子系统，从两端向中间确定性地依次暴露并求解码字；
@@ -123,3 +124,5 @@ Repair $c[I_{erd}]$\;
 \end{semiQuotList}
 
 针对上述瓶颈，本课题提出了四项系统级优化技术，并将其整合进\,FastTT\,实现中。
+
+\FloatBarrier
