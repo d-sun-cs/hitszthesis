@@ -47,7 +47,10 @@
     \caption{FastTT、ISA-L与Jerasure的解码吞吐（GB/s）}
     \label{tab:decode}
     \centering
-    \begin{tabularx}{0.85\textwidth}{*{5}{>{\centering\arraybackslash}X}}
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{0.92}
+    \begin{tabularx}{0.78\textwidth}{*{5}{>{\centering\arraybackslash}X}}
         \toprule
         配置 & 丢失块数 & FastTT & ISA-L & Jerasure \\
         \midrule
@@ -67,6 +70,7 @@
     \end{tabularx}
 \end{table}
 
+\FloatBarrier
 在与学术界SOTA的RS码实现Cerasure对比时（采用Cerasure原始测试方法以保持一致），\,FastTT\,的编码吞吐在所有配置下均优于Cerasure，平均提升13.2\%（最高27.0\%），如表\ref{tab:cerasure-encode}所示；
 解码吞吐平均提升16.0\%（最高43.6\%），如表\ref{tab:cerasure-decode}所示。
 其中仅在个别两块丢失配置下略低于Cerasure（原因同上：两块丢失无法利用快路径），其余情形均全面领先，充分验证了优化方案在各类配置下的泛化性与有效性。
@@ -91,7 +95,10 @@
     \caption{FastTT与Cerasure的解码吞吐（GB/s）}
     \label{tab:cerasure-decode}
     \centering
-    \begin{tabularx}{0.7\textwidth}{*{4}{>{\centering\arraybackslash}X}}
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{0.92}
+    \begin{tabularx}{0.65\textwidth}{*{4}{>{\centering\arraybackslash}X}}
         \toprule
         配置 & 丢失块数 & FastTT & Cerasure \\
         \midrule
