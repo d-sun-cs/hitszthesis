@@ -3,6 +3,10 @@
 针对上述内存访问瓶颈，本课题提出了四项相互配合的系统级优化技术，并将其整合进\,FastTT\,实现中。
 图\ref{fig:opt-overview}给出了\,FastTT\,的整体优化框架：编码阶段先按缓存友好窗口划分（Cache-Friendly Window Partitioning）将数据块切分为小窗口，并以相邻合并访问（Neighbor-Merging Access）模式计算移位异或结果写入校验块；
 解码阶段先通过统一解码抽象（Erasure-Parity Mapping）统一数据块与校验块的丢失情况，再依据丢失情况进行遍历模式选择（Traversal Pattern Selection），最后同样以窗口划分方式完成代入与Two-tone消除，一并完成丢失数据块的解码与丢失校验块的修复。
+需要明确的是，四项优化在编解码路径中的作用范围并不完全相同：
+编码路径主要应用缓存友好窗口划分（CFWP）与相邻合并访问（NMA）；
+解码路径则应用全部四项优化，其中Erasure-Parity Mapping（EPM）用于统一数据块解码与校验块修复，CFWP用于代入与消除的窗口化处理，Traversal Pattern Selection（TPS）用于单块丢失快路径选择，NMA则主要复用于Substitution阶段的存活数据块代入。
+由于解码时可能存在数据块丢失，原本相邻的数据块关系会被破坏；当可参与代入的数据块在偏移矩阵中相差两个偏移单位时，无法像编码阶段那样直观地进行相邻合并，因此NMA在解码侧的性能贡献相对有限，但其仍是FastTT解码实现中的一部分。
 
 \begin{figure}[htbp]
     \centering
@@ -32,7 +36,7 @@
         \vspace{0pt}
         \centering
         \includegraphics[width=\linewidth,height=0.4\textheight,keepaspectratio]{Two-tone Naive Decoding Flow.pdf}
-        \caption{Two-tone一般解码实现流程}
+        \caption{一般解码流程}
         \label{fig:naive-flow}
     \end{minipage}%
     \hspace{0.04\textwidth}
@@ -40,7 +44,7 @@
         \vspace{0pt}
         \centering
         \includegraphics[width=\linewidth,height=0.4\textheight,keepaspectratio]{Erasure-Parity Mapping Decoding Flow.pdf}
-        \caption{Erasure-Parity Mapping统一解码流程}
+        \caption{统一解码流程}
         \label{fig:mapping-flow}
     \end{minipage}
 \end{figure}
@@ -48,11 +52,12 @@
 图\ref{fig:epm-demo}给出了一个具体的解码示例。假设$\boldsymbol d_1$、$\boldsymbol d_2$和$\boldsymbol c_2$丢失，
 映射步骤建立三组关联：$\boldsymbol d_1\leftrightarrow\boldsymbol c_3$、$\boldsymbol c_2\leftrightarrow\boldsymbol c_2$（自映射）、$\boldsymbol d_2\leftrightarrow\boldsymbol c_1$；
 随后将未丢失的数据块$\boldsymbol d_3$、$\boldsymbol d_4$代入这些映射；在消除过程中，解出的码字按序传播至其他映射结构，丢失校验块$\boldsymbol c_2$的修复也被自然融入消除步骤，从而显著减少冗余内存访问。
+图中的虚线箭头表示被统一流程吸收的额外传播关系，删除线标注表示一般实现中可被消除的冗余操作。
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.8\textwidth]{Erasure-Parity Mapping Decoding Demonstration.pdf}
-    \caption{Erasure-Parity Mapping解码举例（假设$\boldsymbol d_1$、$\boldsymbol d_2$、$\boldsymbol c_2$丢失，虚线箭头与删除线标注表示被消除的冗余操作）}
+    \caption{Erasure-Parity Mapping解码示例}
     \label{fig:epm-demo}
 \end{figure}
 
@@ -87,12 +92,13 @@ $Elimination(mpe[I_{mpd}] \leftrightarrow mpe[I_{mpd}+I_{erd}])$\;
 
 由于移位和异或操作本身极为高效，整体性能受限于数据块在内存中的读写效率，频繁的跨块内存访问极易导致缓存失效。
 为此，本课题将每个较长的数据块划分为连续、定长的窗口（window），并在处理下一个窗口前完成当前窗口内的全部移位异或操作，如图\ref{fig:cfw}所示，从而显著提升缓存命中率。
+图中同色片段表示同一窗口内的局部访问，校验块中的阴影区域表示相邻窗口因移位偏移产生的重叠访问范围。
 同时，考虑到Ceph等系统分配的块内存通常未预先初始化，本方案采用“首次访问时初始化”（Init On First Access）策略，仅在窗口被实际访问时才进行初始化，避免了对全部块一次性初始化造成的开销与浪费。
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{Cache-Friendly Window Demonstration.pdf}
-    \caption{缓存友好窗口划分效果演示。同色片段表示同一窗口内的局部访问，校验块中的阴影区域表示与相邻窗口的重叠}
+    \caption{缓存友好窗口划分示意图}
     \label{fig:cfw}
 \end{figure}
 
@@ -111,6 +117,11 @@ $Elimination(mpe[I_{mpd}] \leftrightarrow mpe[I_{mpd}+I_{erd}])$\;
 相邻合并访问的内存访问复杂度降低为约$\Theta((k+\tfrac{km}{2})l)$，明显优于横向遍历，并在$m(k+2)>2k$（实际$(k,m)$配置普遍满足）时也优于纵向遍历。
 该方法既避免了对同一数据块内存的重复访问，又将对校验块内存的访问理论上减少一半，同时通过指令级两块异或提升了SIMD通道吞吐利用率。
 考虑到SIMD寄存器数量有限且更多校验块会增加偏移复杂度，本方案有意将合并限制在相邻两块之间。
+因此，图\ref{fig:access-pattern}中三种访问模式的差异可概括为：横向遍历偏向数据局部性，纵向遍历偏向校验写入连续性，而相邻合并访问在保留数据局部性的同时减少校验写入次数。
+
+在解码端，NMA并不作用于完整的Two-tone消除流程，而主要用于Substitution阶段：当若干存活数据块仍保持相邻关系时，可将相邻块对先在SIMD寄存器内合并，再代入对应映射结构。
+若丢失的数据块打断了相邻块对，或剩余存活块在偏移上相差两个单位，则无法直接复用编码端的相邻合并模式，只能退化为普通代入。
+因此，NMA对解码平均吞吐的提升不如对编码显著；其价值主要体现在可兼容统一解码框架，并在部分丢失模式下减少Substitution阶段的访存。
 
 \begin{figure}[htbp]
     \centering
@@ -133,7 +144,7 @@ $Elimination(mpe[I_{mpd}] \leftrightarrow mpe[I_{mpd}+I_{erd}])$\;
         \includegraphics[height=5.6cm,keepaspectratio]{Neighbor-Merging Access Pattern.pdf}\\[2pt]
         \textbf{(c) 相邻合并访问}
     \end{minipage}
-    \caption{Two-tone编码的访问模式对比：(a)横向遍历，数据局部性好但校验写入分散；(b)纵向遍历，校验写入集中但重复读取数据；(c)相邻合并访问，相邻数据块窗口先在SIMD寄存器内异或合并，再以一次连续存储写回各校验块窗口}
+    \caption{Two-tone编码访问模式对比}
     \label{fig:access-pattern}
 \end{figure}
 
@@ -144,12 +155,13 @@ $Elimination(mpe[I_{mpd}] \leftrightarrow mpe[I_{mpd}+I_{erd}])$\;
 为此本课题针对“仅丢失一个数据块或一个校验块”的常见场景设计了特化优化。
 此时解码无需执行完整的Two-tone消除流程，只需对所有相关的未丢失块做一次全局异或，一次性恢复丢失块。
 由于该操作对每个相关码字恰好访问一次，特别适合采用纵向遍历模式（此时无重复访问，效率高于横向模式），并可进一步采用AVX2的stream类指令让内存访问绕过缓存，省去缓存相关处理流程，如图\ref{fig:special}所示。
+图中以$\boldsymbol d_2$或$\boldsymbol c_1$丢失为例，展示了丢失块如何通过未丢失块的一遍全局异或直接恢复。
 该特化分支与统一解码框架完美兼容：解码器先执行Erasure-Parity Mapping构造映射，再根据丢失块数量选择遍历模式——丢失一块时走单遍纵向异或快路径，否则回退到标准的“代入+消除”流程。
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{Vertical Traversal Pattern Demonstration.pdf}
-    \caption{单块丢失场景下的纵向遍历模式演示：丢失块（如$\boldsymbol d_2$或$\boldsymbol c_1$）通过对未丢失块的一遍全局异或一次性恢复，无需Two-tone消除}
+    \caption{单块丢失的纵向遍历快路径}
     \label{fig:special}
 \end{figure}
 

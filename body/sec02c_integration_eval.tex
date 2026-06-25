@@ -11,7 +11,9 @@
 \subsubsection{实验环境与配置}
 
 实验在配备Intel Core i9-14900K（6.0\,GHz，24核，36\,MiB L3缓存）和64\,GB DDR5内存的工作站上进行，操作系统为Ubuntu 22.04，编译器为GCC 11.4.0，并启用AVX2指令。
-对比基线包括三种代表性纠删码实现：Jerasure\cite{plankJerasureLibraryFacilitating2008}、Intel ISA-L\cite{gajalwarExploringDataProtection2024}（Ceph官方支持、业界公认最高性能的生产级实现）以及学术界SOTA实现Cerasure\cite{wangFastAccelerationStrategies2025}。
+外部对比基线包括三种代表性RS码实现：Jerasure\cite{plankJerasureLibraryFacilitating2008}、Intel ISA-L\cite{gajalwarExploringDataProtection2024}（Ceph官方支持、业界公认最高性能的生产级实现）以及学术界SOTA实现Cerasure\cite{wangFastAccelerationStrategies2025}。
+需要说明的是，现有移位异或纠删码研究主要集中在编码构造与理论性质上，缺少经过系统级优化、接口完整且可复现实验环境一致的工程实现，因此难以找到公平的shift-XOR外部对比目标。
+为避免完全缺失同类基线，本报告在消融实验中加入未经系统级优化的Two-tone直接实现（Two-tone naive）作为内部shift-XOR baseline，仅用于中期阶段参考；后续工作将进一步完善更细粒度的同类对比。
 实验在$(6,2)$、$(8,3)$、$(10,4)$、$(6,3)$四种代表性配置下进行，块大小固定为2\,MB，每组实验取重复2000次的平均吞吐。
 
 \subsubsection{编码与解码吞吐}
@@ -119,28 +121,31 @@
 \end{table}
 
 \FloatBarrier
-\subsubsection{消融实验}
+\subsubsection{消融实验与shift-XOR内部基线}
 
-为评估各项优化的独立贡献，本课题在$(8,3)$配置下进行消融实验，结果如表\ref{tab:ablation}所示，解码吞吐为所有丢失情况的平均值。
-以原始Two-tone实现为基线：Erasure-Parity Mapping（EPM）带来约100.2\%的解码性能提升；
+为评估各项优化的独立贡献，并补充同类移位异或码的参考基线，本课题在$(8,3)$配置下进行消融实验，结果如表\ref{tab:ablation}所示，解码吞吐为所有丢失情况的平均值。
+表中CFWP表示缓存友好窗口划分，NMA表示相邻合并访问，EPM表示统一解码抽象，TPS表示遍历模式选择。
+第一行Two-tone naive是不加入系统级优化的Two-tone直接实现，也是本文当前采用的内部shift-XOR baseline。
+以该基线为起点，Erasure-Parity Mapping（EPM）带来约100.2\%的解码性能提升；
 在此基础上加入Cache-Friendly Window Partitioning（CFWP）使编解码吞吐进一步提升约43.0\%；
 再加入Neighbor-Merging Access（NMA）带来约58.6\%的编码性能提升；
 最后Traversal Pattern Selection（TPS）贡献了约43.5\%的解码吞吐提升。
+可以看到，NMA主要提升编码吞吐；解码侧由于其仅能在Substitution阶段、且只在存活数据块仍可相邻合并时生效，平均收益并不明显。
 每项优化都对最终性能有清晰而显著的贡献。
 
 \begin{table}[htbp]
-    \caption{各项优化技术的性能影响（GB/s）。CFWP：缓存友好窗口划分；NMA：相邻合并访问；EPM：统一解码抽象；TPS：遍历模式选择}
+    \caption{各项优化技术的性能影响（GB/s）}
     \label{tab:ablation}
     \centering
-    \begin{tabularx}{0.9\textwidth}{*{4}{>{\centering\arraybackslash}c}*{2}{>{\centering\arraybackslash}X}}
+    \begin{tabularx}{\textwidth}{>{\centering\arraybackslash}X*{4}{>{\centering\arraybackslash}c}*{2}{>{\centering\arraybackslash}X}}
         \toprule
-        CFWP & NMA & EPM & TPS & 编码 & 解码 \\
+        实现 & CFWP & NMA & EPM & TPS & 编码 & 解码 \\
         \midrule
-                  &            &            &            & 13.16 & 7.54  \\
-                  &            & \checkmark &            & 13.16 & 16.85 \\
-        \checkmark &            & \checkmark &            & 23.32 & 24.10 \\
-        \checkmark & \checkmark & \checkmark &            & 31.23 & 24.10 \\
-        \checkmark & \checkmark & \checkmark & \checkmark & 32.78 & 35.23 \\
+        Two-tone naive &            &            &            &            & 13.16 & 7.54  \\
+        +EPM           &            &            & \checkmark &            & 13.16 & 16.85 \\
+        +CFWP          & \checkmark &            & \checkmark &            & 23.32 & 24.10 \\
+        +NMA           & \checkmark & \checkmark & \checkmark &            & 31.23 & 24.10 \\
+        FastTT         & \checkmark & \checkmark & \checkmark & \checkmark & 32.78 & 35.23 \\
         \bottomrule
     \end{tabularx}
 \end{table}
