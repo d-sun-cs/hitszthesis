@@ -3,7 +3,7 @@
 % * =========================================================================
 \section{目前已完成的主要研究工作及结果}
 
-本部分详细介绍中期阶段已完成的主要研究工作，包括移位异或纠删码的原理分析、四项系统级优化方案的设计与实现、Ceph系统集成，以及完整的实验评估结果。
+本部分介绍中期阶段已完成的主要研究工作，包括移位异或纠删码原理分析、四项系统级优化方案设计与实现、Ceph系统集成与实验评估。
 
 \subsection{Two-tone移位异或纠删码的原理分析}
 
@@ -34,7 +34,7 @@ c_{i}[x] = \bigoplus_{j=1}^{k} d_j[x-s_{i,j}],
     \end{pmatrix}.
 \end{equation}
 
-即每个数据块分别右移、不移或左移若干码字后异或得到校验块，编码过程如图\ref{fig:tt-encode}所示。
+即每个数据块分别右移、不移或左移若干码字后异或得到校验块，图\ref{fig:tt-encode}展示了这一编码过程的直观示例。
 
 \begin{figure}[htbp]
     \centering
@@ -42,6 +42,8 @@ c_{i}[x] = \bigoplus_{j=1}^{k} d_j[x-s_{i,j}],
     \caption{Two-tone码编码示例}
     \label{fig:tt-encode}
 \end{figure}
+
+\FloatBarrier
 
 算法\ref{algo:tt-encode}给出了Two-tone编码的直观实现：按数据块逐码字扫描，并依据偏移矩阵$(s_{i,j})$将其异或贡献累加到对应的校验块码字上。
 这种实现方式会使不同数据块码字分散且重复地写入相同的校验块码字，造成较差的局部性与冗余的内存访问。
@@ -61,6 +63,8 @@ c_{i}[x] = \bigoplus_{j=1}^{k} d_j[x-s_{i,j}],
 }
 \end{algorithm}
 
+\FloatBarrier
+
 \subsubsection{移位异或解码原理}
 
 得益于高度规则的Two-tone构造，解码可按“连续可解”\cite{chengSuccessivelySolvableShiftAdd2021}的顺序进行，每个码字的求解顺序可预先确定，无需暴力搜索。
@@ -72,6 +76,8 @@ c_{i}[x] = \bigoplus_{j=1}^{k} d_j[x-s_{i,j}],
     \caption{Two-tone码解码示例}
     \label{fig:tt-decode}
 \end{figure}
+
+\FloatBarrier
 
 解码总体分为三个阶段。
 第一阶段“代入（Substitution）”：将存活的数据块$\boldsymbol{d}_3,\boldsymbol{d}_4$按偏移异或代入存活的校验块$\boldsymbol{c}_1,\boldsymbol{c}_3$，从而消去已知数据的贡献，使与丢失块相关的码字暴露出来。
@@ -113,9 +119,11 @@ $j_{mid}\gets\mathop{argmin}\limits_j|I_{svd}[j]-1-m/2|$\;
 Repair $c[I_{erd}]$\;
 \end{algorithm}
 
+\FloatBarrier
+
 \subsubsection{直观实现的性能瓶颈}
 
-对上述算法的直观实现进行分析可知，其性能受限于内存访问，主要存在三方面瓶颈：
+对上述算法进行分析可知，其性能受限于内存访问，主要存在三方面瓶颈：
 
 \begin{semiQuotList}
     \item \textbf{冗余内存访问与较差的时间局部性}：编码时按数据块顺序逐码字扫描，每次更新都需访问全部校验块，导致校验块被反复读写，时间局部性差；解码的代入与消除阶段存在同样问题，使整体实现成为内存受限型。

@@ -21,7 +21,7 @@
 在Ceph基准测试工具下，\,FastTT\,的编码吞吐相较ISA-L平均提升59.1\%（最高84.1\%），相较Jerasure平均提升261.4\%（最高342.8\%），如表\ref{tab:encode}所示。
 即便在$(10,4)$这一相对不利的配置下（因第四个校验块需2码字移位、无法在AVX2 256位寄存器约束下合并），\,FastTT\,仍优于两种基线。
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
     \caption{FastTT、ISA-L与Jerasure的编码吞吐（GB/s）}
     \label{tab:encode}
     \centering
@@ -37,6 +37,8 @@
     \end{tabularx}
 \end{table}
 
+\FloatBarrier
+
 在解码方面，\,FastTT\,相较ISA-L平均提升50.9\%，相较Jerasure平均提升161.1\%。
 其中单块丢失场景的优势尤为突出，相较ISA-L提升超过130\%（最高182.1\%），这得益于绕过完整消除流程的直接异或快路径；
 对Jerasure的最大提升则出现在丢失三块或四块的高丢失场景（达212.5\%\,--\,328.8\%）。
@@ -51,8 +53,8 @@
     \centering
     \small
     \setlength{\tabcolsep}{6pt}
-    \renewcommand{\arraystretch}{1.25}
-    \begin{tabularx}{0.9\textwidth}{*{5}{>{\centering\arraybackslash}X}}
+    \renewcommand{\arraystretch}{1.10}
+    \begin{tabularx}{0.88\textwidth}{*{5}{>{\centering\arraybackslash}X}}
         \toprule
         配置 & 丢失块数 & FastTT & ISA-L & Jerasure \\
         \midrule
@@ -75,7 +77,7 @@
 \FloatBarrier
 在与学术界SOTA的RS码实现Cerasure对比时（采用Cerasure原始测试方法以保持一致），\,FastTT\,的编码吞吐在所有配置下均优于Cerasure，平均提升13.2\%（最高27.0\%），如表\ref{tab:cerasure-encode}所示；
 解码吞吐平均提升16.0\%（最高43.6\%），如表\ref{tab:cerasure-decode}所示。
-其中仅在个别两块丢失配置下略低于Cerasure（原因同上：两块丢失无法利用快路径），其余情形均全面领先，充分验证了优化方案在各类配置下的泛化性与有效性。
+其中仅在个别两块丢失配置下略低于Cerasure（原因同上：两块丢失无法利用快路径），其余情形均全面领先，充分验证了优化方案在各类配置下的泛化性与有效性，也为后续系统实验提供了性能依据。
 
 \begin{table}[htbp]
     \caption{FastTT与Cerasure的编码吞吐（GB/s）}
@@ -98,9 +100,9 @@
     \label{tab:cerasure-decode}
     \centering
     \small
-    \setlength{\tabcolsep}{6pt}
-    \renewcommand{\arraystretch}{1.25}
-    \begin{tabularx}{0.72\textwidth}{*{4}{>{\centering\arraybackslash}X}}
+    \setlength{\tabcolsep}{5pt}
+    \renewcommand{\arraystretch}{1.05}
+    \begin{tabularx}{0.68\textwidth}{*{4}{>{\centering\arraybackslash}X}}
         \toprule
         配置 & 丢失块数 & FastTT & Cerasure \\
         \midrule
@@ -121,17 +123,18 @@
 \end{table}
 
 \FloatBarrier
-\subsubsection{消融实验与shift-XOR内部基线}
+\subsubsection{shift-XOR内部基线与消融实验}
 
-为评估各项优化的独立贡献，并补充同类移位异或码的参考基线，本课题在$(8,3)$配置下进行消融实验，结果如表\ref{tab:ablation}所示，解码吞吐为所有丢失情况的平均值。
+由于当前移位异或纠删码领域尚缺少经过系统级优化、接口完整且易于复现实验的公开工程实现，无法直接找到与FastTT公平对比的成熟shift-XOR系统基线。
+因此，本节将未经系统级优化的Two-tone直观实现（Two-tone naive）作为内部shift-XOR baseline，并将其放在表\ref{tab:ablation}第一行；该实现保留Two-tone基础编解码逻辑，但不包含CFWP、NMA、EPM、TPS等系统级优化。
+在此基础上，本课题在$(8,3)$配置下进行消融实验，以同时评估各项优化的独立贡献和FastTT相对原始shift-XOR实现的优化收益；解码吞吐为所有丢失情况的平均值。
 表中CFWP表示缓存友好窗口划分，NMA表示相邻合并访问，EPM表示统一解码抽象，TPS表示遍历模式选择。
-第一行Two-tone naive是不加入系统级优化的Two-tone直接实现，也是本文当前采用的内部shift-XOR baseline。
 以该基线为起点，Erasure-Parity Mapping（EPM）带来约100.2\%的解码性能提升；
 在此基础上加入Cache-Friendly Window Partitioning（CFWP）使编解码吞吐进一步提升约43.0\%；
 再加入Neighbor-Merging Access（NMA）带来约58.6\%的编码性能提升；
 最后Traversal Pattern Selection（TPS）贡献了约43.5\%的解码吞吐提升。
 可以看到，NMA主要提升编码吞吐；解码侧由于其仅能在Substitution阶段、且只在存活数据块仍可相邻合并时生效，平均收益并不明显。
-每项优化都对最终性能有清晰而显著的贡献。
+各项优化都对最终性能有清晰而显著的贡献，并共同构成FastTT性能提升的主要来源。
 
 \begin{table}[htbp]
     \caption{各项优化技术的性能影响（GB/s）}
@@ -157,7 +160,7 @@
 由于\emph{PUT}不仅包含编码过程，还包含较慢的磁盘写入，整体速度显著低于前述实验，但更能体现\,FastTT\,在生产级场景中的实际表现。
 结果（见表\ref{tab:put}）表明，\,FastTT\,的端到端吞吐持续优于ISA-L，平均提升7.1\%（最高13.3\%）。
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
     \caption{Ceph纠删码存储池的端到端\emph{PUT}吞吐（MB/s）}
     \label{tab:put}
     \centering
@@ -172,5 +175,7 @@
         \bottomrule
     \end{tabularx}
 \end{table}
+
+\FloatBarrier
 
 综上，已完成的工作系统性地解决了Two-tone移位异或纠删码工程实现中的内存访问瓶颈，并在编码、解码、消融及端到端实验中全面验证了优化方案的有效性，达成了开题报告中设定的核心目标。
