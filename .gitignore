@@ -1,4 +1,5 @@
-build/
+build/*
+!build/report.pdf
 *.synctex.gz
 # LaTeX 编译产物（根目录直接编译时产生）
 *.aux
